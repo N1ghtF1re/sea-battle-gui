@@ -70,7 +70,7 @@ begin
   begin
     if (((ACol = FLCol) and (ARow = FLRow))
       or
-      (Cells[ACol,ARow] = ' '))   then
+      (Cells[ACol,ARow] = ' '))  then
     begin
       Canvas.Brush.Color:=clRed;
       Rect.Left:=Rect.Left-5;
