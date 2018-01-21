@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+  <Transactions>
+    <Transaction>2018.01.21 19:01:43.612,=C:\Users\Win10\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2018.01.21 21:12:08.499,=C:\Users\Win10\Documents\Embarcadero\Studio\Projects\Unit2.pas</Transaction>
+    <Transaction>2018.01.21 21:28:53.345,D:\Морской бой\Unit1.dfm=C:\Users\Win10\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>2018.01.21 21:28:53.345,D:\Морской бой\Unit1.pas=C:\Users\Win10\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2018.01.21 21:28:56.916,D:\Морской бой\Unit2.dfm=C:\Users\Win10\Documents\Embarcadero\Studio\Projects\Unit2.dfm</Transaction>
+    <Transaction>2018.01.21 21:28:56.916,D:\Морской бой\Unit2.pas=C:\Users\Win10\Documents\Embarcadero\Studio\Projects\Unit2.pas</Transaction>
+    <Transaction>2018.01.21 21:29:23.123,D:\Морской бой\SeaBattle.dproj=C:\Users\Win10\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
+  </Transactions>
+</BorlandProject>

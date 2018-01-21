@@ -1,0 +1,119 @@
+object Form1: TForm1
+  Left = 0
+  Top = 0
+  Caption = #1052#1086#1088#1089#1082#1086#1081' '#1073#1086#1081
+  ClientHeight = 341
+  ClientWidth = 679
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object player1matrix1: TStringGrid
+    Left = 0
+    Top = 0
+    Width = 494
+    Height = 341
+    Align = alClient
+    ColCount = 11
+    DefaultColWidth = 24
+    DrawingStyle = gdsClassic
+    FixedColor = clGradientInactiveCaption
+    RowCount = 11
+    GradientEndColor = clBlack
+    GradientStartColor = clBlack
+    GridLineWidth = 2
+    Options = [goVertLine, goHorzLine]
+    TabOrder = 0
+    OnDrawCell = player1matrix1DrawCell
+    OnMouseUp = player1matrix1MouseUp
+    ExplicitLeft = -48
+    ExplicitTop = -32
+    ExplicitWidth = 679
+  end
+  object pnl1: TPanel
+    Left = 494
+    Top = 0
+    Width = 185
+    Height = 341
+    Align = alRight
+    BevelOuter = bvNone
+    BiDiMode = bdRightToLeftNoAlign
+    Color = clCream
+    Ctl3D = False
+    ParentBiDiMode = False
+    ParentBackground = False
+    ParentCtl3D = False
+    TabOrder = 1
+    StyleElements = [seClient]
+    ExplicitHeight = 137
+    object lb1: TLabel
+      Left = 20
+      Top = 20
+      Width = 49
+      Height = 13
+      Caption = #1050#1086#1088#1072#1073#1083#1077#1081
+    end
+    object lbText4: TLabel
+      Left = 20
+      Top = 39
+      Width = 50
+      Height = 13
+      Caption = #1056#1072#1079#1084#1077#1088#1072' 4'
+    end
+    object lbNum4: TLabel
+      Left = 90
+      Top = 40
+      Width = 6
+      Height = 13
+      Caption = '0'
+    end
+    object lbText3: TLabel
+      Left = 20
+      Top = 60
+      Width = 50
+      Height = 13
+      Caption = #1056#1072#1079#1084#1077#1088#1072' 3'
+    end
+    object lbText2: TLabel
+      Left = 20
+      Top = 80
+      Width = 50
+      Height = 13
+      Caption = #1056#1072#1079#1084#1077#1088#1072' 2'
+    end
+    object lbText1: TLabel
+      Left = 20
+      Top = 100
+      Width = 50
+      Height = 13
+      Caption = #1056#1072#1079#1084#1077#1088#1072' 1'
+    end
+    object lbNum3: TLabel
+      Left = 90
+      Top = 60
+      Width = 6
+      Height = 13
+      Caption = '0'
+    end
+    object lbNum2: TLabel
+      Left = 90
+      Top = 80
+      Width = 6
+      Height = 13
+      Caption = '0'
+    end
+    object lbNum1: TLabel
+      Left = 90
+      Top = 100
+      Width = 6
+      Height = 13
+      Caption = '0'
+    end
+  end
+end

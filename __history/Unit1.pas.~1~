@@ -1,0 +1,137 @@
+unit Unit1;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.Grids, Vcl.StdCtrls;
+
+type
+  TForm1 = class(TForm)
+    player1matrix1: TStringGrid;
+    lb1: TLabel;
+    pnl1: TPanel;
+    lbText4: TLabel;
+    lbNum4: TLabel;
+    lbText3: TLabel;
+    lbText2: TLabel;
+    lbText1: TLabel;
+    lbNum3: TLabel;
+    lbNum2: TLabel;
+    lbNum1: TLabel;
+    procedure FormCreate(Sender: TObject);
+    procedure player1matrix1MouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure player1matrix1DrawCell(Sender: TObject; ACol, ARow: Integer;
+      Rect: TRect; State: TGridDrawState);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+  FLCol, FLRow, NFLRow, NFLCol: Integer;
+
+implementation
+
+{$R *.dfm}
+
+uses Unit2;
+
+
+procedure TForm1.FormCreate(Sender: TObject);
+var i:Byte;
+begin
+  for i:=1 to 10 do
+  begin
+    player1matrix1.Cells[i,0]:=IntToStr(i);
+    player1matrix1.Cells[0,i]:=Chr(1039+i);
+    player1matrix1.Cells[0,10]:='Ê';
+
+  end;
+end;
+
+
+
+procedure TForm1.player1matrix1DrawCell(Sender: TObject; ACol, ARow: Integer;
+  Rect: TRect; State: TGridDrawState);
+var X: Real;
+begin
+  with player1matrix1 do
+  begin
+    if ((ACol = FLCol) and (ARow = FLRow)) then
+    begin
+      Canvas.Brush.Color:=clRed;
+      Rect.Left:=Rect.Left-5;
+      Canvas.FillRect(Rect);
+    end;
+    if ((ACol = NFLCol) and (ARow = NFLRow)) then
+    begin
+      Canvas.Brush.Color:=clWhite;
+      Rect.Left:=Rect.Left-5;
+      Canvas.FillRect(Rect);
+    end;
+    if ((ACol = 0) and (ARow = 0)) then
+    begin
+      Canvas.Brush.Color:=clWhite;
+      Rect.Left:=Rect.Left-5;
+      Canvas.FillRect(Rect);
+    end;
+  end;
+end;
+
+procedure TForm1.player1matrix1MouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+var ACol, ARow: Integer;
+begin
+  if(x < 440) then
+  begin
+    player1matrix1.MouseToCell(X, Y, ACol, ARow);
+    if( (ACol <> 0) and (ARow <> 0)) then
+    begin
+      if (player1matrix1.Cells[ACol,ARow] = '') then
+      begin
+        FLRow:=ARow;
+        FLCol:=ACol;
+        player1matrix1.Cells[ACol,ARow] := ' ';
+      end
+      else
+      begin
+        player1matrix1.Cells[ACol,ARow] := '';
+        NFLRow:=ARow;
+        NFLCol:=ACol;
+
+      end;
+      if((player1matrix1.Cells[ACol+1,ARow+1] = ' ')
+          or
+          (player1matrix1.Cells[ACol+1,ARow-1] = ' ')
+          or
+          (player1matrix1.Cells[ACol-1,ARow+1] = ' ')
+          or
+          (player1matrix1.Cells[ACol-1,ARow-1] = ' ')
+          or
+          ((player1matrix1.Cells[ACol,ARow+1] = ' ') and (player1matrix1.Cells[ACol+1,ARow] = ' '))
+          or
+          ((player1matrix1.Cells[ACol,ARow-1] = ' ') and (player1matrix1.Cells[ACol-1,ARow] = ' '))
+          or
+          ((player1matrix1.Cells[ACol,ARow+1] = ' ') and (player1matrix1.Cells[ACol-1,ARow] = ' '))
+          or
+          ((player1matrix1.Cells[ACol,ARow-1] = ' ') and (player1matrix1.Cells[ACol+1,ARow] = ' '))
+
+          )
+      then
+      begin
+        Form2.ShowModal;
+        player1matrix1.Cells[ACol,ARow] := '';
+        NFLRow:=ARow;
+        NFLCol:=ACol;
+      end;
+      player1matrix1.Col:=ACol;
+      player1matrix1.Row:=ARow;
+    end
+  end;
+end;
+
+end.
