@@ -26,7 +26,6 @@ type
     lbFrom1: TLabel;
     lbFrom2: TLabel;
     lbFrom3: TLabel;
-    lbFrom4: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure player1matrix1MouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
