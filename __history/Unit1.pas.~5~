@@ -27,8 +27,6 @@ type
     lbFrom2: TLabel;
     lbFrom3: TLabel;
     lbFrom4: TLabel;
-    lbInfo: TLabel;
-    pnl2: TPanel;
     procedure FormCreate(Sender: TObject);
     procedure player1matrix1MouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
@@ -59,6 +57,7 @@ begin
     player1matrix1.Cells[i,0]:=IntToStr(i);
     player1matrix1.Cells[0,i]:=Chr(1039+i);
     player1matrix1.Cells[0,10]:='Ê';
+
   end;
 end;
 
