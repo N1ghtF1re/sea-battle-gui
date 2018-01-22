@@ -4,7 +4,8 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Grids, Vcl.ExtCtrls, Vcl.StdCtrls;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Grids, Vcl.ExtCtrls, Vcl.StdCtrls,
+  Vcl.Imaging.pngimage;
 
 type
   TFieldForm = class(TForm)
@@ -13,6 +14,8 @@ type
     Panel2: TPanel;
     pn2: TPanel;
     pnName1: TLabel;
+    imgAI: TImage;
+    Label1: TLabel;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -20,6 +23,9 @@ type
       Rect: TRect; State: TGridDrawState);
     procedure player2FieldDrawCell(Sender: TObject; ACol, ARow: Integer;
       Rect: TRect; State: TGridDrawState);
+    procedure player2FieldMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+
   private
     { Private declarations }
   public
@@ -28,6 +34,7 @@ type
 
 var
   FieldForm: TFieldForm;
+  currplayer: 1..2;
 
 implementation
 
@@ -53,6 +60,7 @@ begin
   end;
   player2Field.Cells[0,10]:=' ';
   player1Field.Cells[0,10]:=' ';
+  currplayer:=1;
 end;
 
 procedure TFieldForm.FormShow(Sender: TObject);
@@ -64,11 +72,11 @@ begin
   begin
     for j:=1 to 10 do
     begin
-      Case Form1.P1F[j,i] of
+      Case Form1.P1F[i,j] of
         'M' : player1Field.Cells[i,j] := '';
         'K' : player1Field.Cells[i,j] := 'S';
       End;
-      Case Form1.P2F[j,i] of
+      Case Form1.P2F[i,j] of
         'M' : player2Field.Cells[i,j] := '';
         'K' : player2Field.Cells[i,j] := 'S';
       End;
@@ -104,6 +112,7 @@ begin
   end;
 end;
 
+
 procedure TFieldForm.player2FieldDrawCell(Sender: TObject; ACol, ARow: Integer;
   Rect: TRect; State: TGridDrawState);
 begin
@@ -112,6 +121,18 @@ begin
     if (Cells[ACol,ARow] = 'S')   then
     begin
       Canvas.Brush.Color:= RGB(82,158,235);//clBlue;
+      Rect.Left:=Rect.Left-5;
+      Canvas.FillRect(Rect);
+    end;
+    if (Cells[ACol,ARow] = 'R')   then
+    begin
+      Canvas.Brush.Color:= RGB(255,170,55);//Orange;
+      Rect.Left:=Rect.Left-10;
+      Canvas.FillRect(Rect);
+    end;
+    if (Cells[ACol,ARow] = 'K')   then
+    begin
+      Canvas.Brush.Color:= clRed;//Red;
       Rect.Left:=Rect.Left-5;
       Canvas.FillRect(Rect);
     end;
@@ -127,6 +148,66 @@ begin
       Rect.Left:=Rect.Left-5;
       Canvas.FillRect(Rect);
     end;
+    if(Cells[ACol,ARow] = '*') then
+    begin
+      Canvas.Brush.Color:=clWhite;
+      Canvas.FillRect(Rect);
+      Canvas.TextOut(Rect.Left+10, Rect.Top+5, 'ï');
+    end;
+  end;
+end;
+
+
+procedure TFieldForm.player2FieldMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+var
+  ACol, ARow: Integer;
+  procedure KillShip(x,y:Byte);
+    var flag, iskilled:Boolean;
+    i,j,lasttop, lastdown,lastleft,lastright:byte;
+  begin
+
+  end;
+begin
+  if (currplayer = 1) then
+  begin
+    player2Field.MouseToCell(X, Y, ACol, ARow);
+    if( (ACol <> 0) and (ARow <> 0)) then
+    begin
+      // ShowMessage(IntToStr(ACol));
+      if (player2Field.Cells[ACol,ARow] = '') then
+      begin
+        // “”“ œ”—“Œ≈ œŒÀ≈
+        player2Field.Cells[ACol,ARow] := '*';
+        currplayer:=2;
+      end
+      else
+      begin
+        case player2Field.Cells[ACol,ARow][1] of
+          '*','R','K': ShowMessage('“˚ ÛÊÂ ÒÚÂÎˇÎ Ò˛‰‡ :c');
+          'S':   // Ã€ œŒœ¿À»!!!
+          begin
+            player2Field.Cells[ACol,ARow] := 'R';
+            KillShip(ACol,ARow);
+          end;
+          else ShowMessage('error :C');
+        end;
+        {if(player2Field.Cells[ACol,ARow] = '*') then
+        begin
+
+        end
+        else
+        begin
+          player2Field.Cells[ACol,ARow] := '*';
+        end;  }
+
+      end;
+    end;
+  end;
+  if (currplayer = 2) then
+  begin
+    ShowMessage('—ÚÂÎˇÂÚ œ¿–¿ÃŒÿ ¿!!!!');
+    currplayer:=1;
   end;
 end;
 
