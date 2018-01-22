@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.Grids, Vcl.StdCtrls,
-  Vcl.Imaging.pngimage, Vcl.Buttons;
+  Vcl.Imaging.pngimage, Vcl.Buttons, Vcl.Menus;
 
 type
   TPF = array[1..10, 1..10] of Char;
@@ -31,6 +31,10 @@ type
     lbInfo: TLabel;
     pnl2: TPanel;
     pnl3: TPanel;
+    mm1: TMainMenu;
+    J1: TMenuItem;
+    N1: TMenuItem;
+    N2: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure player1matrix1MouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
@@ -60,13 +64,14 @@ var i,j:Byte;
 // Test1:string;
   procedure Seabattle_fieldAI_generator(var P2F:TPF);
   const ships = 20;
-   var ib,jb,ie,je,i,j,k,ship_size,ship_amount,direction,n:Integer ;
+   var ib,jb,ie,je,i,j,k,ship_size,ship_amount,direction,counter,n:Integer ;
  var exiter,exc:Boolean;
  function Quick_math(x,y:integer):boolean;
  var count:integer;
 
  begin
-  count:=0;
+
+   
    if
      (P2F[x-1,y]='K') or (P2F[x,y-1]='K') or (P2F[x-1,y-1]='K')
       or (P2F[x+1,y]='K') or (P2F[x,y+1]='K') or (P2F[x+1,y+1]='K')
@@ -75,6 +80,9 @@ var i,j:Byte;
    else quick_math:=false;
  end;
  begin
+  counter:=0;
+   while counter<>20 do
+   begin
  n:=10;
  for I := 1 to n do
    for j := 1 to n do
@@ -144,17 +152,13 @@ var i,j:Byte;
     end;
     inc(ship_amount);
     dec(ship_size);
-
-  {   for I := 1 to n do
+    counter:=0;
+     for I := 1 to n do
   begin
     for j := 1 to n do
-      write (P2F[i,j]);
-      writeln;
-  end;    }
-
-
-
-
+      if P2F[i,j] = 'K' then   Inc(counter);      
+  end;   
+  end;
   end;
 end;
 
