@@ -154,6 +154,7 @@ object Form1: TForm1
     Caption = 'pnl3'
     Color = clBtnHighlight
     ParentBackground = False
+    ShowCaption = False
     TabOrder = 1
     object player1matrix1: TStringGrid
       Left = 0
@@ -5485,6 +5486,7 @@ object Form1: TForm1
         Height = 37
         Caption = #1045#1076#1077#1084' '#1076#1072#1083#1100#1096#1077
         TabOrder = 0
+        OnClick = btNextClick
       end
     end
   end

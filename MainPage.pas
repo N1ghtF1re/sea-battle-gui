@@ -24,21 +24,24 @@ type
     { Private declarations }
   public
     { Public declarations }
+    var
+      UserName: string;
   end;
 
 var
   Form3: TForm3;
-  UserName: string;
+
 
 implementation
 
 {$R *.dfm}
 
-uses CreateField;
+uses CreateField, Game;
 
 procedure TForm3.btn1Click(Sender: TObject);
 begin
-  UserName := edt1.Text;
+  Form3.UserName := edt1.Text;
+  //ShowMessage(Form3.UserName);
   Form3.hide;
   Form1.Show;
 end;

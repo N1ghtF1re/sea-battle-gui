@@ -96,6 +96,9 @@
             <Form>Form1</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="Game.pas">
+            <Form>FieldForm</Form>
+        </DCCReference>
         <DCCReference Include="ErrorPage.pas">
             <Form>Form2</Form>
             <FormType>dfm</FormType>

@@ -8,6 +8,7 @@ uses
   Vcl.Imaging.pngimage, Vcl.Buttons;
 
 type
+  TPF = array[1..10, 1..10] of Char;
   TForm1 = class(TForm)
     player1matrix1: TStringGrid;
     lb1: TLabel;
@@ -36,10 +37,13 @@ type
     procedure player1matrix1DrawCell(Sender: TObject; ACol, ARow: Integer;
       Rect: TRect; State: TGridDrawState);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btNextClick(Sender: TObject);
   private
     { Private declarations }
   public
-    { Public declarations }
+    var
+      P1F: TPF;
+      P2F: TPF;
   end;
 
 var
@@ -49,8 +53,29 @@ implementation
 
 {$R *.dfm}
 
-uses ErrorPage, MainPage;
+uses ErrorPage, MainPage,game;
 
+procedure TForm1.btNextClick(Sender: TObject);
+var i,j:Byte;
+// Test1:string;
+begin
+  for i:=1 to 10 do
+  begin
+    for j:=1 to 10 do
+    begin
+      if (player1matrix1.Cells[j,i] = ' ') then
+        Form1.P1F[i,j] := 'K'
+      else
+        Form1.P1F[i,j] := 'M';
+      //test1 := Test1 + ' ' + P1F[i,j];
+    end;
+    //test1:= test1 + #10#13;
+  end;
+  player1matrix1.Free();
+  Form1.hide;
+  FieldForm.show;
+  //ShowMessage(test1);
+end;
 
 procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
@@ -240,6 +265,7 @@ begin
         pnIsFin.Visible := true
       else
         pnIsFin.Visible := false;
+      pnIsFin.Visible := true
     end;
   end;
 end;
