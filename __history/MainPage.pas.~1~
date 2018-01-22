@@ -1,0 +1,33 @@
+unit MainPage;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls;
+
+type
+  TForm3 = class(TForm)
+    pnl1: TPanel;
+    lbHello: TLabel;
+    pnl2: TPanel;
+    pnl3: TPanel;
+    pnl4: TPanel;
+    lbYourName: TLabel;
+    edt1: TEdit;
+    btn1: TButton;
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form3: TForm3;
+
+implementation
+
+{$R *.dfm}
+
+end.
