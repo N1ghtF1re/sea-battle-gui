@@ -39,6 +39,7 @@ var
   FieldForm: TFieldForm;
   currplayer: 1..2;
   P1N, P2N: 1..20;
+  LSX, LSY: byte;
 
 implementation
 
@@ -48,8 +49,8 @@ uses MainPage, CreateField;
 
 procedure TFieldForm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  {form1.close;
-  Form3.close; }
+  form1.close;
+  Form3.close;
 end;
 
 procedure TFieldForm.FormCreate(Sender: TObject);
@@ -90,6 +91,8 @@ begin
     end;
   end;
   lbWalk.Caption := 'Ходит: ' + form3.UserName;
+  LSX:=0;
+  LSY:=0;
 end;
 
 procedure TFieldForm.player1FieldDrawCell(Sender: TObject; ACol, ARow: Integer;
@@ -234,9 +237,31 @@ var
         end;
         if(iskilled) then
         begin
+          if (lastdown-1) in [1..10] then
+            EnemyMatrix.Cells[lastdown-1, y] := '*';
+          if (((lastdown-1) in [1..10]) and ((y+1) in [1..10])) then
+            EnemyMatrix.Cells[lastdown-1, y+1] := '*';
+          if (((lastdown-1) in [1..10]) and ((y-1) in [1..10])) then
+            EnemyMatrix.Cells[lastdown-1, y-1] := '*';
+          if (((lasttop+1) in [1..10]) and ((y+1) in [1..10])) then
+            EnemyMatrix.Cells[lasttop+1, y+1] := '*';
+          if (((lasttop+1) in [1..10]) and ((y-1) in [1..10])) then
+            EnemyMatrix.Cells[lasttop+1, y-1] := '*';
+          if (lasttop+1) in [1..10] then
+            EnemyMatrix.Cells[lasttop+1, y] := '*';
           for j:=lastdown to lasttop do
           begin
             EnemyMatrix.Cells[j, y] := 'K';
+            if (y+1) in [1..10] then
+              EnemyMatrix.Cells[j, y+1] := '*';
+            if (y-1) in [1..10] then
+              EnemyMatrix.Cells[j, y-1] := '*';
+          end;
+
+          if(currplayer = 2) then
+          begin
+            LSX:=0;
+            LSY:=0;
           end;
         end;
       end
@@ -285,15 +310,35 @@ var
           end;
           if(iskilled) then
           begin
+            if (lastleft-1) in [1..10] then
+              EnemyMatrix.Cells[x,lastleft-1] := '*';
+            if (((lastleft-1) in [1..10]) and ((x+1) in [1..10])) then
+              EnemyMatrix.Cells[x+1, lastleft-1] := '*';
+            if (((lastleft-1) in [1..10]) and ((x-1) in [1..10])) then
+              EnemyMatrix.Cells[x-1, lastleft-1] := '*';
+            if (((lastright+1) in [1..10]) and ((x+1) in [1..10])) then
+              EnemyMatrix.Cells[x+1,lastright+1] := '*';
+            if (((lastright+1) in [1..10]) and ((x-1) in [1..10])) then
+              EnemyMatrix.Cells[x-1,lastright+1] := '*';
+            if (lastright+1) in [1..10] then
+              EnemyMatrix.Cells[x, lastright+1] := '*';
             for j:=lastleft to lastright do
             begin
               EnemyMatrix.Cells[x, j] := 'K';
+              if((x+1) in [1..10]) then
+                EnemyMatrix.Cells[x+1, j] := '*';
+              if((x-1) in [1..10]) then
+                EnemyMatrix.Cells[x-1, j] := '*';
             end;
+            LSX:=0;
+            LSY:=0;
           end;
         end
         else
         begin
           EnemyMatrix.Cells[x, y] := 'K';
+            LSX:=0;
+            LSY:=0;
         end;
       end;
   end;
@@ -306,8 +351,24 @@ var
     while (not missed) do
     begin
       repeat
-        AIX := Random(10) +1;
-        AIY := Random(10) +1;
+        {if ((LSX <> 0) and (LSY <> 0)) then
+        begin
+          repeat
+            AIX:=LSX;
+            AIY:=LSY;
+            case random(4) of
+              1: Inc(AIX);
+              2: Inc(AIY);
+              3: Dec(AIX);
+              4: Dec(AIY);
+            end;
+          until ((AIX in [1..10]) and (AIY in [1..10]) );
+        end
+        else }
+        begin
+          AIX := Random(10) +1;
+          AIY := Random(10) +1;
+        end;
       until ((player1Field.Cells[AIX,AIY] <> '*') and (player1Field.Cells[AIX,AIY] <> 'R') and (player1Field.Cells[AIX,AIY] <> 'K'));
       if player1Field.Cells[AIX,AIY] = '' then
       begin
@@ -321,6 +382,8 @@ var
           Dec(P1N);
           player1Field.Cells[AIX,AIY] := 'R';
           KillShip(Form1.P1F, player1Field,AIX,AIY);
+          LSX:=AIX;
+          LSY:=AIY;
           ShowMessage('Большой ИИ попал в тебя');
         end;
       end;
@@ -367,7 +430,8 @@ begin
   end;
   if (currplayer = 2) then
   begin
-    ShowMessage('Стреляет ПАРАМОШКА!!!!');
+    //ShowMessage('Стреляет ПАРАМОШКА!!!!');
+    Sleep(300);
     AIShotShotShot;
     Currplayer := 1;
     lbWalk.Caption := 'Ходит: ' + form3.UserName;

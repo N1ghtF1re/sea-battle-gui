@@ -32,8 +32,6 @@ object FieldForm: TFieldForm
     Font.Style = []
     ParentColor = False
     ParentFont = False
-    ExplicitLeft = -58
-    ExplicitTop = 24
     ExplicitWidth = 65
   end
   object Panel2: TPanel
@@ -46,8 +44,6 @@ object FieldForm: TFieldForm
     Color = clHighlightText
     ParentBackground = False
     TabOrder = 0
-    ExplicitTop = 0
-    ExplicitHeight = 424
     object imgAI: TImage
       Left = 136
       Top = 32
@@ -5415,8 +5411,6 @@ object FieldForm: TFieldForm
     Color = clBtnHighlight
     ParentBackground = False
     TabOrder = 1
-    ExplicitTop = 0
-    ExplicitHeight = 424
     DesignSize = (
       350
       440)
