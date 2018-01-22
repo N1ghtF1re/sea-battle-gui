@@ -162,25 +162,27 @@ procedure TFieldForm.player2FieldMouseDown(Sender: TObject;
   Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 var
   ACol, ARow: Integer;
-  procedure KillShip(x,y:Byte);
+  AIX, AIY: byte;
+  type TEM = array[1..10,1..10] of string;
+  procedure KillShip(const fullmatrix: TPF; var EnemyMatrix: TStringGrid; const x,y:Byte);
     var flag, iskilled:Boolean;
     i,j,lasttop, lastdown,lastleft,lastright:byte;
   begin
-     if ((Form1.P2F[x+1, y] = 'K') or (Form1.P2F[x-1, y] = 'K')) then
+    if ((fullmatrix[x+1, y] = 'K') or (fullmatrix[x-1, y] = 'K')) then
       begin
         flag:=True;
         isKilled:=true;
         i:=1;
         while(flag) do
         begin
-          if ((Form1.P2F[x-i, y] = 'K') and (player2Field.Cells[x-i, y] <> 'R')) then
+          if ((fullmatrix[x-i, y] = 'K') and (EnemyMatrix.Cells[x-i, y] <> 'R')) then
           begin
             isKilled:=false;
             flag:=false;
           end
           else
           begin
-            if (Form1.P2F[x-i, y] <> 'K') then
+            if (fullmatrix[x-i, y] <> 'K') then
             begin
               flag:=false;
               lastdown:=x-i+1;
@@ -192,14 +194,14 @@ var
         i:=1;
         while(flag and isKilled) do
         begin
-          if ((Form1.P2F[x+i, y] = 'K') and (player2Field.Cells[x+i, y] <> 'R')) then
+          if ((fullmatrix[x+i, y] = 'K') and (EnemyMatrix.Cells[x+i, y] <> 'R')) then
           begin
             isKilled:=false;
             flag:=false;
           end
           else
           begin
-            if (Form1.P2F[x+i, y] <> 'K') then
+            if (fullmatrix[x+i, y] <> 'K') then
             begin
               flag:=false;
               lasttop:=x+i-1;
@@ -211,27 +213,27 @@ var
         begin
           for j:=lastdown to lasttop do
           begin
-            player2Field.Cells[j, y] := 'K';
+            EnemyMatrix.Cells[j, y] := 'K';
           end;
         end;
       end
       else
       begin
-        if ((Form1.P2F[x, y+1] = 'K') or (Form1.P2F[x, y-1] = 'K')) then
+        if ((fullmatrix[x, y+1] = 'K') or (fullmatrix[x, y-1] = 'K')) then
         begin
           flag:=True;
           isKilled:=true;
           i:=1;
           while(flag) do
           begin
-            if ((Form1.P2F[x, y-i] = 'K') and (player2Field.Cells[x, y-i] <> 'R')) then
+            if ((fullmatrix[x, y-i] = 'K') and (EnemyMatrix.Cells[x, y-i] <> 'R')) then
             begin
               isKilled:=false;
               flag:=false;
             end
             else
             begin
-              if (Form1.P2F[x, y-i] <> 'K') then
+              if (fullmatrix[x, y-i] <> 'K') then
               begin
                 flag:=false;
                 lastleft:=y-i+1;
@@ -243,14 +245,14 @@ var
           i:=1;
           while(flag and isKilled) do
           begin
-            if ((Form1.P2F[x, y+i] = 'K') and (player2Field.Cells[x, y+i] <> 'R')) then
+            if ((fullmatrix[x, y+i] = 'K') and (EnemyMatrix.Cells[x, y+i] <> 'R')) then
             begin
               isKilled:=false;
               flag:=false;
             end
             else
             begin
-              if (Form1.P2F[x, y+i] <> 'K') then
+              if (fullmatrix[x, y+i] <> 'K') then
               begin
                 flag:=false;
                 lastright:=y+i-1;
@@ -262,13 +264,13 @@ var
           begin
             for j:=lastleft to lastright do
             begin
-              player2Field.Cells[x, j] := 'K';
+              EnemyMatrix.Cells[x, j] := 'K';
             end;
           end;
         end
         else
         begin
-          player2Field.Cells[x, y] := 'K';
+          EnemyMatrix.Cells[x, y] := 'K';
         end;
       end;
   end;
@@ -292,7 +294,7 @@ begin
           'S':   // Ã€ œŒœ¿À»!!!
           begin
             player2Field.Cells[ACol,ARow] := 'R';
-            KillShip(ACol,ARow);
+            KillShip(Form1.P2F, player2Field,ACol,ARow);
           end;
           else ShowMessage('error :C');
         end;
@@ -311,7 +313,7 @@ begin
   if (currplayer = 2) then
   begin
     ShowMessage('—ÚÂÎˇÂÚ œ¿–¿ÃŒÿ ¿!!!!');
-    currplayer:=1;
+
   end;
 end;
 
