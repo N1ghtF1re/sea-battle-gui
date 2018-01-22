@@ -40,10 +40,16 @@ uses CreateField, Game;
 
 procedure TForm3.btn1Click(Sender: TObject);
 begin
+
   Form3.UserName := edt1.Text;
   //ShowMessage(Form3.UserName);
-  Form3.hide;
-  Form1.Show;
+  if(Trim(Form3.UserName) = '' ) then
+    ShowMessage('¬ведите им€')
+  else
+  begin
+    Form3.hide;
+    Form1.Show;
+  end;
 end;
 
 procedure TForm3.FormCanResize(Sender: TObject; var NewWidth,
