@@ -55,7 +55,8 @@ uses ErrorPage, MainPage;
 
 procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  Form1.Close;
+  Form1.Close;    // щрн онрнл мсфмн асдер сапюрэ, йнцдю онидел б пекхг
+  //  нмн врнаш ме бшкюгхкю цпеаюммюъ ньхайю OUTPUT ERROR
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
@@ -68,8 +69,6 @@ begin
     player1matrix1.Cells[0,10]:='й';
   end;
 end;
-
-
 
 procedure TForm1.player1matrix1DrawCell(Sender: TObject; ACol, ARow: Integer;
   Rect: TRect; State: TGridDrawState);
@@ -253,7 +252,6 @@ begin
       else
         pnIsFin.Visible := false;
     end;
-
   end;
 end;
 

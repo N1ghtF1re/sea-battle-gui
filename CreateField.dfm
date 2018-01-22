@@ -156,10 +156,12 @@ object Form1: TForm1
     ParentBackground = False
     TabOrder = 1
     object player1matrix1: TStringGrid
-      Left = 16
-      Top = 11
-      Width = 288
-      Height = 290
+      Left = 0
+      Top = 0
+      Width = 286
+      Height = 286
+      BevelInner = bvNone
+      BorderStyle = bsNone
       ColCount = 11
       DefaultColWidth = 24
       DrawingStyle = gdsClassic
