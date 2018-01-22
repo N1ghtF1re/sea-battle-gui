@@ -5,6 +5,8 @@ object Form2: TForm2
   ClientHeight = 136
   ClientWidth = 395
   Color = clBtnFace
+  Constraints.MaxHeight = 176
+  Constraints.MaxWidth = 411
   Constraints.MinHeight = 175
   Constraints.MinWidth = 411
   Font.Charset = DEFAULT_CHARSET
