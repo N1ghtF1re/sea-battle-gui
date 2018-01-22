@@ -337,6 +337,22 @@ var
         else
         begin
           EnemyMatrix.Cells[x, y] := 'K';
+          if ( (x+1) in [1..10] ) then
+            EnemyMatrix.Cells[x+1, y] := '*';
+          if ( (y+1) in [1..10] ) then
+            EnemyMatrix.Cells[x, y+1] := '*';
+          if ( (x-1) in [1..10] ) then
+            EnemyMatrix.Cells[x-1, y] := '*';
+          if ( (y-1) in [1..10] ) then
+            EnemyMatrix.Cells[x, y-1] := '*';
+          if ( ((y-1) in [1..10] ) and ((x-1) in [1..10])) then
+            EnemyMatrix.Cells[x-1, y-1] := '*';
+          if ( ((y+1) in [1..10] ) and ((x-1) in [1..10])) then
+            EnemyMatrix.Cells[x-1, y+1] := '*';
+          if ( ((y-1) in [1..10] ) and ((x+1) in [1..10])) then
+            EnemyMatrix.Cells[x+1, y-1] := '*';
+          if ( ((y+1) in [1..10] ) and ((x+1) in [1..10])) then
+            EnemyMatrix.Cells[x+1, y+1] := '*';
             LSX:=0;
             LSY:=0;
         end;
