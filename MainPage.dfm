@@ -1,12 +1,10 @@
 object Form3: TForm3
   Left = 0
   Top = 0
-  Caption = 'Form3'
+  Caption = #1052#1086#1088#1089#1082#1086#1081' '#1073#1086#1081
   ClientHeight = 308
   ClientWidth = 496
   Color = clBtnFace
-  Constraints.MaxHeight = 347
-  Constraints.MaxWidth = 512
   Constraints.MinHeight = 347
   Constraints.MinWidth = 512
   Font.Charset = DEFAULT_CHARSET

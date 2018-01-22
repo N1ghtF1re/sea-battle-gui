@@ -44,7 +44,6 @@ type
 
 var
   Form1: TForm1;
-  FLCol, FLRow, NFLRow, NFLCol: Integer;
 
 implementation
 
@@ -76,15 +75,13 @@ var X: Real;
 begin
   with player1matrix1 do
   begin
-    if (((ACol = FLCol) and (ARow = FLRow))
-      or
-      (Cells[ACol,ARow] = ' '))   then
+    if (Cells[ACol,ARow] = ' ')   then
     begin
       Canvas.Brush.Color:=clRed;
-      Rect.Left:=Rect.Left-5;
+      Rect.Left:=Rect.Left-6;
       Canvas.FillRect(Rect);
     end;
-    if ((ACol = NFLCol) and (ARow = NFLRow)) then
+    if (Cells[ACol,ARow] = '') then
     begin
       Canvas.Brush.Color:=clWhite;
       Rect.Left:=Rect.Left-5;
@@ -93,7 +90,7 @@ begin
     if ((ACol = 0) and (ARow = 0)) then
     begin
       Canvas.Brush.Color:=clWhite;
-      Rect.Left:=Rect.Left-5;
+      Rect.Left:=Rect.Left-6;
       Canvas.FillRect(Rect);
     end;
   end;
@@ -108,8 +105,6 @@ procedure showError;
 begin
   Form2.ShowModal;
   player1matrix1.Cells[ACol,ARow] := '';
-  NFLRow:=ARow;
-  NFLCol:=ACol;
 end;
 
 procedure checkInCol(var num1,num2,num3,num4:byte);
@@ -130,7 +125,6 @@ begin
       begin
         count:=0;
         k:=j;
-
         while(player1matrix1.Cells[i,k] = ' ') do
         begin
           inc(count);
@@ -209,16 +203,11 @@ begin
     begin
       if (player1matrix1.Cells[ACol,ARow] = '') then
       begin
-        FLRow:=ARow;
-        FLCol:=ACol;
         player1matrix1.Cells[ACol,ARow] := ' ';
       end
       else
       begin
         player1matrix1.Cells[ACol,ARow] := '';
-        NFLRow:=ARow;
-        NFLCol:=ACol;
-
       end;
       // Далее идет проверка на корректность расстановки (Низя по диагонали и
       // Треугольниками
