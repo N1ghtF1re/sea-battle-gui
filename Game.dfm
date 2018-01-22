@@ -2,7 +2,7 @@ object FieldForm: TFieldForm
   Left = 0
   Top = 0
   Caption = #1052#1086#1088#1089#1082#1086#1081' '#1073#1086#1081'.'
-  ClientHeight = 384
+  ClientHeight = 424
   ClientWidth = 693
   Color = clAppWorkSpace
   Font.Charset = DEFAULT_CHARSET
@@ -20,13 +20,14 @@ object FieldForm: TFieldForm
     Left = 343
     Top = 0
     Width = 350
-    Height = 384
+    Height = 424
     Align = alRight
     BevelOuter = bvNone
     Color = clHighlightText
     ParentBackground = False
     TabOrder = 0
     ExplicitLeft = 508
+    ExplicitHeight = 384
     object imgAI: TImage
       Left = 136
       Top = 32
@@ -5341,6 +5342,13 @@ object FieldForm: TFieldForm
       Font.Style = []
       ParentFont = False
     end
+    object lbP2N: TLabel
+      Left = 168
+      Top = 400
+      Width = 12
+      Height = 13
+      Caption = '20'
+    end
     object player2Field: TStringGrid
       Left = 35
       Top = 95
@@ -5380,16 +5388,17 @@ object FieldForm: TFieldForm
     Left = 0
     Top = 0
     Width = 350
-    Height = 384
+    Height = 424
     Align = alLeft
     BevelOuter = bvNone
     Caption = 'pn2'
     Color = clBtnHighlight
     ParentBackground = False
     TabOrder = 1
+    ExplicitHeight = 384
     DesignSize = (
       350
-      384)
+      424)
     object pnName1: TLabel
       Left = 144
       Top = 56
@@ -5403,12 +5412,19 @@ object FieldForm: TFieldForm
       Font.Style = []
       ParentFont = False
     end
+    object lbP1N: TLabel
+      Left = 160
+      Top = 400
+      Width = 12
+      Height = 13
+      Caption = '20'
+    end
     object player1Field: TStringGrid
       AlignWithMargins = True
       Left = 33
       Top = 95
-      Width = 286
-      Height = 287
+      Width = 285
+      Height = 285
       Cursor = crNo
       ParentCustomHint = False
       TabStop = False

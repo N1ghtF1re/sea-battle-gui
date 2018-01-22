@@ -16,6 +16,8 @@ type
     pnName1: TLabel;
     imgAI: TImage;
     Label1: TLabel;
+    lbP2N: TLabel;
+    lbP1N: TLabel;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -35,6 +37,7 @@ type
 var
   FieldForm: TFieldForm;
   currplayer: 1..2;
+  P1N, P2N: 1..20;
 
 implementation
 
@@ -61,6 +64,8 @@ begin
   player2Field.Cells[0,10]:='К';
   player1Field.Cells[0,10]:='К';
   currplayer:=1;
+  P1N := 20;
+  P2N := 20;
 end;
 
 procedure TFieldForm.FormShow(Sender: TObject);
@@ -91,6 +96,12 @@ procedure TFieldForm.player1FieldDrawCell(Sender: TObject; ACol, ARow: Integer;
 begin
   with player1Field do
   begin
+    if(Cells[ACol,ARow] = '*') then
+    begin
+      Canvas.Brush.Color:=clWhite;
+      Canvas.FillRect(Rect);
+      Canvas.TextOut(Rect.Left+10, Rect.Top+5, '•');
+    end;
     if (Cells[ACol,ARow] = 'S')   then
     begin
       Canvas.Brush.Color:= RGB(82,158,235);//clBlue;
@@ -100,6 +111,18 @@ begin
     if (Cells[ACol,ARow] = '') then
     begin
       Canvas.Brush.Color:=clWhite;
+      Rect.Left:=Rect.Left-5;
+      Canvas.FillRect(Rect);
+    end;
+    if (Cells[ACol,ARow] = 'R')   then
+    begin
+      Canvas.Brush.Color:= RGB(255,170,55);//Orange;
+      Rect.Left:=Rect.Left-10;
+      Canvas.FillRect(Rect);
+    end;
+    if (Cells[ACol,ARow] = 'K')   then
+    begin
+      Canvas.Brush.Color:= clRed;//Red;
       Rect.Left:=Rect.Left-5;
       Canvas.FillRect(Rect);
     end;
@@ -162,13 +185,12 @@ procedure TFieldForm.player2FieldMouseDown(Sender: TObject;
   Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 var
   ACol, ARow: Integer;
-  AIX, AIY: byte;
   type TEM = array[1..10,1..10] of string;
   procedure KillShip(const fullmatrix: TPF; var EnemyMatrix: TStringGrid; const x,y:Byte);
     var flag, iskilled:Boolean;
     i,j,lasttop, lastdown,lastleft,lastright:byte;
   begin
-    if ((fullmatrix[x+1, y] = 'K') or (fullmatrix[x-1, y] = 'K')) then
+      if ((fullmatrix[x+1, y] = 'K') or (fullmatrix[x-1, y] = 'K')) then
       begin
         flag:=True;
         isKilled:=true;
@@ -274,6 +296,36 @@ var
         end;
       end;
   end;
+  procedure AIShotShotShot;
+  var
+    missed:Boolean;
+    AIX, AIY: byte;
+  begin
+    missed := False;
+    while (not missed) do
+    begin
+      repeat
+        AIX := Random(10) +1;
+        AIY := Random(10) +1;
+      until ((player1Field.Cells[AIX,AIY] <> '*') and (player1Field.Cells[AIX,AIY] <> 'R') and (player1Field.Cells[AIX,AIY] <> 'K'));
+      if player1Field.Cells[AIX,AIY] = '' then
+      begin
+        player1Field.Cells[AIX,AIY] := '*';
+        missed:=true;
+      end
+      else
+      begin
+        if (player1Field.Cells[AIX,AIY] = 'S') then
+        begin
+          Dec(P1N);
+          player1Field.Cells[AIX,AIY] := 'R';
+          KillShip(Form1.P1F, player1Field,AIX,AIY);
+          ShowMessage('Большой ИИ попал в тебя');
+        end;
+      end;
+
+    end;
+  end;
 begin
   if (currplayer = 1) then
   begin
@@ -293,6 +345,7 @@ begin
           '*','R','K': ShowMessage('Ты уже стрелял сюда :c');
           'S':   // МЫ ПОПАЛИ!!!
           begin
+            Dec(P2N);
             player2Field.Cells[ACol,ARow] := 'R';
             KillShip(Form1.P2F, player2Field,ACol,ARow);
           end;
@@ -313,8 +366,11 @@ begin
   if (currplayer = 2) then
   begin
     ShowMessage('Стреляет ПАРАМОШКА!!!!');
-
+    AIShotShotShot;
+    Currplayer := 1;
   end;
+  lbP1N.Caption := IntToStr(P1N);
+  lbP2N.Caption := IntToStr(P2N);
 end;
 
 end.

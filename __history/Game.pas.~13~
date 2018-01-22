@@ -16,8 +16,6 @@ type
     pnName1: TLabel;
     imgAI: TImage;
     Label1: TLabel;
-    lbP1N: TLabel;
-    Label2: TLabel;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -37,7 +35,6 @@ type
 var
   FieldForm: TFieldForm;
   currplayer: 1..2;
-  P1N, P2N: 1..20;
 
 implementation
 
@@ -61,8 +58,8 @@ begin
     player2Field.Cells[i,0]:=IntToStr(i);
     player2Field.Cells[0,i]:=Chr(1039+i);
   end;
-  player2Field.Cells[0,10]:='–ö';
-  player1Field.Cells[0,10]:='–ö';
+  player2Field.Cells[0,10]:=' ';
+  player1Field.Cells[0,10]:=' ';
   currplayer:=1;
 end;
 
@@ -94,12 +91,6 @@ procedure TFieldForm.player1FieldDrawCell(Sender: TObject; ACol, ARow: Integer;
 begin
   with player1Field do
   begin
-    if(Cells[ACol,ARow] = '*') then
-    begin
-      Canvas.Brush.Color:=clWhite;
-      Canvas.FillRect(Rect);
-      Canvas.TextOut(Rect.Left+10, Rect.Top+5, '‚Ä¢');
-    end;
     if (Cells[ACol,ARow] = 'S')   then
     begin
       Canvas.Brush.Color:= RGB(82,158,235);//clBlue;
@@ -161,7 +152,7 @@ begin
     begin
       Canvas.Brush.Color:=clWhite;
       Canvas.FillRect(Rect);
-      Canvas.TextOut(Rect.Left+10, Rect.Top+5, '‚Ä¢');
+      Canvas.TextOut(Rect.Left+10, Rect.Top+5, 'ï');
     end;
   end;
 end;
@@ -171,6 +162,7 @@ procedure TFieldForm.player2FieldMouseDown(Sender: TObject;
   Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 var
   ACol, ARow: Integer;
+  AIX, AIY: byte;
   type TEM = array[1..10,1..10] of string;
   procedure KillShip(const fullmatrix: TPF; var EnemyMatrix: TStringGrid; const x,y:Byte);
     var flag, iskilled:Boolean;
@@ -282,27 +274,6 @@ var
         end;
       end;
   end;
-  procedure AIShotShotShot;
-  var
-    missed:Boolean;
-    AIX, AIY: byte;
-  begin
-    missed := False;
-    while (not missed) do
-    begin
-      repeat
-        AIX := Random(10) +1;
-        AIY := Random(10) +1;
-      until ((player1Field.Cells[AIX,AIY] <> '*') and (player1Field.Cells[AIX,AIY] <> 'R') and (player1Field.Cells[AIX,AIY] <> 'K'));
-      if player1Field.Cells[AIX,AIY] = '' then
-      begin
-        player1Field.Cells[AIX,AIY] := '*';
-        missed:=true;
-      end;
-
-      ShowMessage('Kek');
-    end;
-  end;
 begin
   if (currplayer = 1) then
   begin
@@ -312,17 +283,16 @@ begin
       // ShowMessage(IntToStr(ACol));
       if (player2Field.Cells[ACol,ARow] = '') then
       begin
-        // –¢–£–¢ –ü–£–°–¢–û–ï –ü–û–õ–ï
+        // “”“ œ”—“Œ≈ œŒÀ≈
         player2Field.Cells[ACol,ARow] := '*';
         currplayer:=2;
       end
       else
       begin
         case player2Field.Cells[ACol,ARow][1] of
-          '*','R','K': ShowMessage('–¢—ã —É–∂–µ —Å—Ç—Ä–µ–ª—è–ª —Å—é–¥–∞ :c');
-          'S':   // –ú–´ –ü–û–ü–ê–õ–ò!!!
+          '*','R','K': ShowMessage('“˚ ÛÊÂ ÒÚÂÎˇÎ Ò˛‰‡ :c');
+          'S':   // Ã€ œŒœ¿À»!!!
           begin
-            Dec(P2N);
             player2Field.Cells[ACol,ARow] := 'R';
             KillShip(Form1.P2F, player2Field,ACol,ARow);
           end;
@@ -342,9 +312,8 @@ begin
   end;
   if (currplayer = 2) then
   begin
-    ShowMessage('–°—Ç—Ä–µ–ª—è–µ—Ç –ü–ê–†–ê–ú–û–®–ö–ê!!!!');
-    AIShotShotShot;
-    Currplayer := 1;
+    ShowMessage('—ÚÂÎˇÂÚ œ¿–¿ÃŒÿ ¿!!!!');
+
   end;
 end;
 
