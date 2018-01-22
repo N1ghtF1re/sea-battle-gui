@@ -13,5 +13,6 @@ In the development of this chic game involved:
 + [**Pankratiew Alexandr**](https://vk.com/sasha_pankratiew)
 + [**Holubeu Kiryl**](https://vk.com/smertowing)
 + [**Pilinko Nikita**](https://vk.com/mineralsfree)
+```
 
-#### [Download last version](https://github.com/N1ghtF1re/sea-battle/releases/tag/v1.11)
+#### [Download last version](https://github.com/N1ghtF1re/sea-battle-gui/releases/tag/0.1)
