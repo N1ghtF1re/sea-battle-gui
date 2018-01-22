@@ -1,9 +1,17 @@
 [Stats]
+<<<<<<< HEAD
 EditorSecs=8309
 DesignerSecs=1107
 InspectorSecs=975
 CompileSecs=154436
 OtherSecs=795
+=======
+EditorSecs=1153
+DesignerSecs=313
+InspectorSecs=364
+CompileSecs=24622
+OtherSecs=208
+>>>>>>> parent of 4821094... Create name check
 StartTime=22.01.2018 10:59:33
 RealKeys=0
 EffectiveKeys=0
