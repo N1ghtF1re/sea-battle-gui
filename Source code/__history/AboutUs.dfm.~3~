@@ -5,8 +5,6 @@ object FormAboutDevelopers: TFormAboutDevelopers
   ClientHeight = 534
   ClientWidth = 525
   Color = clBtnFace
-  Constraints.MinHeight = 573
-  Constraints.MinWidth = 541
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
