@@ -97,6 +97,8 @@ var rand, g, l, iDamaged, jDamaged:integer;
     stem,limit:Boolean;
 begin
 stem:=False;
+idamaged:=0;
+jDamaged:=0;
 for l:=i-1 to i+1 do
   for g:=j-1 to j+1  do
     if (g>=1) and (g<=10) and (l>=1) and (l<=10) and not((g=j) and (l=i)) then
@@ -126,8 +128,20 @@ else
       limit:=True;
       Rand:=Random(1);
       case Rand of
-        0: if (J<=9) and (player1matrix.cells[i,j+1]<>'R') then Inc(j) else limit:=false;
-        1: if (J>=2) and (player1matrix.cells[i,j-1]<>'R') then Dec(j) else limit:=false;
+        0: if (J<=9)
+      then
+        repeat
+        Inc(j);
+        if (j=10) and (player1matrix.cells[i,j]='R') then limit:=False;
+        until (player1matrix.cells[i,j]<>'R') or (j=10)
+      else limit:=false;
+        1: if (J>=2)
+      then
+        repeat
+        Dec(j);
+        if (j=1) and (player1matrix.cells[i,j]='R') then limit:=False;
+        until (player1matrix.cells[i,j]<>'R') or (j=1)
+      else limit:=false;
       end;
     until limit;
   if iDamaged = i then
@@ -135,8 +149,19 @@ else
       limit:=True;
       Rand:=Random(1);
       case Rand of
-        0: if (i<=9) and (player1matrix.cells[i+1,j]<>'R') then Inc(j) else limit:=false;
-        1: if (i>=2) and (player1matrix.cells[i-1,J]<>'R') then Dec(j) else limit:=false;
+        0: if (i<=9) then
+        repeat
+        Inc(i);
+        if (i=10) and (player1matrix.cells[i,j]='R') then limit:=False;
+        until (player1matrix.cells[i,j]<>'R') or (i=10)
+      else limit:=false;
+        1: if (i>=2)
+      then
+        repeat
+        Dec(i);
+        if (i=1) and (player1matrix.cells[i,j]='R') then limit:=False;
+        until (player1matrix.cells[i,j]<>'R') or (i=1)
+      else limit:=false;
       end;
     until limit;
   end;

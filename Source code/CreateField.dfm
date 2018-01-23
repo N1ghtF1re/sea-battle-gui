@@ -132,18 +132,17 @@ object Form1: TForm1
       Height = 80
       Align = alBottom
       TabOrder = 0
-      ExplicitTop = 282
-      ExplicitWidth = 185
       object lbInfo: TLabel
         Left = 1
         Top = 1
-        Width = 169
+        Width = 175
         Height = 52
         Align = alTop
         Caption = 
           #1055#1086#1078#1072#1083#1091#1081#1089#1090#1072', '#1079#1072#1087#1086#1083#1085#1080#1090#1077' '#1080#1075#1088#1086#1074#1086#1077' '#1087#1086#1083#1077' '#1082#1086#1088#1072#1073#1083#1103#1084#1080' '#1050#1072#1082' '#1090#1086#1083#1100#1082#1086' '#1074#1099' '#1101#1090#1086' '#1089 +
           #1076#1077#1083#1072#1077#1090#1077', '#1087#1086#1103#1074#1080#1090#1089#1103' '#1082#1085#1086#1087#1082#1072' '#1087#1088#1086#1076#1086#1083#1078#1077#1085#1080#1103' '
         WordWrap = True
+        ExplicitWidth = 169
       end
     end
   end
@@ -159,8 +158,6 @@ object Form1: TForm1
     ParentBackground = False
     ShowCaption = False
     TabOrder = 1
-    ExplicitWidth = 536
-    ExplicitHeight = 362
     object img2: TImage
       Left = 514
       Top = -5
