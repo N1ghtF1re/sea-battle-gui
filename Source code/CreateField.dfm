@@ -12,6 +12,7 @@ object Form1: TForm1
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
+  Menu = mm1
   OldCreateOrder = False
   OnActivate = FormActivate
   OnClose = FormClose
@@ -11518,5 +11519,44 @@ object Form1: TForm1
     ParentFont = False
     TabOrder = 3
     Visible = False
+  end
+  object mm1: TMainMenu
+    Left = 312
+    Top = 48
+    object N1: TMenuItem
+      Caption = #1060#1072#1081#1083
+      object N2: TMenuItem
+        Caption = #1053#1086#1074#1072#1103' '#1080#1075#1088#1072
+        OnClick = newGame
+      end
+      object N3: TMenuItem
+        Caption = #1047#1072#1074#1077#1088#1096#1080#1090#1100' '#1080#1075#1088#1091
+        OnClick = N3Click
+      end
+    end
+    object N7: TMenuItem
+      Caption = #1055#1088#1072#1074#1080#1083#1072
+      object N8: TMenuItem
+        Caption = #1055#1088#1072#1074#1080#1083#1072' '#1088#1072#1079#1084#1077#1097#1077#1085#1080#1103' '#1082#1086#1088#1072#1073#1083#1077#1081
+        OnClick = N8Click
+      end
+      object N9: TMenuItem
+        Caption = #1055#1086#1090#1086#1087#1083#1077#1085#1080#1077' '#1082#1086#1088#1072#1073#1083#1077#1081' '#1087#1088#1086#1090#1080#1074#1085#1080#1082#1072
+        OnClick = N9Click
+      end
+      object N10: TMenuItem
+        Caption = #1042#1099#1081#1075#1088#1099#1096#1085#1072#1103' '#1089#1090#1088#1072#1090#1077#1075#1080#1103
+        OnClick = N10Click
+      end
+    end
+    object N4: TMenuItem
+      Caption = #1055#1086#1084#1086#1097#1100
+      object N5: TMenuItem
+        Caption = #1059#1087#1088#1072#1074#1083#1077#1085#1080#1077
+      end
+      object N6: TMenuItem
+        Caption = #1054' '#1087#1088#1086#1075#1088#1072#1084#1084#1077
+      end
+    end
   end
 end
