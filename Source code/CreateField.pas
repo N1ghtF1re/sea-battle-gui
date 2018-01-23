@@ -374,7 +374,7 @@ end;
     //lbWalk.Caption := 'Ходит: ИИ';
     missed := False;
     second := False;
-    while (not missed) do
+    while (not missed) and (P1N>0) do
     begin
     if not second then
       repeat
@@ -400,7 +400,7 @@ end;
           second:=true;
         end;
       end;
-      if second then isHitted_wow(player1matrix,AIX,AIY)
+      if (second) and (P1N>0) then isHitted_wow(player1matrix,AIX,AIY)
 
     end;
 
