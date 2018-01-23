@@ -92,6 +92,56 @@ implementation
 uses ErrorPage, MainPage,game, AboutUs;
 
 // resourcestring PlacingRules = 'Игровое поле — обычно квадрат 10×10 каждого игрока, на котором размещается флот кораблей. Горизонтали обычно нумеруются сверху вниз, а вертикали помечаются буквами слева направо. При этом используются буквы русского алфавита от «а» до «к» (буквы «ё» и «й» обычно пропускаются) либо от «а» до «и» (с использованием буквы «ё»), либо буквы латинского алфавита от «a» до «j». Иногда используется слово «республика» или «снегурочка», так как в этих 10-буквенных словах ни одна буква не повторяется. Поскольку существуют различные варианты задания системы координат, то об этом лучше заранее договориться.' + #1013 'Размещаются:';
+procedure isHitted_wow(var player1matrix:TStringGrid; var i,j:byte);
+var rand, g, l, iDamaged, jDamaged:integer;
+    stem,limit:Boolean;
+begin
+stem:=False;
+for l:=i-1 to i+1 do
+  for g:=j-1 to j+1  do
+    if (g>=1) and (g<=10) and (l>=1) and (l<=10) and not((g=j) and (l=i)) then
+      if player1matrix.cells[l,g] = 'R' then
+        begin
+        stem:=True;
+        iDamaged:=l;
+        jDamaged:=g;
+        end;
+if not(stem) then
+  begin
+  repeat
+    limit:=True;
+    Rand:=Random(3);
+    case Rand of
+      0: if i<=9 then Inc(i) else Limit:=false;
+      1: if i>=2 then Dec(i) else Limit:=false;
+      2: if j<=9 then Inc(i) else Limit:=false;
+      3: if j>=2 then Dec(i) else Limit:=false;
+    end;
+  until limit;
+  end
+else
+  begin
+  if jDamaged = j then
+    repeat
+      limit:=True;
+      Rand:=Random(1);
+      case Rand of
+        0: if (J<=9) and (player1matrix.cells[i,j+1]<>'R') then Inc(j) else limit:=false;
+        1: if (J>=2) and (player1matrix.cells[i,j-1]<>'R') then Dec(j) else limit:=false;
+      end;
+    until limit;
+  if iDamaged = i then
+    repeat
+      limit:=True;
+      Rand:=Random(1);
+      case Rand of
+        0: if (i<=9) and (player1matrix.cells[i+1,j]<>'R') then Inc(j) else limit:=false;
+        1: if (i>=2) and (player1matrix.cells[i-1,J]<>'R') then Dec(j) else limit:=false;
+      end;
+    until limit;
+  end;
+end;
+
 
 
   procedure KillShip(const fullmatrix: TPF; var EnemyMatrix: TStringGrid; const x,y:Byte);
@@ -296,7 +346,7 @@ uses ErrorPage, MainPage,game, AboutUs;
           second:=true;
         end;
       end;
-    if second then isHitted_wow(AIX,AIY)
+      if second then isHitted_wow(player1matrix,AIX,AIY)
 
     end;
 
@@ -890,56 +940,6 @@ begin
     pnl5.Visible := true;
     pnl5.color := RGB(34,180,34);
     pnl5.Caption := 'Ваш ход, ' + form3.UserName;
-  end;
-end;
-
-procedure isHitted_wow(var i,j:Integer);
-var rand, g, l, iDamaged, jDamaged:integer;
-    stem,limit:Boolean;
-begin
-stem:=False;
-for l:=i-1 to i+1 do
-  for g:=j-1 to j+1  do
-    if (g>=1) and (g<=10) and (l>=1) and (l<=10) and not((g=j) and (l=i)) then
-      if player1matrix.cells[l,g] = 'R' then
-        begin
-        stem:=True;
-        iDamaged:=l;
-        jDamaged:=g;
-        end;
-if not(stem) then
-  begin
-  repeat
-    limit:=True;
-    Rand:=Random(3);
-    case Rand of
-      0: if i<=9 then Inc(i) else Limit:=false;
-      1: if i>=2 then Dec(i) else Limit:=false;
-      2: if j<=9 then Inc(i) else Limit:=false;
-      3: if j>=2 then Dec(i) else Limit:=false;
-    end;
-  until limit;
-  end
-else
-  begin
-  if jDamaged = j then
-    repeat
-      limit:=True;
-      Rand:=Random(1);
-      case Rand of
-        0: if (J<=9) and (player1matrix.cells[i,j+1]<>'R') then Inc(j) else limit:=false;
-        1: if (J>=2) and (player1matrix.cells[i,j-1]<>'R') then Dec(j) else limit:=false;
-      end;
-    until limit;
-  if iDamaged = i then
-    repeat
-      limit:=True;
-      Rand:=Random(1);
-      case Rand of
-        0: if (i<=9) and (player1matrix.cells[i+1,j]<>'R') then Inc(j) else limit:=false;
-        1: if (i>=2) and (player1matrix.cells[i-1,J]<>'R') then Dec(j) else limit:=false;
-      end;
-    until limit;
   end;
 end;
 
