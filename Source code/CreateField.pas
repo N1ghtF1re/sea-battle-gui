@@ -401,6 +401,7 @@ procedure Seabattle_fieldAI_generator(var P2F:TPF);
 
 
 
+
    end;
   end;
   end;
