@@ -264,20 +264,34 @@ uses ErrorPage, MainPage,game, AboutUs;
   end;
   procedure AIShotShotShot(player1matrix:TStringGrid);
   var
-    missed,second:Boolean;
+    missed:Boolean;
     AIX, AIY: byte;
   begin
     //lbWalk.Caption := 'Ходит: ИИ';
     missed := False;
-    second := False;
     while (not missed) do
     begin
-    if not second then
       repeat
-      AIX := Random(10) +1;
-      AIY := Random(10) +1;
+        {if ((LSX <> 0) and (LSY <> 0)) then
+        begin
+          repeat
+            AIX:=LSX;
+            AIY:=LSY;
+            case random(4) of
+              1: Inc(AIX);
+              2: Inc(AIY);
+              3: Dec(AIX);
+              4: Dec(AIY);
+            end;
+          until ((AIX in [1..10]) and (AIY in [1..10]) );
+        end
+        else }
+        begin
+          AIX := Random(10) +1;
+          AIY := Random(10) +1;
+        end;
       until ((player1matrix.Cells[AIX,AIY] <> '*') and (player1matrix.Cells[AIX,AIY] <> 'R') and (player1matrix.Cells[AIX,AIY] <> 'K'));
-       if player1matrix.Cells[AIX,AIY] = '' then
+      if player1matrix.Cells[AIX,AIY] = '' then
       begin
         player1matrix.Cells[AIX,AIY] := '*';
         missed:=true;
@@ -293,13 +307,10 @@ uses ErrorPage, MainPage,game, AboutUs;
           LSX:=AIX;
           LSY:=AIY;
           ShowMessage('Большой ИИ попал в тебя');
-          second:=true;
         end;
       end;
-    if second then isHitted_wow(AIX,AIY)
 
     end;
-
   end;
 
 procedure Seabattle_fieldAI_generator(var P2F:TPF);
@@ -893,55 +904,7 @@ begin
   end;
 end;
 
-procedure isHitted_wow(var i,j:Integer);
-var rand, g, l, iDamaged, jDamaged:integer;
-    stem,limit:Boolean;
-begin
-stem:=False;
-for l:=i-1 to i+1 do
-  for g:=j-1 to j+1  do
-    if (g>=1) and (g<=10) and (l>=1) and (l<=10) and not((g=j) and (l=i)) then
-      if player1matrix.cells[l,g] = 'R' then
-        begin
-        stem:=True;
-        iDamaged:=l;
-        jDamaged:=g;
-        end;
-if not(stem) then
-  begin
-  repeat
-    limit:=True;
-    Rand:=Random(3);
-    case Rand of
-      0: if i<=9 then Inc(i) else Limit:=false;
-      1: if i>=2 then Dec(i) else Limit:=false;
-      2: if j<=9 then Inc(i) else Limit:=false;
-      3: if j>=2 then Dec(i) else Limit:=false;
-    end;
-  until limit;
-  end
-else
-  begin
-  if jDamaged = j then
-    repeat
-      limit:=True;
-      Rand:=Random(1);
-      case Rand of
-        0: if (J<=9) and (player1matrix.cells[i,j+1]<>'R') then Inc(j) else limit:=false;
-        1: if (J>=2) and (player1matrix.cells[i,j-1]<>'R') then Dec(j) else limit:=false;
-      end;
-    until limit;
-  if iDamaged = i then
-    repeat
-      limit:=True;
-      Rand:=Random(1);
-      case Rand of
-        0: if (i<=9) and (player1matrix.cells[i+1,j]<>'R') then Inc(j) else limit:=false;
-        1: if (i>=2) and (player1matrix.cells[i-1,J]<>'R') then Dec(j) else limit:=false;
-      end;
-    until limit;
-  end;
-end;
+
 
 
 procedure TForm1.player2matrixMouseUp(Sender: TObject; Button: TMouseButton;
