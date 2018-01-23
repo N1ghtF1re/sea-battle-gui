@@ -2,7 +2,7 @@ object Form1: TForm1
   Left = 0
   Top = 0
   Caption = #1052#1086#1088#1089#1082#1086#1081' '#1073#1086#1081
-  ClientHeight = 403
+  ClientHeight = 424
   ClientWidth = 721
   Color = clBtnFace
   Constraints.MinHeight = 380
@@ -19,10 +19,10 @@ object Form1: TForm1
   PixelsPerInch = 96
   TextHeight = 13
   object pnl1: TPanel
-    Left = 536
+    Left = 544
     Top = 41
-    Width = 185
-    Height = 362
+    Width = 177
+    Height = 383
     Align = alRight
     BevelOuter = bvNone
     BiDiMode = bdRightToLeftNoAlign
@@ -33,8 +33,6 @@ object Form1: TForm1
     ParentCtl3D = False
     TabOrder = 0
     StyleElements = [seClient]
-    ExplicitTop = 0
-    ExplicitHeight = 379
     object lb1: TLabel
       Left = 20
       Top = 20
@@ -128,16 +126,17 @@ object Form1: TForm1
     end
     object pnl2: TPanel
       Left = 0
-      Top = 282
-      Width = 185
+      Top = 303
+      Width = 177
       Height = 80
       Align = alBottom
       TabOrder = 0
-      ExplicitTop = 299
+      ExplicitTop = 282
+      ExplicitWidth = 185
       object lbInfo: TLabel
         Left = 1
         Top = 1
-        Width = 183
+        Width = 175
         Height = 52
         Align = alTop
         Caption = 
@@ -151,8 +150,8 @@ object Form1: TForm1
   object pnl3: TPanel
     Left = 0
     Top = 41
-    Width = 536
-    Height = 362
+    Width = 544
+    Height = 383
     Align = alClient
     BevelOuter = bvNone
     Caption = 'pnl3'
@@ -160,7 +159,8 @@ object Form1: TForm1
     ParentBackground = False
     ShowCaption = False
     TabOrder = 1
-    ExplicitLeft = -5
+    ExplicitWidth = 536
+    ExplicitHeight = 362
     object img2: TImage
       Left = 514
       Top = -5
@@ -5447,6 +5447,22 @@ object Form1: TForm1
         82203410220082200882D0408800088220084203210220088220080D84088020
         0882203410FF172747BF13AFAB56470000000049454E44AE426082}
       Stretch = True
+      Visible = False
+    end
+    object lbP1N: TLabel
+      Left = 160
+      Top = 352
+      Width = 12
+      Height = 13
+      Caption = '20'
+      Visible = False
+    end
+    object lbP2N: TLabel
+      Left = 558
+      Top = 352
+      Width = 68
+      Height = 13
+      Caption = '20'
       Visible = False
     end
     object player1matrix: TStringGrid
@@ -11468,9 +11484,6 @@ object Form1: TForm1
     ParentBackground = False
     TabOrder = 2
     Visible = False
-    ExplicitLeft = 345
-    ExplicitTop = 8
-    ExplicitWidth = 185
     object pnl5: TPanel
       Left = 0
       Top = 0
@@ -11486,7 +11499,6 @@ object Form1: TForm1
       ParentBackground = False
       ParentFont = False
       TabOrder = 0
-      ExplicitTop = 41
     end
   end
   object pnlName: TPanel
