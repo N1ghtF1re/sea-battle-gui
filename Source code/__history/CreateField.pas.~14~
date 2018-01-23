@@ -67,7 +67,6 @@ type
     procedure N8Click(Sender: TObject);
     procedure N9Click(Sender: TObject);
     procedure N10Click(Sender: TObject);
-    procedure N5Click(Sender: TObject);
 
   private
     { Private declarations }
@@ -351,7 +350,7 @@ var i,j:Byte;
       repeat
         ib:=Random(n)+1;
         jb:=Random(n)+1;
-      until not(quick_math(ib,jb)) and ( (jb+ship_size-1>10) or (ib+ship_size-1>10)) ;
+      until not(quick_math(ib,jb)) or ( (jb+ship_size-1>10) or (ib+ship_size-1>10)) ;
       direction:=random(2)+1;             //1-Right 2-Bottom 3-Left 4-up
       if ship_size>1 then
       begin
@@ -531,22 +530,6 @@ procedure TForm1.N3Click(Sender: TObject);
 begin
   ShowMessage('Я еще вернусь!');
   Form1.Close;
-end;
-
-procedure TForm1.N5Click(Sender: TObject);
-var
-  savedTitle : String;
-  rule:string;
-begin
-  savedTitle := Application.Title;
-  rule := 'Для создание своего '
-  try
-    Application.Title := 'Управление';
-    ShowMessage(rule);
-  finally
-    rule:='';
-    Application.Title := savedTitle;
-  end;
 end;
 
 procedure TForm1.N8Click(Sender: TObject);
