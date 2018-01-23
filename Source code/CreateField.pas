@@ -93,7 +93,7 @@ uses ErrorPage, MainPage,game, AboutUs;
 
 // resourcestring PlacingRules = 'Игровое поле — обычно квадрат 10×10 каждого игрока, на котором размещается флот кораблей. Горизонтали обычно нумеруются сверху вниз, а вертикали помечаются буквами слева направо. При этом используются буквы русского алфавита от «а» до «к» (буквы «ё» и «й» обычно пропускаются) либо от «а» до «и» (с использованием буквы «ё»), либо буквы латинского алфавита от «a» до «j». Иногда используется слово «республика» или «снегурочка», так как в этих 10-буквенных словах ни одна буква не повторяется. Поскольку существуют различные варианты задания системы координат, то об этом лучше заранее договориться.' + #1013 'Размещаются:';
 procedure isHitted_wow(var player1matrix:TStringGrid; var i,j:byte);
-var rand, g, l, iDamaged, jDamaged:integer;
+var rand, g, l, iDamaged, jDamaged, K:integer;
     stem,limit:Boolean;
 begin
 stem:=False;
@@ -124,9 +124,9 @@ if not(stem) then
   until (limit) or (k=15);
   if k=15 then
     repeat
-      AIX := Random(10) +1;
-      AIY := Random(10) +1;
-      until ((player1matrix.Cells[AIX,AIY] <> '*') and (player1matrix.Cells[AIX,AIY] <> 'R') and (player1matrix.Cells[AIX,AIY] <> 'K'));
+      i := Random(10) +1;
+      j := Random(10) +1;
+      until ((player1matrix.Cells[i,j] <> '*') and (player1matrix.Cells[i,j] <> 'R') and (player1matrix.Cells[I,J] <> 'K'));
   end
 else
   begin
@@ -174,11 +174,10 @@ else
       end;
     until (limit) or (k=30);
   if k=30 then
-    repeat
-      AIX := Random(10) +1;
-      AIY := Random(10) +1;
-      until ((player1matrix.Cells[AIX,AIY] <> '*') and (player1matrix.Cells[AIX,AIY] <> 'R') and (player1matrix.Cells[AIX,AIY] <> 'K'));
-
+      repeat
+      i := Random(10) +1;
+      j := Random(10) +1;
+      until ((player1matrix.Cells[i,j] <> '*') and (player1matrix.Cells[i,j] <> 'R') and (player1matrix.Cells[I,J] <> 'K'));
   end;
 end;
 
