@@ -1,4 +1,4 @@
-unit CreateField;
+﻿unit CreateField;
 
 interface
 
@@ -39,6 +39,19 @@ type
     pnlName: TPanel;
     lbP1N: TLabel;
     lbP2N: TLabel;
+    mm1: TMainMenu;
+    N1: TMenuItem;
+    N2: TMenuItem;
+    N3: TMenuItem;
+    N4: TMenuItem;
+    N5: TMenuItem;
+    N6: TMenuItem;
+    N7: TMenuItem;
+    N8: TMenuItem;
+    N9: TMenuItem;
+    N10: TMenuItem;
+    btnAutoCreate: TButton;
+    N11: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure player1matrixMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
@@ -51,6 +64,14 @@ type
     procedure player2matrixMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure FormActivate(Sender: TObject);
+    procedure newGame(Sender: TObject);
+    procedure N3Click(Sender: TObject);
+    procedure N8Click(Sender: TObject);
+    procedure N9Click(Sender: TObject);
+    procedure N10Click(Sender: TObject);
+    procedure N5Click(Sender: TObject);
+    procedure btnAutoCreateClick(Sender: TObject);
+    procedure N11Click(Sender: TObject);
 
   private
     { Private declarations }
@@ -68,7 +89,10 @@ implementation
 
 {$R *.dfm}
 
-uses ErrorPage, MainPage,game;
+uses ErrorPage, MainPage,game, AboutUs;
+
+// resourcestring PlacingRules = 'Игровое поле — обычно квадрат 10×10 каждого игрока, на котором размещается флот кораблей. Горизонтали обычно нумеруются сверху вниз, а вертикали помечаются буквами слева направо. При этом используются буквы русского алфавита от «а» до «к» (буквы «ё» и «й» обычно пропускаются) либо от «а» до «и» (с использованием буквы «ё»), либо буквы латинского алфавита от «a» до «j». Иногда используется слово «республика» или «снегурочка», так как в этих 10-буквенных словах ни одна буква не повторяется. Поскольку существуют различные варианты задания системы координат, то об этом лучше заранее договориться.' + #1013 'Размещаются:';
+
 
   procedure KillShip(const fullmatrix: TPF; var EnemyMatrix: TStringGrid; const x,y:Byte);
     var flag, iskilled:Boolean;
@@ -240,34 +264,20 @@ uses ErrorPage, MainPage,game;
   end;
   procedure AIShotShotShot(player1matrix:TStringGrid);
   var
-    missed:Boolean;
+    missed,second:Boolean;
     AIX, AIY: byte;
   begin
-    //lbWalk.Caption := '�����: ��';
+    //lbWalk.Caption := 'Ходит: ИИ';
     missed := False;
+    second := False;
     while (not missed) do
     begin
+    if not second then
       repeat
-        {if ((LSX <> 0) and (LSY <> 0)) then
-        begin
-          repeat
-            AIX:=LSX;
-            AIY:=LSY;
-            case random(4) of
-              1: Inc(AIX);
-              2: Inc(AIY);
-              3: Dec(AIX);
-              4: Dec(AIY);
-            end;
-          until ((AIX in [1..10]) and (AIY in [1..10]) );
-        end
-        else }
-        begin
-          AIX := Random(10) +1;
-          AIY := Random(10) +1;
-        end;
+      AIX := Random(10) +1;
+      AIY := Random(10) +1;
       until ((player1matrix.Cells[AIX,AIY] <> '*') and (player1matrix.Cells[AIX,AIY] <> 'R') and (player1matrix.Cells[AIX,AIY] <> 'K'));
-      if player1matrix.Cells[AIX,AIY] = '' then
+       if player1matrix.Cells[AIX,AIY] = '' then
       begin
         player1matrix.Cells[AIX,AIY] := '*';
         missed:=true;
@@ -282,17 +292,17 @@ uses ErrorPage, MainPage,game;
           KillShip(Form1.P1F, player1matrix,AIX,AIY);
           LSX:=AIX;
           LSY:=AIY;
-          ShowMessage('������� �� ����� � ����');
+          ShowMessage('Большой ИИ попал в тебя');
+          second:=true;
         end;
       end;
+    if second then isHitted_wow(AIX,AIY)
 
     end;
+
   end;
 
-procedure TForm1.btNextClick(Sender: TObject);
-var i,j:Byte;
-// Test1:string;
-  procedure Seabattle_fieldAI_generator(var P2F:TPF);
+procedure Seabattle_fieldAI_generator(var P2F:TPF);
   const ships = 20;
    var ib,jb,ie,je,i,j,k,ship_size,ship_amount,direction,n,counter:Integer ;
  var exiter,exc:Boolean;
@@ -301,10 +311,9 @@ var i,j:Byte;
 
  begin
 
-   if
-     (P2F[x-1,y]='K') or (P2F[x,y-1]='K') or (P2F[x-1,y-1]='K')
+   if (P2F[x-1,y]='K') or (P2F[x,y-1]='K') or (P2F[x-1,y-1]='K')
       or (P2F[x+1,y]='K') or (P2F[x,y+1]='K') or (P2F[x+1,y+1]='K')
-      or (P2F[x+1,y-1]='K')or (P2F[x-1,y+1]='K')  then
+      or (P2F[x+1,y-1]='K')or (P2F[x-1,y+1]='K') or (P2F[x,y]='K')  then
    Quick_math:=true
    else quick_math:=false;
  end;
@@ -331,7 +340,7 @@ var i,j:Byte;
       repeat
         ib:=Random(n)+1;
         jb:=Random(n)+1;
-      until not(quick_math(ib,jb)) or ( (jb+ship_size-1>10) or (ib+ship_size-1>10)) ;
+      until not (quick_math(ib,jb)) or ( (jb+ship_size-1>10) or (ib+ship_size-1>10)) ;
       direction:=random(2)+1;             //1-Right 2-Bottom 3-Left 4-up
       if ship_size>1 then
       begin
@@ -395,7 +404,35 @@ var i,j:Byte;
    end;
   end;
   end;
+procedure TForm1.btnAutoCreateClick(Sender: TObject);
+var i,j:Integer;
+begin
+  for i:=1 to 10 do
+  begin
+    for j:=1 to 10 do
+    begin
+      player1matrix.Cells[i,j] := '';
+      P1F[i,j] := ' ';
+    end;
+  end;
+  Seabattle_fieldAI_generator(P1F);
+  for i:=1 to 10 do
+    for j:= 1 to 10 do
+      Case P1F[i,j] of
+        'M' : player1matrix.Cells[i,j] := '';
+        'K' : player1matrix.Cells[i,j] := 'S';
+      End;
+  lbnum1.Caption := '4';
+  lbNum2.Caption := '3';
+  lbNum3.Caption := '2';
+  lbNum4.Caption := '1';
+  pnIsFin.Visible := true
 
+end;
+
+procedure TForm1.btNextClick(Sender: TObject);
+var i,j:Byte;
+// Test1:string;
 begin
   for i:=1 to 10 do
   begin
@@ -411,7 +448,7 @@ begin
   end;
   //player1matrix.Free();
   Seabattle_fieldAI_generator(P2F);
-
+  btnAutoCreate.Visible := false;
   pnl1.Visible := false;
   pnIsFin.Visible := false;
   mode := battaly;
@@ -433,7 +470,7 @@ begin
   player2matrix.Visible := True;
   pnl4.Visible := true;
   //Form3.UserName := 'kek';
-  pnl5.Caption := '��� ���, ' + form3.UserName;
+  pnl5.Caption := 'Ваш ход, ' + form3.UserName;
   LSX:=0;
   LSY:=0;
   pnlName.Visible := true;
@@ -455,8 +492,8 @@ end;
 
 procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  //Form3.Close;    // ��� ����� ����� ����� ������, ����� ������ � �����
-  //  ��� ����� �� �������� ��������� ������ OUTPUT ERROR
+  //Form3.Close;    // ЭТО ПОТОМ НУЖНО БУДЕТ УБРАТЬ, КОГДА ПОЙДЕМ В РЕЛИЗ
+  //  ОНО ЧТОБЫ НЕ ВЫЛАЗИЛА ГРЕБАННАЯ ОШИБКА OUTPUT ERROR
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
@@ -469,11 +506,128 @@ begin
     player2matrix.Cells[i,0]:=IntToStr(i);
     player2matrix.Cells[0,i]:=Chr(1039+i);
   end;
-  player1matrix.Cells[0,10]:='�';
-  player2matrix.Cells[0,10]:='�';
+  player1matrix.Cells[0,10]:='К';
+  player2matrix.Cells[0,10]:='К';
 end;
 
 
+procedure TForm1.N10Click(Sender: TObject);
+var
+  savedTitle : String;
+  rule:string;
+begin
+  savedTitle := Application.Title;
+
+  rule:= 'Вокруг каждого корабля можно нарисовать область (толщиной в одну клетку), в которой не может быть других кораблей — эту область назовём ореолом данного корабля.';
+  rule := rule + 'Одна из выигрышных стратегий описана Я. И. Перельманом. Игрока, использующего эту выигрышную стратегию, назовём Виктором; другого игрока (не использующего выигрышную стратегию Я. И. Перельмана) назовём Петром.';
+  rule := rule + #10#13 + #10#13 + 'Выигрышная стратегия Перельмана состоит в том, что Виктор свои многоклеточные корабли компактно располагает в одном из углов поля, «вжимая» в этот угол так, как только возможно. Одноклеточные';
+  rule := rule + ' корабли Виктор равномерно распределяет по оставшейся незанятой ';
+  rule := rule + 'многоклеточными кораблями части поля. Скорее всего, Пётр относительно';
+  rule := rule +'быстро обнаружит, что много кораблей Виктора компактно сосредоточенно в этом углу,';
+  rule := rule + ' и быстро уничтожит все корабли Виктора, кроме одноклеточных. После этого, ';
+  rule:= rule + ' чтобы найти одноклеточные корабли Виктора, Петру ';
+  rule := rule + 'надо будет исследовать своими ходами-выстрелами очень большую площадь, поскольку ореолы многоклеточных кораблей';
+  rule := rule + 'Виктора перекрываются, плюс к тому львиная доля площади ореолов кораблей, прижатых к кромке поля, оказывается за пределами поля. Между тем, благодаря тому, что у Петра';
+  rule := rule + 'перекрывается меньше площади ореолов, чем у Виктора, Виктору нужно исследовать меньшую площадь поля Петра, чем Петру площадь поля Виктора.';
+  rule := rule + #10#13 + #10#13 + 'По мере того, как игроки поражают корабли друг друга, неисследованная Виктором часть площади поля Петра уменьшается быстрее, чем уменьшается неисследованная Петром часть площади поля';
+  rule := rule + ' Виктора. Благодаря этому, Виктор быстрее исследует своими ходами-выстрелами поле Петра, ';
+  rule := rule + 'чем Пётр поле Виктора, и, следовательно, Виктор быстрее, чем Пётр, поразит все корабли противника. При этом Виктор понесёт большие потери (потеряет все многоклеточные корабли), ';
+  rule:= rule+ ' однако правила игры не требуют стремиться к минимальным потерям, поэтому Виктор, сохранив только одноклеточные корабли,';
+  rule := rule + 'окажется в выигрыше по сравнению с Петром, который потеряет все свои корабли раньше, чем Виктор.';
+  try
+    Application.Title := 'Выйгрышная стратегия';
+    ShowMessage(rule);
+  finally
+    rule:='';
+    Application.Title := savedTitle;
+  end;
+
+end;
+
+procedure TForm1.N11Click(Sender: TObject);
+begin
+  FormAboutDevelopers.Show;
+end;
+
+procedure TForm1.N3Click(Sender: TObject);
+begin
+  ShowMessage('Я еще вернусь!');
+  Form1.Close;
+end;
+
+procedure TForm1.N5Click(Sender: TObject);
+var
+  savedTitle : String;
+  rule:string;
+begin
+  savedTitle := Application.Title;
+  rule := 'Для расстановки кораблей кликайте по ячейкам игрового поля. Слева вы можете отслеживать, сколько каких кораблей вам осталось создать.';
+  rule := rule + #10#13 + 'После правильной расстановки кораблей появится кнопка продолжения.';
+  rule := rule + #10#13 + #10#13 + 'Для стрельбы кликайте по ячейкам поля соперника (расположено справа)';
+
+  try
+    Application.Title := 'Управление';
+    ShowMessage(rule);
+  finally
+    rule:='';
+    Application.Title := savedTitle;
+  end;
+end;
+
+procedure TForm1.N8Click(Sender: TObject);
+var
+  savedTitle : String;
+begin
+  savedTitle := Application.Title;
+    try
+      Application.Title := 'Правила размещения кораблей';
+      ShowMessage('Игровое поле — квадрат 10×10 каждого игрока, на котором размещается флот кораблей.' + #10#13 + #10#13 + 'Размещаются:' + #10#13 + '  • 1 корабль — ряд из 4 клеток («четырёхпалубные»)' + #10#13 + '  • 2 корабля — ряд из 3 клеток («трёхпалубные»)' +  #10#13 + '  • 3 корабля — ряд из 2 клеток («двухпалубные»)' + #10#13 + '  • 4 корабля — 1 клетка («однопалубные»)' + #10#13 + #10#13 + 'При размещении корабли не могут касаться друг друга сторонами и углами.');
+    finally
+      Application.Title := savedTitle;
+    end;
+   // ShowMessage(rules);
+end;
+
+procedure TForm1.N9Click(Sender: TObject);
+var
+  savedTitle : String;
+  rule:string;
+begin
+  savedTitle := Application.Title;
+  rule := 'Игрок, выполняющий ход, совершает выстрел по определенной клетке';
+  rule:= rule + #10#13 + #10#13 + '  • Если выстрел пришёлся в клетку, не занятую ни одним кораблём противника, это «Мимо!» и на этой клетке ставится точка';
+  rule := rule + #10#13 + #10#13 + '  • Если выстрел пришёлся в клетку, где находится многопалубный корабль (размером больше чем 1 клетка), то следует вы ранили соперника и клетка закрашивается оранжевым цветом. Стрелявший игрок получает право на ещё один выстрел.';
+  rule := rule +  #10#13 + #10#13 + '  • Если выстрел пришёлся в клетку, где находится однотрубный корабль или последнюю непоражённую клетку многопалубного корабля, то вы "убили" корабль. Клетка закрашивается в красный цвет. Стрелявший игрок получает право на ещё один выстрел.';
+  rule := rule + #10#13 + #10#13 + 'Победителем считается тот, кто первым потопит все 10 кораблей противника.';
+  try
+    Application.Title := 'Потопление кораблей противника';
+    ShowMessage(rule);
+  finally
+    rule:='';
+    Application.Title := savedTitle;
+  end;
+end;
+
+procedure TForm1.newGame(Sender: TObject);
+  var i,j: byte;
+begin
+  for i:=1 to 10 do
+    for j:=1 to 10 do
+    begin
+      player1matrix.Cells[i,j] := '';
+      player2matrix.Cells[i,j] := '';
+    end;
+  mode:=Fcreate;
+  pnl1.Visible := true;
+  pnIsFin.Visible := true;
+  player2matrix.Visible := false;
+  pnl4.Visible := false;
+  pnlName.Visible := false;
+  img2.Visible := false;
+  lbP1N.Visible := false;
+  lbP2N.Visible := false;
+  btnAutoCreate.Visible := true;
+end;
 
 procedure TForm1.player1matrixDrawCell(Sender: TObject; ACol, ARow: Integer;
   Rect: TRect; State: TGridDrawState);
@@ -485,7 +639,7 @@ begin
     begin
       Canvas.Brush.Color:=clWhite;
       Canvas.FillRect(Rect);
-      Canvas.TextOut(Rect.Left+10, Rect.Top+5, '�');
+      Canvas.TextOut(Rect.Left+10, Rect.Top+5, '•');
     end;
     if (Cells[ACol,ARow] = 'S')   then
     begin
@@ -537,12 +691,12 @@ var
   i,j,k:byte;
   count:byte;
 begin
-  // ************* ������� �������� � ������� ****************
+  // ************* Подсчет кораблей в столбец ****************
   for i:=1 to 10 do
   begin
     j:=1;
-    while(j<=10) do                  // i - �������, j - ������
-    begin                            // [Col, Row]  ([�������, ������])
+    while(j<=10) do                  // i - столбец, j - строка
+    begin                            // [Col, Row]  ([Столбец, Строка])
       if( (player1matrix.Cells[i,j] = 'S')
       and
       ( (player1matrix.Cells[i+1,j] <> 'S') and (player1matrix.Cells[i-1,j] <> 'S')))
@@ -582,7 +736,7 @@ var
   i,j,k:byte;
   count:byte;
 begin
-  // ************* ������� �������� � ������ ****************
+  // ************* Подсчет кораблей в строчу ****************
   for i:=1 to 10 do
   begin
     j:=1;
@@ -634,8 +788,8 @@ begin
       begin
         player1matrix.Cells[ACol,ARow] := '';
       end;
-      // ����� ���� �������� �� ������������ ����������� (���� �� ��������� �
-      // ��������������
+      // Далее идет проверка на корректность расстановки (Низя по диагонали и
+      // Треугольниками
       if((player1matrix.Cells[ACol+1,ARow+1] = 'S')
           or
           (player1matrix.Cells[ACol+1,ARow-1] = 'S')
@@ -665,7 +819,7 @@ begin
         pnIsFin.Visible := true
       else
         pnIsFin.Visible := false;
-      pnIsFin.Visible := true
+      // pnIsFin.Visible := true
     end;
   end;
 end;
@@ -675,8 +829,8 @@ procedure TForm1.player2matrixDrawCell(Sender: TObject; ACol, ARow: Integer;
 var flag:Boolean;
 begin
   {case currplayer of
-    1: lbWalk.Caption := '�����: ' + form3.UserName;
-    2: lbWalk.Caption := '�����: ��';
+    1: lbWalk.Caption := 'Ходит: ' + form3.UserName;
+    2: lbWalk.Caption := 'Ходит: ИИ';
   end;  }
   flag:=false;
   with player2matrix do
@@ -716,7 +870,7 @@ begin
       Canvas.Brush.Color:=clWhite;
       flag:=true;
       Canvas.FillRect(Rect);
-      Canvas.TextOut(Rect.Left+10, Rect.Top+5, '�');
+      Canvas.TextOut(Rect.Left+10, Rect.Top+5, '•');
     end;
   end;
 
@@ -727,18 +881,66 @@ begin
     begin
       //pnl5.Visible := false;
       sleep(800);
-      // ShowMessage('�������� ���������!!!!');
+      // ShowMessage('Стреляет ПАРАМОШКА!!!!');
       AIShotShotShot(player1matrix);
       lbP1N.Caption := IntToStr(P1n);
       Currplayer := 1;
     end;
     pnl5.Visible := true;
     pnl5.color := RGB(34,180,34);
-    pnl5.Caption := '��� ���, ' + form3.UserName;
+    pnl5.Caption := 'Ваш ход, ' + form3.UserName;
   end;
 end;
 
-
+procedure isHitted_wow(var i,j:Integer);
+var rand, g, l, iDamaged, jDamaged:integer;
+    stem,limit:Boolean;
+begin
+stem:=False;
+for l:=i-1 to i+1 do
+  for g:=j-1 to j+1  do
+    if (g>=1) and (g<=10) and (l>=1) and (l<=10) then
+      if player1matrix.cells[l,g] = 'R' then
+        begin
+        stem:=True;
+        iDamaged:=l;
+        jDamaged:=g;
+        end;
+if not(stem) then
+  begin
+  repeat
+    limit:=True;
+    Rand:=Random(3);
+    case Rand of
+      0: if i<=9 then Inc(i) else Limit:=false;
+      1: if i>=2 then Dec(i) else Limit:=false;
+      2: if j<=9 then Inc(i) else Limit:=false;
+      3: if j>=2 then Dec(i) else Limit:=false;
+    end;
+  until limit;
+  end
+else
+  begin
+  if jDamaged = j then
+    repeat
+      limit:=True;
+      Rand:=Random(1);
+      case Rand of
+        0: if (J<=9) and (player1matrix.cells[i,j+1]='') then Inc(j) else limit:=false;
+        1: if (J>=2) and (player1matrix.cells[i,j-1]='') then Dec(j) else limit:=false;
+      end;
+    until limit;
+  if iDamaged = i then
+    repeat
+      limit:=True;
+      Rand:=Random(1);
+      case Rand of
+        0: if (i<=9) and (player1matrix.cells[i+1,j]='') then Inc(j) else limit:=false;
+        1: if (i>=2) and (player1matrix.cells[i-1,J]='') then Dec(j) else limit:=false;
+      end;
+    until limit;
+  end;
+end;
 
 
 procedure TForm1.player2matrixMouseUp(Sender: TObject; Button: TMouseButton;
@@ -750,6 +952,8 @@ var
 begin
   if (mode = battaly) then
   begin
+    if (currplayer = 2) then
+      ShowMessage('Соблюдай очередь, иначе придет большой ИИ и накажет тебя :c');
     if (currplayer = 1) then
     begin
       player2matrix.MouseToCell(X, Y, ACol, ARow);
@@ -758,18 +962,18 @@ begin
         // ShowMessage(IntToStr(ACol));
         if (player2matrix.Cells[ACol,ARow] = '') then
         begin
-          // ��� ������ ����
+          // ТУТ ПУСТОЕ ПОЛЕ
           player2matrix.Cells[ACol,ARow] := '*';
           currplayer:=2;
-          pnl5.Caption := '����� ��';
+          pnl5.Caption := 'Ходит ИИ';
           pnl5.color := RGB(0,50,0);
           pnl5.Font.Color := clWhite;
         end
         else
         begin
           case player2matrix.Cells[ACol,ARow][1] of
-            '*','R','K': ShowMessage('�� ��� ������� ���� :c');
-            'S':   // �� ������!!!
+            '*','R','K': ShowMessage('Ты уже стрелял сюда :c');
+            'S':   // МЫ ПОПАЛИ!!!
             begin
               Dec(P2N);
               lbP2N.Caption := IntToStr(P2n);
@@ -798,7 +1002,7 @@ begin
     ShowMessage('Game Over');
     mode := GameOver;
     if (P1N = 0) then
-      ShowMessage('��������� �������, ������� ����� � ���������� �� ���������� ������');
+      ShowMessage('Парамошка победил, поэтому может и продолжать не выставлять модули');
   end;
 end;
 
