@@ -100,14 +100,29 @@ stem:=False;
 idamaged:=0;
 jDamaged:=0;
 k:=0;
-for l:=i-1 to i+1 do
-  for g:=j-1 to j+1  do
-    if (g>=1) and (g<=10) and (l>=1) and (l<=10) and not((g=j) and (l=i)) then
-      if player1matrix.cells[l,g] = 'R' then
+if j<=9 then
+  if player1matrix.cells[i,j+1] = 'R' then
         begin
         stem:=True;
-        iDamaged:=l;
-        jDamaged:=g;
+        iDamaged:=i;
+        end;
+if j>=2 then
+  if player1matrix.cells[i+1,j] = 'R' then
+        begin
+        stem:=True;
+        jDamaged:=j;
+        end;
+if i<=9 then
+  if player1matrix.cells[i,j-1] = 'R' then
+        begin
+        stem:=True;
+        iDamaged:=i;
+        end;
+if i>=2 then
+  if player1matrix.cells[i-1,j] = 'R' then
+        begin
+        stem:=True;
+        jDamaged:=j;
         end;
 if not(stem) then
   begin
@@ -140,15 +155,15 @@ else
       then
         repeat
         Inc(j);
-        if (j=10) and (player1matrix.cells[i,j]='R') then limit:=False;
-        until (player1matrix.cells[i,j]<>'R') or (j=10)
+        if (j=10) and (player1matrix.cells[i,j]<>'') then limit:=False;
+        until (player1matrix.cells[i,j]='') or (j=10)
       else limit:=false;
         1: if (J>=2)
       then
         repeat
         Dec(j);
-        if (j=1) and (player1matrix.cells[i,j]='R') then limit:=False;
-        until (player1matrix.cells[i,j]<>'R') or (j=1)
+        if (j=1) and (player1matrix.cells[i,j]<>'') then limit:=False;
+        until (player1matrix.cells[i,j]='') or (j=1)
       else limit:=false;
       end;
     until (limit) or (k=30);
@@ -161,15 +176,15 @@ else
         0: if (i<=9) then
         repeat
         Inc(i);
-        if (i=10) and (player1matrix.cells[i,j]='R') then limit:=False;
-        until (player1matrix.cells[i,j]<>'R') or (i=10)
+        if (i=10) and (player1matrix.cells[i,j]<>'') then limit:=False;
+        until (player1matrix.cells[i,j]='') or (i=10)
       else limit:=false;
         1: if (i>=2)
       then
         repeat
         Dec(i);
-        if (i=1) and (player1matrix.cells[i,j]='R') then limit:=False;
-        until (player1matrix.cells[i,j]<>'R') or (i=1)
+        if (i=1) and (player1matrix.cells[i,j]<>'') then limit:=False;
+        until (player1matrix.cells[i,j]='') or (i=1)
       else limit:=false;
       end;
     until (limit) or (k=30);
