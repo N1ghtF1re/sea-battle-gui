@@ -926,8 +926,8 @@ else
       limit:=True;
       Rand:=Random(1);
       case Rand of
-        0: if (J<=9) and (player1matrix.cells[i,j+1]='') then Inc(j) else limit:=false;
-        1: if (J>=2) and (player1matrix.cells[i,j-1]='') then Dec(j) else limit:=false;
+        0: if (J<=9) and (player1matrix.cells[i,j+1]<>'R') then Inc(j) else limit:=false;
+        1: if (J>=2) and (player1matrix.cells[i,j-1]<>'R') then Dec(j) else limit:=false;
       end;
     until limit;
   if iDamaged = i then
@@ -935,8 +935,8 @@ else
       limit:=True;
       Rand:=Random(1);
       case Rand of
-        0: if (i<=9) and (player1matrix.cells[i+1,j]='') then Inc(j) else limit:=false;
-        1: if (i>=2) and (player1matrix.cells[i-1,J]='') then Dec(j) else limit:=false;
+        0: if (i<=9) and (player1matrix.cells[i+1,j]<>'R') then Inc(j) else limit:=false;
+        1: if (i>=2) and (player1matrix.cells[i-1,J]<>'R') then Dec(j) else limit:=false;
       end;
     until limit;
   end;
