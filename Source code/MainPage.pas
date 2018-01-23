@@ -19,6 +19,7 @@ type
     procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
       var Resize: Boolean);
     procedure btn1Click(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 
   private
     { Private declarations }
@@ -40,15 +41,13 @@ uses CreateField, Game;
 
 procedure TForm3.btn1Click(Sender: TObject);
 begin
-
   Form3.UserName := edt1.Text;
   //ShowMessage(Form3.UserName);
   if(Trim(Form3.UserName) = '' ) then
     ShowMessage('¬ведите им€')
   else
   begin
-    Form3.hide;
-    Form1.Show;
+    Form3.Close;
   end;
 end;
 
@@ -61,6 +60,14 @@ begin
   edt1.Top := Trunc( (pnl3.Height + edt1.Height) / 2 );
   btn1.Left := Trunc(pnl4.Width*0.3);
   btn1.Width := Trunc(pnl4.Width*0.4);
+end;
+
+procedure TForm3.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = 13) then
+    btn1Click(btn1);
+
 end;
 
 end.

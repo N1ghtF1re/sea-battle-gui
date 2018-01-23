@@ -1,6 +1,7 @@
 object Form3: TForm3
   Left = 0
   Top = 0
+  BorderIcons = [biMinimize, biMaximize]
   Caption = #1052#1086#1088#1089#1082#1086#1081' '#1073#1086#1081
   ClientHeight = 308
   ClientWidth = 496
@@ -14,6 +15,7 @@ object Form3: TForm3
   Font.Style = []
   OldCreateOrder = False
   OnCanResize = FormCanResize
+  OnKeyDown = FormKeyDown
   PixelsPerInch = 96
   TextHeight = 13
   object pnl1: TPanel
