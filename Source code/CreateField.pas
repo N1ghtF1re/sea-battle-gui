@@ -50,6 +50,7 @@ type
     N8: TMenuItem;
     N9: TMenuItem;
     N10: TMenuItem;
+    btnAutoCreate: TButton;
     procedure FormCreate(Sender: TObject);
     procedure player1matrixMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
@@ -68,6 +69,7 @@ type
     procedure N9Click(Sender: TObject);
     procedure N10Click(Sender: TObject);
     procedure N5Click(Sender: TObject);
+    procedure btnAutoCreateClick(Sender: TObject);
 
   private
     { Private declarations }
@@ -309,10 +311,7 @@ uses ErrorPage, MainPage,game;
     end;
   end;
 
-procedure TForm1.btNextClick(Sender: TObject);
-var i,j:Byte;
-// Test1:string;
-  procedure Seabattle_fieldAI_generator(var P2F:TPF);
+procedure Seabattle_fieldAI_generator(var P2F:TPF);
   const ships = 20;
    var ib,jb,ie,je,i,j,k,ship_size,ship_amount,direction,n,counter:Integer ;
  var exiter,exc:Boolean;
@@ -322,9 +321,9 @@ var i,j:Byte;
  begin
 
    if
-     (P2F[x-1,y]='K') or (P2F[x,y-1]='K') or (P2F[x-1,y-1]='K')
+        (P2F[x-1,y]='K') or (P2F[x,y-1]='K') or (P2F[x-1,y-1]='K')
       or (P2F[x+1,y]='K') or (P2F[x,y+1]='K') or (P2F[x+1,y+1]='K')
-      or (P2F[x+1,y-1]='K')or (P2F[x-1,y+1]='K')  then
+      or (P2F[x+1,y-1]='K')or (P2F[x-1,y+1]='K') or (P2F[x,y]='K')  then
    Quick_math:=true
    else quick_math:=false;
  end;
@@ -351,7 +350,7 @@ var i,j:Byte;
       repeat
         ib:=Random(n)+1;
         jb:=Random(n)+1;
-      until not(quick_math(ib,jb)) and ( (jb+ship_size-1>10) or (ib+ship_size-1>10)) ;
+      until not (quick_math(ib,jb)) or ( (jb+ship_size-1>10) or (ib+ship_size-1>10)) ;
       direction:=random(2)+1;             //1-Right 2-Bottom 3-Left 4-up
       if ship_size>1 then
       begin
@@ -415,7 +414,29 @@ var i,j:Byte;
    end;
   end;
   end;
+procedure TForm1.btnAutoCreateClick(Sender: TObject);
+var i,j:Integer;
+begin
+  for i:=1 to 10 do
+  begin
+    for j:=1 to 10 do
+    begin
+      player1matrix.Cells[i,j] := '';
+      P1F[i,j] := ' ';
+    end;
+  end;
+  Seabattle_fieldAI_generator(P1F);
+  for i:=1 to 10 do
+    for j:= 1 to 10 do
+      Case P1F[i,j] of
+        'M' : player1matrix.Cells[i,j] := '';
+        'K' : player1matrix.Cells[i,j] := 'S';
+      End;
+end;
 
+procedure TForm1.btNextClick(Sender: TObject);
+var i,j:Byte;
+// Test1:string;
 begin
   for i:=1 to 10 do
   begin
@@ -539,7 +560,10 @@ var
   rule:string;
 begin
   savedTitle := Application.Title;
-  rule := 'Для создание своего '
+  rule := 'Для расстановки кораблей кликайте по ячейкам игрового поля. Слева вы можете отслеживать, сколько каких кораблей вам осталось создать.';
+  rule := rule + #10#13 + 'После правильной расстановки кораблей появится кнопка продолжения.';
+  rule := rule + #10#13 + #10#13 + 'Для стрельбы кликайте по ячейкам поля соперника (расположено справа)';
+
   try
     Application.Title := 'Управление';
     ShowMessage(rule);

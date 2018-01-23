@@ -11472,6 +11472,16 @@ object Form1: TForm1
       OnDrawCell = player2matrixDrawCell
       OnMouseUp = player2matrixMouseUp
     end
+    object btnAutoCreate: TButton
+      Left = 335
+      Top = 100
+      Width = 123
+      Height = 49
+      Caption = #1040#1074#1090#1086#1084#1072#1090#1080#1095#1077#1089#1082#1072#1103' '#1088#1072#1089#1089#1090#1072#1085#1086#1074#1082#1072
+      TabOrder = 3
+      WordWrap = True
+      OnClick = btnAutoCreateClick
+    end
   end
   object pnl4: TPanel
     Left = 0
