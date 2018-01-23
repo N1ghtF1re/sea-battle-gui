@@ -51,6 +51,7 @@ type
     N9: TMenuItem;
     N10: TMenuItem;
     btnAutoCreate: TButton;
+    N11: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure player1matrixMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
@@ -70,6 +71,7 @@ type
     procedure N10Click(Sender: TObject);
     procedure N5Click(Sender: TObject);
     procedure btnAutoCreateClick(Sender: TObject);
+    procedure N11Click(Sender: TObject);
 
   private
     { Private declarations }
@@ -87,9 +89,84 @@ implementation
 
 {$R *.dfm}
 
-uses ErrorPage, MainPage,game;
+uses ErrorPage, MainPage,game, AboutUs;
 
 // resourcestring PlacingRules = 'Игровое поле — обычно квадрат 10×10 каждого игрока, на котором размещается флот кораблей. Горизонтали обычно нумеруются сверху вниз, а вертикали помечаются буквами слева направо. При этом используются буквы русского алфавита от «а» до «к» (буквы «ё» и «й» обычно пропускаются) либо от «а» до «и» (с использованием буквы «ё»), либо буквы латинского алфавита от «a» до «j». Иногда используется слово «республика» или «снегурочка», так как в этих 10-буквенных словах ни одна буква не повторяется. Поскольку существуют различные варианты задания системы координат, то об этом лучше заранее договориться.' + #1013 'Размещаются:';
+procedure isHitted_wow(var player1matrix:TStringGrid; var i,j:byte);
+var rand, g, l, iDamaged, jDamaged:integer;
+    stem,limit:Boolean;
+begin
+stem:=False;
+idamaged:=0;
+jDamaged:=0;
+for l:=i-1 to i+1 do
+  for g:=j-1 to j+1  do
+    if (g>=1) and (g<=10) and (l>=1) and (l<=10) and not((g=j) and (l=i)) then
+      if player1matrix.cells[l,g] = 'R' then
+        begin
+        stem:=True;
+        iDamaged:=l;
+        jDamaged:=g;
+        end;
+if not(stem) then
+  begin
+  repeat
+    limit:=True;
+    Rand:=Random(3);
+    case Rand of
+      0: if i<=9 then Inc(i) else Limit:=false;
+      1: if i>=2 then Dec(i) else Limit:=false;
+      2: if j<=9 then Inc(i) else Limit:=false;
+      3: if j>=2 then Dec(i) else Limit:=false;
+    end;
+  until limit;
+  end
+else
+  begin
+  if jDamaged = j then
+    repeat
+      limit:=True;
+      Rand:=Random(1);
+      case Rand of
+        0: if (J<=9)
+      then
+        repeat
+        Inc(j);
+        if (j=10) and (player1matrix.cells[i,j]='R') then limit:=False;
+        until (player1matrix.cells[i,j]<>'R') or (j=10)
+      else limit:=false;
+        1: if (J>=2)
+      then
+        repeat
+        Dec(j);
+        if (j=1) and (player1matrix.cells[i,j]='R') then limit:=False;
+        until (player1matrix.cells[i,j]<>'R') or (j=1)
+      else limit:=false;
+      end;
+    until limit;
+  if iDamaged = i then
+    repeat
+      limit:=True;
+      Rand:=Random(1);
+      case Rand of
+        0: if (i<=9) then
+        repeat
+        Inc(i);
+        if (i=10) and (player1matrix.cells[i,j]='R') then limit:=False;
+        until (player1matrix.cells[i,j]<>'R') or (i=10)
+      else limit:=false;
+        1: if (i>=2)
+      then
+        repeat
+        Dec(i);
+        if (i=1) and (player1matrix.cells[i,j]='R') then limit:=False;
+        until (player1matrix.cells[i,j]<>'R') or (i=1)
+      else limit:=false;
+      end;
+    until limit;
+  end;
+end;
+
 
 
   procedure KillShip(const fullmatrix: TPF; var EnemyMatrix: TStringGrid; const x,y:Byte);
@@ -262,34 +339,20 @@ uses ErrorPage, MainPage,game;
   end;
   procedure AIShotShotShot(player1matrix:TStringGrid);
   var
-    missed:Boolean;
+    missed,second:Boolean;
     AIX, AIY: byte;
   begin
     //lbWalk.Caption := 'Ходит: ИИ';
     missed := False;
+    second := False;
     while (not missed) do
     begin
+    if not second then
       repeat
-        {if ((LSX <> 0) and (LSY <> 0)) then
-        begin
-          repeat
-            AIX:=LSX;
-            AIY:=LSY;
-            case random(4) of
-              1: Inc(AIX);
-              2: Inc(AIY);
-              3: Dec(AIX);
-              4: Dec(AIY);
-            end;
-          until ((AIX in [1..10]) and (AIY in [1..10]) );
-        end
-        else }
-        begin
-          AIX := Random(10) +1;
-          AIY := Random(10) +1;
-        end;
+      AIX := Random(10) +1;
+      AIY := Random(10) +1;
       until ((player1matrix.Cells[AIX,AIY] <> '*') and (player1matrix.Cells[AIX,AIY] <> 'R') and (player1matrix.Cells[AIX,AIY] <> 'K'));
-      if player1matrix.Cells[AIX,AIY] = '' then
+       if player1matrix.Cells[AIX,AIY] = '' then
       begin
         player1matrix.Cells[AIX,AIY] := '*';
         missed:=true;
@@ -305,10 +368,13 @@ uses ErrorPage, MainPage,game;
           LSX:=AIX;
           LSY:=AIY;
           ShowMessage('Большой ИИ попал в тебя');
+          second:=true;
         end;
       end;
+      if second then isHitted_wow(player1matrix,AIX,AIY)
 
     end;
+
   end;
 
 procedure Seabattle_fieldAI_generator(var P2F:TPF);
@@ -406,6 +472,7 @@ procedure Seabattle_fieldAI_generator(var P2F:TPF);
       if P2F[i,j] = 'K' then inc(counter);
 
   end;
+
 
 
 
@@ -551,6 +618,11 @@ begin
     Application.Title := savedTitle;
   end;
 
+end;
+
+procedure TForm1.N11Click(Sender: TObject);
+begin
+  FormAboutDevelopers.Show;
 end;
 
 procedure TForm1.N3Click(Sender: TObject);
@@ -895,8 +967,6 @@ begin
     pnl5.Caption := 'Ваш ход, ' + form3.UserName;
   end;
 end;
-
-
 
 
 procedure TForm1.player2matrixMouseUp(Sender: TObject; Button: TMouseButton;

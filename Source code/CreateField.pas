@@ -99,6 +99,7 @@ begin
 stem:=False;
 idamaged:=0;
 jDamaged:=0;
+k:=0;
 for l:=i-1 to i+1 do
   for g:=j-1 to j+1  do
     if (g>=1) and (g<=10) and (l>=1) and (l<=10) and not((g=j) and (l=i)) then
@@ -111,6 +112,7 @@ for l:=i-1 to i+1 do
 if not(stem) then
   begin
   repeat
+    INC(K);
     limit:=True;
     Rand:=Random(3);
     case Rand of
@@ -119,12 +121,18 @@ if not(stem) then
       2: if j<=9 then Inc(i) else Limit:=false;
       3: if j>=2 then Dec(i) else Limit:=false;
     end;
-  until limit;
+  until (limit) or (k=15);
+  if k=15 then
+    repeat
+      AIX := Random(10) +1;
+      AIY := Random(10) +1;
+      until ((player1matrix.Cells[AIX,AIY] <> '*') and (player1matrix.Cells[AIX,AIY] <> 'R') and (player1matrix.Cells[AIX,AIY] <> 'K'));
   end
 else
   begin
   if jDamaged = j then
     repeat
+    Inc(k);
       limit:=True;
       Rand:=Random(1);
       case Rand of
@@ -143,9 +151,10 @@ else
         until (player1matrix.cells[i,j]<>'R') or (j=1)
       else limit:=false;
       end;
-    until limit;
+    until (limit) or (k=30);
   if iDamaged = i then
     repeat
+      Inc(k);
       limit:=True;
       Rand:=Random(1);
       case Rand of
@@ -163,7 +172,13 @@ else
         until (player1matrix.cells[i,j]<>'R') or (i=1)
       else limit:=false;
       end;
-    until limit;
+    until (limit) or (k=30);
+  if k=30 then
+    repeat
+      AIX := Random(10) +1;
+      AIY := Random(10) +1;
+      until ((player1matrix.Cells[AIX,AIY] <> '*') and (player1matrix.Cells[AIX,AIY] <> 'R') and (player1matrix.Cells[AIX,AIY] <> 'K'));
+
   end;
 end;
 
