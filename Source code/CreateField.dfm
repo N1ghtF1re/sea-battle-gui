@@ -11473,7 +11473,7 @@ object Form1: TForm1
       OnMouseUp = player2matrixMouseUp
     end
     object btnAutoCreate: TButton
-      Left = 335
+      Left = 339
       Top = 100
       Width = 123
       Height = 49
@@ -11564,6 +11564,10 @@ object Form1: TForm1
       object N5: TMenuItem
         Caption = #1059#1087#1088#1072#1074#1083#1077#1085#1080#1077
         OnClick = N5Click
+      end
+      object N11: TMenuItem
+        Caption = #1054' '#1088#1072#1079#1088#1072#1073#1086#1090#1095#1082#1072#1093
+        OnClick = N11Click
       end
       object N6: TMenuItem
         Caption = #1054' '#1087#1088#1086#1075#1088#1072#1084#1084#1077

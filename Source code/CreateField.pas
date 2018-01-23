@@ -51,6 +51,7 @@ type
     N9: TMenuItem;
     N10: TMenuItem;
     btnAutoCreate: TButton;
+    N11: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure player1matrixMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
@@ -70,6 +71,7 @@ type
     procedure N10Click(Sender: TObject);
     procedure N5Click(Sender: TObject);
     procedure btnAutoCreateClick(Sender: TObject);
+    procedure N11Click(Sender: TObject);
 
   private
     { Private declarations }
@@ -87,7 +89,7 @@ implementation
 
 {$R *.dfm}
 
-uses ErrorPage, MainPage,game;
+uses ErrorPage, MainPage,game, AboutUs;
 
 // resourcestring PlacingRules = 'Игровое поле — обычно квадрат 10×10 каждого игрока, на котором размещается флот кораблей. Горизонтали обычно нумеруются сверху вниз, а вертикали помечаются буквами слева направо. При этом используются буквы русского алфавита от «а» до «к» (буквы «ё» и «й» обычно пропускаются) либо от «а» до «и» (с использованием буквы «ё»), либо буквы латинского алфавита от «a» до «j». Иногда используется слово «республика» или «снегурочка», так как в этих 10-буквенных словах ни одна буква не повторяется. Поскольку существуют различные варианты задания системы координат, то об этом лучше заранее договориться.' + #1013 'Размещаются:';
 
@@ -320,8 +322,7 @@ procedure Seabattle_fieldAI_generator(var P2F:TPF);
 
  begin
 
-   if
-        (P2F[x-1,y]='K') or (P2F[x,y-1]='K') or (P2F[x-1,y-1]='K')
+   if (P2F[x-1,y]='K') or (P2F[x,y-1]='K') or (P2F[x-1,y-1]='K')
       or (P2F[x+1,y]='K') or (P2F[x,y+1]='K') or (P2F[x+1,y+1]='K')
       or (P2F[x+1,y-1]='K')or (P2F[x-1,y+1]='K') or (P2F[x,y]='K')  then
    Quick_math:=true
@@ -432,6 +433,12 @@ begin
         'M' : player1matrix.Cells[i,j] := '';
         'K' : player1matrix.Cells[i,j] := 'S';
       End;
+  lbnum1.Caption := '4';
+  lbNum2.Caption := '3';
+  lbNum3.Caption := '2';
+  lbNum4.Caption := '1';
+  pnIsFin.Visible := true
+
 end;
 
 procedure TForm1.btNextClick(Sender: TObject);
@@ -452,7 +459,7 @@ begin
   end;
   //player1matrix.Free();
   Seabattle_fieldAI_generator(P2F);
-
+  btnAutoCreate.Visible := false;
   pnl1.Visible := false;
   pnIsFin.Visible := false;
   mode := battaly;
@@ -548,6 +555,11 @@ begin
 
 end;
 
+procedure TForm1.N11Click(Sender: TObject);
+begin
+  FormAboutDevelopers.Show;
+end;
+
 procedure TForm1.N3Click(Sender: TObject);
 begin
   ShowMessage('Я еще вернусь!');
@@ -625,6 +637,7 @@ begin
   img2.Visible := false;
   lbP1N.Visible := false;
   lbP2N.Visible := false;
+  btnAutoCreate.Visible := true;
 end;
 
 procedure TForm1.player1matrixDrawCell(Sender: TObject; ACol, ARow: Integer;
@@ -817,7 +830,7 @@ begin
         pnIsFin.Visible := true
       else
         pnIsFin.Visible := false;
-      pnIsFin.Visible := true
+      // pnIsFin.Visible := true
     end;
   end;
 end;
