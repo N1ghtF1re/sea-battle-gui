@@ -72,6 +72,7 @@ type
     procedure N5Click(Sender: TObject);
     procedure btnAutoCreateClick(Sender: TObject);
     procedure N11Click(Sender: TObject);
+    procedure N6Click(Sender: TObject);
 
   private
     { Private declarations }
@@ -84,6 +85,7 @@ type
 var
   Form1: TForm1;
   mode:TMode;
+  isShow:Boolean;
 
 implementation
 
@@ -592,7 +594,11 @@ end;
 
 procedure TForm1.FormActivate(Sender: TObject);
 begin
-  Form3.ShowModal;
+  if(not isShow)then
+  begin
+    Form3.ShowModal;
+    isShow:= true;
+  end;
 end;
 
 procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -604,6 +610,7 @@ end;
 procedure TForm1.FormCreate(Sender: TObject);
 var i:Byte;
 begin
+  isShow:=false;
   for i:=1 to 10 do
   begin
     player1matrix.Cells[i,0]:=IntToStr(i);
@@ -670,6 +677,29 @@ begin
   rule := rule + #10#13 + 'После правильной расстановки кораблей появится кнопка продолжения.';
   rule := rule + #10#13 + #10#13 + 'Для стрельбы кликайте по ячейкам поля соперника (расположено справа)';
 
+  try
+    Application.Title := 'Управление';
+    ShowMessage(rule);
+  finally
+    rule:='';
+    Application.Title := savedTitle;
+  end;
+end;
+
+procedure TForm1.N6Click(Sender: TObject);
+  var
+  savedTitle : String;
+  rule:string;
+begin
+  savedTitle := Application.Title;
+  rule := 'SEA-BATTLE-GUI (Торговая марка не зарегистрирована, никакие права не защищены, все имена вымышленные, а фотографии сгенерированны нейросетью, все совпадения неслучайны)- это';
+  rule := rule + 'современный симулятор войны, основанный на технологиях самообучившегося искусственного интеллекта и дополнительной реальности.';
+  rule := rule + #10#13 + #10#13 + 'В нашей игре вы сможете управлять своим флотом современной морской техники и противостоять армии восстания машин! Мы также поддерживаем блокчейн технологии - встроенные скрипты будут майнить криптовалюты за счет мощностей вашего процессора!';
+  rule := rule + #10#13 + #10#13 + #10#13 + 'Мы успешно решили две главные задачи, которые ставили перед новым написанием данной программы. Во-первых, обеспечили себе занятие на каникулы, ведь Оношко Д.Е. сказал нам: делайте, что хотите, пока время позволяет.';
+  rule := rule + 'Во-вторых, изучили поведение иноземного искусственного интеллекта в условиях графического пользовательского интерфейса. ';
+  rule := rule + #10#13 + 'Александр Панкратьев,';
+  rule := rule + #10#13 + 'Технический директор BrakhMen Corp';
+  rule:= rule + #10#13 + #10#13 + 'Морской бой еще никогда не был таким увлекающим!' + #10#13 + '(Торговая марка не зарегистрирована, никакие права не защищены)';
   try
     Application.Title := 'Управление';
     ShowMessage(rule);
@@ -994,6 +1024,13 @@ begin
     pnl5.Visible := true;
     pnl5.color := RGB(34,180,34);
     pnl5.Caption := 'Ваш ход, ' + form3.UserName;
+    if ((P1N =  0) or (P2N = 0)) then
+    begin
+      ShowMessage('Game Over');
+      mode := GameOver;
+      if (P1N = 0) then
+        ShowMessage('Парамошка победил, поэтому может и продолжать не выставлять модули');
+    end;
   end;
 end;
 
