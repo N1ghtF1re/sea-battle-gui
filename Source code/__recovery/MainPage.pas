@@ -54,8 +54,7 @@ end;
 procedure TForm3.edt1KeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
-  if (Key = 13) then
-    btn1Click(btn1);
+
 end;
 
 procedure TForm3.FormCanResize(Sender: TObject; var NewWidth,
