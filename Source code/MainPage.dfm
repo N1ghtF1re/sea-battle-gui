@@ -15,7 +15,6 @@ object Form3: TForm3
   Font.Style = []
   OldCreateOrder = False
   OnCanResize = FormCanResize
-  OnKeyDown = FormKeyDown
   PixelsPerInch = 96
   TextHeight = 13
   object pnl1: TPanel
@@ -94,6 +93,7 @@ object Form3: TForm3
         Font.Style = []
         ParentFont = False
         TabOrder = 0
+        OnKeyDown = edt1KeyDown
       end
     end
     object pnl4: TPanel
