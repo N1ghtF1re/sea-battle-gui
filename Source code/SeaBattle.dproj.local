@@ -1,19 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
 	<Transactions>
-    <Transaction>1899.12.30 00:00:00.000.123,D:\Морской бой\SeaBattle.dproj=C:\Users\Win10\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.282,D:\Морской бой\ErrorPage.pas=D:\Морской бой\Unit2.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.345,D:\Морской бой\Unit1.pas=C:\Users\Win10\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.409,D:\Морской бой\Game.dfm=D:\Морской бой\Unit3.dfm</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.612,=C:\Users\Win10\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.345,D:\Морской бой\Unit1.dfm=C:\Users\Win10\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.899,D:\Морской бой\CreateField.pas=D:\Морской бой\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.899,D:\Морской бой\CreateField.dfm=D:\Морской бой\Unit1.dfm</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.037,=D:\Морской бой\Unit3.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.282,D:\Морской бой\ErrorPage.dfm=D:\Морской бой\Unit2.dfm</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.499,=C:\Users\Win10\Documents\Embarcadero\Studio\Projects\Unit2.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.916,D:\Морской бой\Unit2.dfm=C:\Users\Win10\Documents\Embarcadero\Studio\Projects\Unit2.dfm</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.916,D:\Морской бой\Unit2.pas=C:\Users\Win10\Documents\Embarcadero\Studio\Projects\Unit2.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.409,D:\Морской бой\Game.pas=D:\Морской бой\Unit3.pas</Transaction>
+    <Transaction>1899/12/30 00:00:00.000.899,D:\Морской бой\Unit1.dfm=D:\Морской бой\CreateField.dfm</Transaction>
+    <Transaction>1899/12/30 00:00:00.000.916,C:\Users\Win10\Documents\Embarcadero\Studio\Projects\Unit2.pas=D:\Морской бой\Unit2.pas</Transaction>
+    <Transaction>1899/12/30 00:00:00.000.499,=C:\Users\Win10\Documents\Embarcadero\Studio\Projects\Unit2.pas</Transaction>
+    <Transaction>1899/12/30 00:00:00.000.916,C:\Users\Win10\Documents\Embarcadero\Studio\Projects\Unit2.dfm=D:\Морской бой\Unit2.dfm</Transaction>
+    <Transaction>1899/12/30 00:00:00.000.899,D:\Морской бой\Unit1.pas=D:\Морской бой\CreateField.pas</Transaction>
+    <Transaction>1899/12/30 00:00:00.000.282,D:\Морской бой\Unit2.dfm=D:\Морской бой\ErrorPage.dfm</Transaction>
+    <Transaction>1899/12/30 00:00:00.000.282,D:\Морской бой\Unit2.pas=D:\Морской бой\ErrorPage.pas</Transaction>
+    <Transaction>1899/12/30 00:00:00.000.409,D:\Морской бой\Unit3.dfm=D:\Морской бой\Game.dfm</Transaction>
+    <Transaction>1899/12/30 00:00:00.000.612,=C:\Users\Win10\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899/12/30 00:00:00.000.345,C:\Users\Win10\Documents\Embarcadero\Studio\Projects\Unit1.pas=D:\Морской бой\Unit1.pas</Transaction>
+    <Transaction>1899/12/30 00:00:00.000.037,=D:\Морской бой\Unit3.pas</Transaction>
+    <Transaction>1899/12/30 00:00:00.000.123,C:\Users\Win10\Documents\Embarcadero\Studio\Projects\Project1.dproj=D:\Морской бой\SeaBattle.dproj</Transaction>
+    <Transaction>1899/12/30 00:00:00.000.345,C:\Users\Win10\Documents\Embarcadero\Studio\Projects\Unit1.dfm=D:\Морской бой\Unit1.dfm</Transaction>
+    <Transaction>1899/12/30 00:00:00.000.409,D:\Морской бой\Unit3.pas=D:\Морской бой\Game.pas</Transaction>
   </Transactions>
 </BorlandProject>
