@@ -95,7 +95,7 @@ uses ErrorPage, MainPage,game, AboutUs;
 
 // resourcestring PlacingRules = 'Игровое поле — обычно квадрат 10×10 каждого игрока, на котором размещается флот кораблей. Горизонтали обычно нумеруются сверху вниз, а вертикали помечаются буквами слева направо. При этом используются буквы русского алфавита от «а» до «к» (буквы «ё» и «й» обычно пропускаются) либо от «а» до «и» (с использованием буквы «ё»), либо буквы латинского алфавита от «a» до «j». Иногда используется слово «республика» или «снегурочка», так как в этих 10-буквенных словах ни одна буква не повторяется. Поскольку существуют различные варианты задания системы координат, то об этом лучше заранее договориться.' + #1013 'Размещаются:';
 procedure isHitted_wow(var player1matrix:TStringGrid; var i,j:byte);
-var rand, g, l, iDamaged, jDamaged, K:integer;
+var rand, g, l, iDamaged, jDamaged, K, trigr:integer;
     stem,limit:Boolean;
 begin
 stem:=False;
@@ -133,13 +133,68 @@ if not(stem) then
     limit:=True;
     Rand:=Random(3);
     case Rand of
-      0: if i<=9 then Inc(i) else Limit:=false;
-      1: if i>=2 then Dec(i) else Limit:=false;
-      2: if j<=9 then Inc(i) else Limit:=false;
-      3: if j>=2 then Dec(i) else Limit:=false;
+      0: if i<=9 then
+      begin
+      trigr:=0;
+      repeat
+      Inc(i);
+      Inc(trigr);
+      if ((i=10) and (player1matrix.cells[i,j] <> '')) and (player1matrix.Cells[i,j] <> 'S') then
+        begin
+        limit:=False;
+        dec(i,trigr);
+        end;
+      until (player1matrix.Cells[i,j]='S') or (player1matrix.Cells[i,j]='') or (i=10)
+      end
+    else Limit:=false;
+
+      1: if i>=2 then
+      begin
+      trigr:=0;
+      repeat
+      dec(i);
+      Inc(trigr);
+      if ((i=1) and (player1matrix.cells[i,j] <> '')) and (player1matrix.Cells[i,j] <> 'S') then
+        begin
+        limit:=False;
+        inc(i,trigr);
+        end;
+      until (player1matrix.Cells[i,j]='S') or (player1matrix.Cells[i,j]='') or (i=1)
+      end
+    else Limit:=false;
+
+      2: if j<=9 then
+      begin
+      trigr:=0;
+      repeat
+      Inc(j);
+      Inc(trigr);
+      if ((j=10) and (player1matrix.cells[i,j] <> '')) and (player1matrix.Cells[i,j] <> 'S') then
+        begin
+        limit:=False;
+        dec(j,trigr);
+        end;
+      until (player1matrix.Cells[i,j]='S') or (player1matrix.Cells[i,j]='') or (j=10)
+      end
+    else Limit:=false;
+
+      3: if j>=2 then
+      begin
+      trigr:=0;
+      repeat
+      dec(j);
+      Inc(trigr);
+      if ((j=1) and (player1matrix.cells[i,j] <> '')) and (player1matrix.Cells[i,j] <> 'S') then
+        begin
+        limit:=False;
+        inc(j,trigr);
+        end;
+      until (player1matrix.Cells[i,j]='S') or (player1matrix.Cells[i,j]='') or (j=1)
+      end
+    else Limit:=false;
     end;
-  until (limit) or (k=15);
-  if k=15 then
+  until ((limit) and ((player1matrix.Cells[i,j] = 'S') or (player1matrix.Cells[i,j] = '')))  or (k=30) ;
+  if k=30 then
   repeat
       i := Random(10) +1;
       j := Random(10) +1;
@@ -155,17 +210,33 @@ if not(stem) then
       case Rand of
         0: if (J<=9)
       then
-      repeat
+        begin
+        trigr:=0;
+        repeat
         Inc(j);
-        if (j=10) and (player1matrix.cells[i,j]<>'') then limit:=False;
-      until (player1matrix.cells[i,j]='') or (j=10)
+        Inc(trigr);
+        if ((j=10) and ((player1matrix.cells[i,j]<>'') and (player1matrix.cells[i,j]<>'S'))) or (player1matrix.Cells[i,j]= '*') then
+          begin
+          limit:=False;
+          Dec(j,trigr);
+          end;
+        until (player1matrix.cells[i,j]='') or (player1matrix.cells[i,j]='S') or (j=10)
+        end
       else limit:=false;
         1: if (J>=2)
       then
+        begin
+        trigr:=0;
         repeat
         Dec(j);
-        if (j=1) and (player1matrix.cells[i,j]<>'') then limit:=False;
-        until (player1matrix.cells[i,j]='') or (j=1)
+        inc(trigr);
+        if ((j=1) and ((player1matrix.cells[i,j]<>'') and (player1matrix.cells[i,j]<>'S'))) or (player1matrix.Cells[i,j]= '*') then
+          begin
+            limit:=False;
+            Inc(j,trigr);
+            end;
+        until (player1matrix.cells[i,j]='') or (player1matrix.cells[i,j]='S') or (j=1)
+        end
       else limit:=false;
       end;
     until (limit) or (k=30);
@@ -176,17 +247,33 @@ if not(stem) then
       Rand:=Random(1);
       case Rand of
         0: if (i<=9) then
+        begin
+        trigr:=0;
         repeat
         Inc(i);
-        if (i=10) and (player1matrix.cells[i,j]<>'') then limit:=False;
-        until (player1matrix.cells[i,j]='') or (i=10)
+        Inc(trigr);
+        if ((i=10) and ((player1matrix.cells[i,j]<>'') and (player1matrix.cells[i,j]<>'S'))) or (player1matrix.Cells[i,j]= '*') then
+          begin
+          limit:=False;
+          Dec(i,trigr);
+          end;
+        until (player1matrix.cells[i,j]='') or (player1matrix.cells[i,j]='S') or (i=10)
+        end
       else limit:=false;
         1: if (i>=2)
       then
+        begin
+        trigr:=0;
         repeat
         Dec(i);
-        if (i=1) and (player1matrix.cells[i,j]<>'') then limit:=False;
-        until (player1matrix.cells[i,j]='') or (i=1)
+        Inc(trigr);
+        if ((i=1) and ((player1matrix.cells[i,j]<>'') and (player1matrix.cells[i,j]<>'S'))) or (player1matrix.Cells[i,j]= '*') then
+          begin
+          limit:=False;
+          Inc(j,trigr);
+          end;
+        until (player1matrix.cells[i,j]='') or (player1matrix.cells[i,j]='S') or (i=1)
+        end
       else limit:=false;
       end;
     until (limit) or (k=30);
@@ -371,11 +458,19 @@ end;
   procedure AIShotShotShot(player1matrix:TStringGrid);
   var
     missed,second:Boolean;
-    AIX, AIY: byte;
+    AIX, AIY, UtilI, UtilJ: byte;
   begin
     //lbWalk.Caption := 'Ходит: ИИ';
     missed := False;
     second := False;
+    for UtilI := 1 to 10 do
+      for UtilJ := 1 to 10 do
+        if player1matrix.Cells[UtilI,UtilJ]='R' then
+          begin
+          second:=true;
+          AIX:=UtilI;
+          AIY:=UtilJ;
+          end;
     while (not missed) and (P1N>0) do
     begin
     if not second then
@@ -383,6 +478,7 @@ end;
       AIX := Random(10) +1;
       AIY := Random(10) +1;
       until ((player1matrix.Cells[AIX,AIY] <> '*') and (player1matrix.Cells[AIX,AIY] <> 'R') and (player1matrix.Cells[AIX,AIY] <> 'K'));
+    if (second) and (P1N>0) then isHitted_wow(player1matrix,AIX,AIY);
        if player1matrix.Cells[AIX,AIY] = '' then
       begin
         player1matrix.Cells[AIX,AIY] := '*';
@@ -402,7 +498,7 @@ end;
           second:=true;
         end;
       end;
-      if (second) and (P1N>0) then isHitted_wow(player1matrix,AIX,AIY)
+
 
     end;
 
@@ -446,7 +542,7 @@ procedure Seabattle_fieldAI_generator(var P2F:TPF);
       repeat
         ib:=Random(n)+1;
         jb:=Random(n)+1;
-      until not (quick_math(ib,jb)) or ( (jb+ship_size-1>10) or (ib+ship_size-1>10)) ;
+      until not (quick_math(ib,jb)) or ( (jb+ship_size-1>10) and (ib+ship_size-1>10)) ;
       direction:=random(2)+1;             //1-Right 2-Bottom 3-Left 4-up
       if ship_size>1 then
       begin

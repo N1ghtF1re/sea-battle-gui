@@ -72,6 +72,7 @@ type
     procedure N5Click(Sender: TObject);
     procedure btnAutoCreateClick(Sender: TObject);
     procedure N11Click(Sender: TObject);
+    procedure N6Click(Sender: TObject);
 
   private
     { Private declarations }
@@ -84,6 +85,7 @@ type
 var
   Form1: TForm1;
   mode:TMode;
+  isShow:Boolean;
 
 implementation
 
@@ -93,52 +95,128 @@ uses ErrorPage, MainPage,game, AboutUs;
 
 // resourcestring PlacingRules = 'Игровое поле — обычно квадрат 10×10 каждого игрока, на котором размещается флот кораблей. Горизонтали обычно нумеруются сверху вниз, а вертикали помечаются буквами слева направо. При этом используются буквы русского алфавита от «а» до «к» (буквы «ё» и «й» обычно пропускаются) либо от «а» до «и» (с использованием буквы «ё»), либо буквы латинского алфавита от «a» до «j». Иногда используется слово «республика» или «снегурочка», так как в этих 10-буквенных словах ни одна буква не повторяется. Поскольку существуют различные варианты задания системы координат, то об этом лучше заранее договориться.' + #1013 'Размещаются:';
 procedure isHitted_wow(var player1matrix:TStringGrid; var i,j:byte);
-var rand, g, l, iDamaged, jDamaged:integer;
+var rand, g, l, iDamaged, jDamaged, K:integer;
     stem,limit:Boolean;
 begin
 stem:=False;
-for l:=i-1 to i+1 do
-  for g:=j-1 to j+1  do
-    if (g>=1) and (g<=10) and (l>=1) and (l<=10) and not((g=j) and (l=i)) then
-      if player1matrix.cells[l,g] = 'R' then
+idamaged:=0;
+jDamaged:=0;
+k:=0;
+if j<=9 then
+  if player1matrix.cells[i,j+1] = 'R' then
         begin
         stem:=True;
-        iDamaged:=l;
-        jDamaged:=g;
+        iDamaged:=i;
+        end;
+if j>=2 then
+  if player1matrix.cells[i+1,j] = 'R' then
+        begin
+        stem:=True;
+        jDamaged:=j;
+        end;
+if i<=9 then
+  if player1matrix.cells[i,j-1] = 'R' then
+        begin
+        stem:=True;
+        iDamaged:=i;
+        end;
+if i>=2 then
+  if player1matrix.cells[i-1,j] = 'R' then
+        begin
+        stem:=True;
+        jDamaged:=j;
         end;
 if not(stem) then
   begin
   repeat
+    INC(K);
     limit:=True;
     Rand:=Random(3);
     case Rand of
-      0: if i<=9 then Inc(i) else Limit:=false;
-      1: if i>=2 then Dec(i) else Limit:=false;
-      2: if j<=9 then Inc(i) else Limit:=false;
-      3: if j>=2 then Dec(i) else Limit:=false;
+      0: if i<=9 then
+      repeat
+      Inc(i);
+      if (i=10) and (player1matrix.cells[i,j]='R') then  limit:=False;
+      until (player1matrix.Cells[i,j]<>'R') or (i=10)
+    else Limit:=false;
+
+      1: if i>=2 then
+      repeat
+      dec(i);
+      if (i=1) and (player1matrix.cells[i,j]='R') then  limit:=False;
+      until (player1matrix.Cells[i,j]<>'R') or (i=1)
+    else Limit:=false;
+
+      2: if j<=9 then
+      repeat
+      Inc(j);
+      if ()j=10 and (player1matrix.cells[i,j]='R') then  limit:=False;
+      until (player1matrix.Cells[i,j]<>'R') or (j=10)
+    else Limit:=false;
+
+      3: if j>=2 then repeat
+      dec(j);
+      if (j=1) and (player1matrix.cells[i,j]='R') then  limit:=False;
+      until (player1matrix.Cells[i,j]<>'R') or (j=1)
+    else Limit:=false;
     end;
-  until limit;
+  until ((limit) and ((player1matrix.Cells[i,j] = 'S') or (player1matrix.Cells[i,j] = '')))  or (k=30) ;
+  if k=30 then
+  repeat
+      i := Random(10) +1;
+      j := Random(10) +1;
+  until ((player1matrix.Cells[i,j] <> '*') and (player1matrix.Cells[i,j] <> 'R') and (player1matrix.Cells[I,J] <> 'K'));
   end
-else
+  else
   begin
   if jDamaged = j then
     repeat
+    Inc(k);
       limit:=True;
       Rand:=Random(1);
       case Rand of
-        0: if (J<=9) and (player1matrix.cells[i,j+1]<>'R') then Inc(j) else limit:=false;
-        1: if (J>=2) and (player1matrix.cells[i,j-1]<>'R') then Dec(j) else limit:=false;
+        0: if (J<=9)
+      then
+      repeat
+        Inc(j);
+        if (j=10) and (player1matrix.cells[i,j]<>'') then limit:=False;
+      until (player1matrix.cells[i,j]='') or (j=10)
+      else limit:=false;
+        1: if (J>=2)
+      then
+        repeat
+        Dec(j);
+        if (j=1) and (player1matrix.cells[i,j]<>'') then limit:=False;
+        until (player1matrix.cells[i,j]='') or (j=1)
+      else limit:=false;
       end;
-    until limit;
+    until (limit) or (k=30);
   if iDamaged = i then
     repeat
+      Inc(k);
       limit:=True;
       Rand:=Random(1);
       case Rand of
-        0: if (i<=9) and (player1matrix.cells[i+1,j]<>'R') then Inc(j) else limit:=false;
-        1: if (i>=2) and (player1matrix.cells[i-1,J]<>'R') then Dec(j) else limit:=false;
+        0: if (i<=9) then
+        repeat
+        Inc(i);
+        if (i=10) and (player1matrix.cells[i,j]<>'') then limit:=False;
+        until (player1matrix.cells[i,j]='') or (i=10)
+      else limit:=false;
+        1: if (i>=2)
+      then
+        repeat
+        Dec(i);
+        if (i=1) and (player1matrix.cells[i,j]<>'') then limit:=False;
+        until (player1matrix.cells[i,j]='') or (i=1)
+      else limit:=false;
       end;
-    until limit;
+    until (limit) or (k=30);
+  if k=30 then
+      repeat
+      i := Random(10) +1;
+      j := Random(10) +1;
+      until ((player1matrix.Cells[i,j] <> '*') and (player1matrix.Cells[i,j] <> 'R') and (player1matrix.Cells[I,J] <> 'K'));
   end;
 end;
 
@@ -315,18 +393,27 @@ end;
   procedure AIShotShotShot(player1matrix:TStringGrid);
   var
     missed,second:Boolean;
-    AIX, AIY: byte;
+    AIX, AIY, UtilI, UtilJ: byte;
   begin
     //lbWalk.Caption := 'Ходит: ИИ';
     missed := False;
     second := False;
-    while (not missed) do
+    for UtilI := 1 to 10 do
+      for UtilJ := 1 to 10 do
+        if player1matrix.Cells[UtilI,UtilJ]='R' then
+          begin
+          second:=true;
+          AIX:=UtilI;
+          AIY:=UtilJ;
+          end;
+    while (not missed) and (P1N>0) do
     begin
     if not second then
       repeat
       AIX := Random(10) +1;
       AIY := Random(10) +1;
       until ((player1matrix.Cells[AIX,AIY] <> '*') and (player1matrix.Cells[AIX,AIY] <> 'R') and (player1matrix.Cells[AIX,AIY] <> 'K'));
+    if (second) and (P1N>0) then isHitted_wow(player1matrix,AIX,AIY);
        if player1matrix.Cells[AIX,AIY] = '' then
       begin
         player1matrix.Cells[AIX,AIY] := '*';
@@ -342,11 +429,11 @@ end;
           KillShip(Form1.P1F, player1matrix,AIX,AIY);
           LSX:=AIX;
           LSY:=AIY;
-          ShowMessage('Большой ИИ попал в тебя');
+          //ShowMessage('Большой ИИ попал в тебя');
           second:=true;
         end;
       end;
-      if second then isHitted_wow(player1matrix,AIX,AIY)
+
 
     end;
 
@@ -390,7 +477,7 @@ procedure Seabattle_fieldAI_generator(var P2F:TPF);
       repeat
         ib:=Random(n)+1;
         jb:=Random(n)+1;
-      until not (quick_math(ib,jb)) or ( (jb+ship_size-1>10) or (ib+ship_size-1>10)) ;
+      until not (quick_math(ib,jb)) or ( (jb+ship_size-1>10) and (ib+ship_size-1>10)) ;
       direction:=random(2)+1;             //1-Right 2-Bottom 3-Left 4-up
       if ship_size>1 then
       begin
@@ -538,7 +625,11 @@ end;
 
 procedure TForm1.FormActivate(Sender: TObject);
 begin
-  Form3.ShowModal;
+  if(not isShow)then
+  begin
+    Form3.ShowModal;
+    isShow:= true;
+  end;
 end;
 
 procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -550,6 +641,7 @@ end;
 procedure TForm1.FormCreate(Sender: TObject);
 var i:Byte;
 begin
+  isShow:=false;
   for i:=1 to 10 do
   begin
     player1matrix.Cells[i,0]:=IntToStr(i);
@@ -616,6 +708,29 @@ begin
   rule := rule + #10#13 + 'После правильной расстановки кораблей появится кнопка продолжения.';
   rule := rule + #10#13 + #10#13 + 'Для стрельбы кликайте по ячейкам поля соперника (расположено справа)';
 
+  try
+    Application.Title := 'Управление';
+    ShowMessage(rule);
+  finally
+    rule:='';
+    Application.Title := savedTitle;
+  end;
+end;
+
+procedure TForm1.N6Click(Sender: TObject);
+  var
+  savedTitle : String;
+  rule:string;
+begin
+  savedTitle := Application.Title;
+  rule := 'SEA-BATTLE-GUI (Торговая марка не зарегистрирована, никакие права не защищены, все имена вымышленные, а фотографии сгенерированны нейросетью, все совпадения неслучайны)- это';
+  rule := rule + 'современный симулятор войны, основанный на технологиях самообучившегося искусственного интеллекта и дополнительной реальности.';
+  rule := rule + #10#13 + #10#13 + 'В нашей игре вы сможете управлять своим флотом современной морской техники и противостоять армии восстания машин! Мы также поддерживаем блокчейн технологии - встроенные скрипты будут майнить криптовалюты за счет мощностей вашего процессора!';
+  rule := rule + #10#13 + #10#13 + #10#13 + 'Мы успешно решили две главные задачи, которые ставили перед новым написанием данной программы. Во-первых, обеспечили себе занятие на каникулы, ведь Оношко Д.Е. сказал нам: делайте, что хотите, пока время позволяет.';
+  rule := rule + 'Во-вторых, изучили поведение иноземного искусственного интеллекта в условиях графического пользовательского интерфейса. ';
+  rule := rule + #10#13 + 'Александр Панкратьев,';
+  rule := rule + #10#13 + 'Технический директор BrakhMen Corp';
+  rule:= rule + #10#13 + #10#13 + 'Морской бой еще никогда не был таким увлекающим!' + #10#13 + '(Торговая марка не зарегистрирована, никакие права не защищены)';
   try
     Application.Title := 'Управление';
     ShowMessage(rule);
@@ -940,6 +1055,13 @@ begin
     pnl5.Visible := true;
     pnl5.color := RGB(34,180,34);
     pnl5.Caption := 'Ваш ход, ' + form3.UserName;
+    if ((P1N =  0) and (mode = battaly)) then
+    begin
+      ShowMessage('Game Over');
+      mode := GameOver;
+      if (P1N = 0) then
+        ShowMessage('Парамошка победил, поэтому может и продолжать не выставлять модули');
+    end;
   end;
 end;
 

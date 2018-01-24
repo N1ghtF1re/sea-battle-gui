@@ -138,14 +138,14 @@ if not(stem) then
       2: if j<=9 then Inc(i) else Limit:=false;
       3: if j>=2 then Dec(i) else Limit:=false;
     end;
-  until (limit) or (k=15);
-  if k=15 then
-    repeat
+  until ((limit) and ((player1matrix.Cells[i,j] = 'S') or (player1matrix.Cells[i,j] = '')))  or (k=30) ;
+  if k=30 then
+  repeat
       i := Random(10) +1;
       j := Random(10) +1;
-      until ((player1matrix.Cells[i,j] <> '*') and (player1matrix.Cells[i,j] <> 'R') and (player1matrix.Cells[I,J] <> 'K'));
+  until ((player1matrix.Cells[i,j] <> '*') and (player1matrix.Cells[i,j] <> 'R') and (player1matrix.Cells[I,J] <> 'K'));
   end
-else
+  else
   begin
   if jDamaged = j then
     repeat
@@ -155,10 +155,10 @@ else
       case Rand of
         0: if (J<=9)
       then
-        repeat
+      repeat
         Inc(j);
         if (j=10) and (player1matrix.cells[i,j]<>'') then limit:=False;
-        until (player1matrix.cells[i,j]='') or (j=10)
+      until (player1matrix.cells[i,j]='') or (j=10)
       else limit:=false;
         1: if (J>=2)
       then
@@ -371,11 +371,19 @@ end;
   procedure AIShotShotShot(player1matrix:TStringGrid);
   var
     missed,second:Boolean;
-    AIX, AIY: byte;
+    AIX, AIY, UtilI, UtilJ: byte;
   begin
     //lbWalk.Caption := 'Ходит: ИИ';
     missed := False;
     second := False;
+    for UtilI := 1 to 10 do
+      for UtilJ := 1 to 10 do
+        if player1matrix.Cells[UtilI,UtilJ]='R' then
+          begin
+          second:=true;
+          AIX:=UtilI;
+          AIY:=UtilJ;
+          end;
     while (not missed) and (P1N>0) do
     begin
     if not second then
@@ -383,6 +391,7 @@ end;
       AIX := Random(10) +1;
       AIY := Random(10) +1;
       until ((player1matrix.Cells[AIX,AIY] <> '*') and (player1matrix.Cells[AIX,AIY] <> 'R') and (player1matrix.Cells[AIX,AIY] <> 'K'));
+    if (second) and (P1N>0) then isHitted_wow(player1matrix,AIX,AIY);
        if player1matrix.Cells[AIX,AIY] = '' then
       begin
         player1matrix.Cells[AIX,AIY] := '*';
@@ -398,11 +407,11 @@ end;
           KillShip(Form1.P1F, player1matrix,AIX,AIY);
           LSX:=AIX;
           LSY:=AIY;
-          ShowMessage('Большой ИИ попал в тебя');
+          //ShowMessage('Большой ИИ попал в тебя');
           second:=true;
         end;
       end;
-      if (second) and (P1N>0) then isHitted_wow(player1matrix,AIX,AIY)
+
 
     end;
 
@@ -1024,7 +1033,7 @@ begin
     pnl5.Visible := true;
     pnl5.color := RGB(34,180,34);
     pnl5.Caption := 'Ваш ход, ' + form3.UserName;
-    if ((P1N =  0) or (P2N = 0)) then
+    if ((P1N =  0) and (mode = battaly)) then
     begin
       ShowMessage('Game Over');
       mode := GameOver;
