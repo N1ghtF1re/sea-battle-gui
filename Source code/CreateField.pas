@@ -270,7 +270,7 @@ if not(stem) then
         if ((i=1) and ((player1matrix.cells[i,j]<>'') and (player1matrix.cells[i,j]<>'S'))) or (player1matrix.Cells[i,j]= '*') then
           begin
           limit:=False;
-          Inc(j,trigr);
+          Inc(i,trigr);
           end;
         until (player1matrix.cells[i,j]='') or (player1matrix.cells[i,j]='S') or (i=1)
         end
