@@ -140,12 +140,12 @@ if not(stem) then
     end;
   until (limit) or (k=15);
   if k=15 then
-    repeat
+  repeat
       i := Random(10) +1;
       j := Random(10) +1;
-      until ((player1matrix.Cells[i,j] <> '*') and (player1matrix.Cells[i,j] <> 'R') and (player1matrix.Cells[I,J] <> 'K'));
+  until ((player1matrix.Cells[i,j] <> '*') and (player1matrix.Cells[i,j] <> 'R') and (player1matrix.Cells[I,J] <> 'K'));
   end
-else
+  else
   begin
   if jDamaged = j then
     repeat
@@ -155,10 +155,10 @@ else
       case Rand of
         0: if (J<=9)
       then
-        repeat
+      repeat
         Inc(j);
         if (j=10) and (player1matrix.cells[i,j]<>'') then limit:=False;
-        until (player1matrix.cells[i,j]='') or (j=10)
+      until (player1matrix.cells[i,j]='') or (j=10)
       else limit:=false;
         1: if (J>=2)
       then
@@ -398,7 +398,7 @@ end;
           KillShip(Form1.P1F, player1matrix,AIX,AIY);
           LSX:=AIX;
           LSY:=AIY;
-          ShowMessage('Большой ИИ попал в тебя');
+          //ShowMessage('Большой ИИ попал в тебя');
           second:=true;
         end;
       end;
@@ -1024,7 +1024,7 @@ begin
     pnl5.Visible := true;
     pnl5.color := RGB(34,180,34);
     pnl5.Caption := 'Ваш ход, ' + form3.UserName;
-    if ((P1N =  0) or (P2N = 0)) then
+    if ((P1N =  0) and (mode = battaly)) then
     begin
       ShowMessage('Game Over');
       mode := GameOver;
