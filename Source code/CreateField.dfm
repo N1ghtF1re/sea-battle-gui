@@ -11451,6 +11451,7 @@ object Form1: TForm1
       Top = 60
       Width = 286
       Height = 286
+      Cursor = crCross
       BevelInner = bvNone
       BorderStyle = bsNone
       ColCount = 11
