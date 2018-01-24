@@ -62,7 +62,6 @@ object Form3: TForm3
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 1
-      ExplicitTop = 91
       object lbYourName: TLabel
         Left = 0
         Top = 0
