@@ -30555,7 +30555,6 @@ object FormAboutDevelopers: TFormAboutDevelopers
         Top = 160
         Width = 125
         Height = 47
-        Cursor = crHandPoint
         Align = alBottom
         Alignment = taCenter
         Caption = #1055#1072#1085#1082#1088#1072#1090#1100#1077#1074' '#1040#1083#1077#1082#1089#1072#1085#1076#1088
@@ -30573,7 +30572,6 @@ object FormAboutDevelopers: TFormAboutDevelopers
         Top = 127
         Width = 41
         Height = 34
-        Cursor = crHandPoint
         Picture.Data = {
           0954506E67496D61676589504E470D0A1A0A0000000D49484452000002000000
           02000803000000C3A624C800000045504C544547704C00000000000000000000
@@ -30756,7 +30754,6 @@ object FormAboutDevelopers: TFormAboutDevelopers
         Top = 133
         Width = 25
         Height = 25
-        Cursor = crHandPoint
         Picture.Data = {
           0A544A504547496D616765023E0000FFD8FFE000104A46494600010100000100
           010000FFDB0084000303030303030404040405050505050707060607070B0809
@@ -31263,7 +31260,6 @@ object FormAboutDevelopers: TFormAboutDevelopers
         Top = 132
         Width = 30
         Height = 29
-        Cursor = crHandPoint
         Picture.Data = {
           0954506E67496D61676589504E470D0A1A0A0000000D49484452000001F00000
           01F008030000006E72CDD40000005A504C544547704C22272022272022272022
@@ -37039,7 +37035,6 @@ object FormAboutDevelopers: TFormAboutDevelopers
         Top = 160
         Width = 119
         Height = 47
-        Cursor = crHandPoint
         Align = alBottom
         Alignment = taCenter
         Caption = #1043#1086#1083#1091#1073#1077#1074'  '#1050#1080#1088#1080#1083#1083
@@ -37057,7 +37052,6 @@ object FormAboutDevelopers: TFormAboutDevelopers
         Top = 128
         Width = 41
         Height = 34
-        Cursor = crHandPoint
         Picture.Data = {
           0954506E67496D61676589504E470D0A1A0A0000000D49484452000002000000
           02000803000000C3A624C800000045504C544547704C00000000000000000000
@@ -37240,7 +37234,6 @@ object FormAboutDevelopers: TFormAboutDevelopers
         Top = 132
         Width = 26
         Height = 26
-        Cursor = crHandPoint
         Picture.Data = {
           0A544A504547496D616765023E0000FFD8FFE000104A46494600010100000100
           010000FFDB0084000303030303030404040405050505050707060607070B0809
@@ -47427,7 +47420,6 @@ object FormAboutDevelopers: TFormAboutDevelopers
         Top = 160
         Width = 117
         Height = 47
-        Cursor = crHandPoint
         Align = alBottom
         Alignment = taCenter
         Caption = #1055#1080#1083#1080#1085#1082#1086' '#1053#1080#1082#1080#1090#1072
@@ -47445,7 +47437,6 @@ object FormAboutDevelopers: TFormAboutDevelopers
         Top = 127
         Width = 41
         Height = 34
-        Cursor = crHandPoint
         Picture.Data = {
           0954506E67496D61676589504E470D0A1A0A0000000D49484452000002000000
           02000803000000C3A624C800000045504C544547704C00000000000000000000
@@ -47628,7 +47619,6 @@ object FormAboutDevelopers: TFormAboutDevelopers
         Top = 131
         Width = 26
         Height = 26
-        Cursor = crHandPoint
         Picture.Data = {
           0A544A504547496D616765023E0000FFD8FFE000104A46494600010100000100
           010000FFDB0084000303030303030404040405050505050707060607070B0809
