@@ -86,6 +86,8 @@ var
   Form1: TForm1;
   mode:TMode;
   isShow:Boolean;
+  LSX, LSY:byte;
+  Flagok:Boolean;
 
 implementation
 
@@ -134,30 +136,63 @@ if not(stem) then
     Rand:=Random(3);
     case Rand of
       0: if i<=9 then
+      begin
+      trigr:=0;
       repeat
       Inc(i);
-      if ((i=10) and (player1matrix.cells[i,j]='R')) or (player1matrix.Cells[i,j]= '*') then  limit:=False;
-      until (player1matrix.Cells[i,j]<>'R') or (i=10)
+      Inc(trigr);
+      if ((i=10) and (player1matrix.cells[i,j] <> '')) and (player1matrix.Cells[i,j] <> 'S') then
+        begin
+        limit:=False;
+        dec(i,trigr);
+        end;
+      until (player1matrix.Cells[i,j]='S') or (player1matrix.Cells[i,j]='') or (i=10)
+      end
     else Limit:=false;
 
       1: if i>=2 then
+      begin
+      trigr:=0;
       repeat
       dec(i);
-      if ((i=1) and (player1matrix.cells[i,j]='R')) or (player1matrix.Cells[i,j]= '*') then  limit:=False;
-      until (player1matrix.Cells[i,j]<>'R') or (i=1)
+      Inc(trigr);
+      if ((i=1) and (player1matrix.cells[i,j] <> '')) and (player1matrix.Cells[i,j] <> 'S') then
+        begin
+        limit:=False;
+        inc(i,trigr);
+        end;
+      until (player1matrix.Cells[i,j]='S') or (player1matrix.Cells[i,j]='') or (i=1)
+      end
     else Limit:=false;
 
       2: if j<=9 then
+      begin
+      trigr:=0;
       repeat
       Inc(j);
-      if ((j=10) and (player1matrix.cells[i,j]='R')) or (player1matrix.Cells[i,j]= '*') then  limit:=False;
-      until (player1matrix.Cells[i,j]<>'R') or (j=10)
+      Inc(trigr);
+      if ((j=10) and (player1matrix.cells[i,j] <> '')) and (player1matrix.Cells[i,j] <> 'S') then
+        begin
+        limit:=False;
+        dec(j,trigr);
+        end;
+      until (player1matrix.Cells[i,j]='S') or (player1matrix.Cells[i,j]='') or (j=10)
+      end
     else Limit:=false;
 
-      3: if j>=2 then repeat
+      3: if j>=2 then
+      begin
+      trigr:=0;
+      repeat
       dec(j);
-      if ((j=1) and (player1matrix.cells[i,j]='R')) or (player1matrix.Cells[i,j]= '*') then  limit:=False;
-      until (player1matrix.Cells[i,j]<>'R') or (j=1)
+      Inc(trigr);
+      if ((j=1) and (player1matrix.cells[i,j] <> '')) and (player1matrix.Cells[i,j] <> 'S') then
+        begin
+        limit:=False;
+        inc(j,trigr);
+        end;
+      until (player1matrix.Cells[i,j]='S') or (player1matrix.Cells[i,j]='') or (j=1)
+      end
     else Limit:=false;
     end;
   until ((limit) and ((player1matrix.Cells[i,j] = 'S') or (player1matrix.Cells[i,j] = '')))  or (k=30) ;
@@ -237,7 +272,7 @@ if not(stem) then
         if ((i=1) and ((player1matrix.cells[i,j]<>'') and (player1matrix.cells[i,j]<>'S'))) or (player1matrix.Cells[i,j]= '*') then
           begin
           limit:=False;
-          Inc(j,trigr);
+          Inc(i,trigr);
           end;
         until (player1matrix.cells[i,j]='') or (player1matrix.cells[i,j]='S') or (i=1)
         end
@@ -324,6 +359,7 @@ end;
 
           if(currplayer = 2) then
           begin
+            //ShowMessage('kek');
             LSX:=0;
             LSY:=0;
           end;
@@ -394,8 +430,12 @@ end;
               if((x-1) in [1..10]) then
                 EnemyMatrix.Cells[x-1, j] := '*';
             end;
-            LSX:=0;
-            LSY:=0;
+            if(currplayer = 2) then
+            begin
+              //ShowMessage('kek');
+              LSX:=0;
+              LSY:=0;
+            end;
           end;
         end
         else
@@ -417,8 +457,12 @@ end;
             EnemyMatrix.Cells[x+1, y-1] := '*';
           if ( ((y+1) in [1..10] ) and ((x+1) in [1..10])) then
             EnemyMatrix.Cells[x+1, y+1] := '*';
+          if(currplayer = 2) then
+          begin
+            //ShowMessage('kek');
             LSX:=0;
             LSY:=0;
+          end;
         end;
       end;
   end;
@@ -430,22 +474,55 @@ end;
     //lbWalk.Caption := 'Ходит: ИИ';
     missed := False;
     second := False;
-    for UtilI := 1 to 10 do
+    {for UtilI := 1 to 10 do
       for UtilJ := 1 to 10 do
         if player1matrix.Cells[UtilI,UtilJ]='R' then
           begin
           second:=true;
           AIX:=UtilI;
           AIY:=UtilJ;
-          end;
+          end;}
     while (not missed) and (P1N>0) do
     begin
-    if not second then
-      repeat
+    if ((not second) and (LSX = 0)) then
+    repeat
       AIX := Random(10) +1;
       AIY := Random(10) +1;
-      until ((player1matrix.Cells[AIX,AIY] <> '*') and (player1matrix.Cells[AIX,AIY] <> 'R') and (player1matrix.Cells[AIX,AIY] <> 'K'));
-    if (second) and (P1N>0) then isHitted_wow(player1matrix,AIX,AIY);
+    until ((player1matrix.Cells[AIX,AIY] <> '*') and (player1matrix.Cells[AIX,AIY] <> 'R') and (player1matrix.Cells[AIX,AIY] <> 'K'))
+    else
+    begin
+      if (((AIX = 10) or (player1matrix.Cells[AIX+1,AIY] <> 'R')) and
+          ((AIX = 0) or (player1matrix.Cells[AIX-1,AIY] <> 'R')) and
+          ((AIY = 10) or (player1matrix.Cells[AIX,AIY+1] <> 'R')) and
+          ( (AIY = 0) or (player1matrix.Cells[AIX,AIY-1] <> 'R')))
+      then
+      begin
+        repeat
+          AIX := LSX;
+          AIY := AIY;
+          case Random(4) + 1 of
+            1: Inc(AIX);
+            2: Inc(AIY);
+            3: Dec(AIX);
+            4: Dec(AIY);
+          end;
+        until((AIX in [1..10]) and (AIY in [1..10]) and (player1matrix.Cells[AIX,AIY] <> '*') and (player1matrix.Cells[AIX,AIY] <> 'R') and (player1matrix.Cells[AIX,AIY] <> 'K'));
+      end
+      else
+      begin
+        if((AIX <> 10) and (player1matrix.Cells[AIX+1,AIY] = 'R')) or ((AIX <> 0) and(player1matrix.Cells[AIX-1,AIY]) = 'R')) then
+        begin
+          while(((player1matrix.Cells[AIX,AIY]) <> 'S') or ((player1matrix.Cells[AIX,AIY]) <> '')) do
+          begin
+
+          end;
+        end;
+
+
+      end;
+    end;
+
+    //if (second) and (P1N>0) then isHitted_wow(player1matrix,AIX,AIY);
        if player1matrix.Cells[AIX,AIY] = '' then
       begin
         player1matrix.Cells[AIX,AIY] := '*';
@@ -458,9 +535,10 @@ end;
           Dec(P1N);
 
           player1matrix.Cells[AIX,AIY] := 'R';
-          KillShip(Form1.P1F, player1matrix,AIX,AIY);
           LSX:=AIX;
           LSY:=AIY;
+          KillShip(Form1.P1F, player1matrix,AIX,AIY);
+
           //ShowMessage('Большой ИИ попал в тебя');
           second:=true;
         end;
@@ -831,6 +909,7 @@ procedure TForm1.player1matrixDrawCell(Sender: TObject; ACol, ARow: Integer;
   Rect: TRect; State: TGridDrawState);
 var X: Real;
 begin
+  pnlName.Caption := 'X : ' + IntToStr(LSX) + ' Y : ' + IntToStr (LSY);
  with player1matrix do
   begin
     if(Cells[ACol,ARow] = '*') then
