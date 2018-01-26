@@ -19,6 +19,7 @@ uses
   Vcl.Imaging.pngimage, Vcl.Buttons, Vcl.Menus;
 
 type
+  hard = (easy,medium,paramon);
   TPF = array[1..10, 1..10] of Char;
   TMode = (Fcreate, battaly, GameOver);
   TForm1 = class(TForm)
@@ -63,6 +64,10 @@ type
     N10: TMenuItem;
     btnAutoCreate: TButton;
     N11: TMenuItem;
+    rb1: TRadioButton;
+    rb2: TRadioButton;
+    rb3: TRadioButton;
+    lbl1: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure player1matrixMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
@@ -84,6 +89,9 @@ type
     procedure btnAutoCreateClick(Sender: TObject);
     procedure N11Click(Sender: TObject);
     procedure N6Click(Sender: TObject);
+    procedure rb1Click(Sender: TObject);
+    procedure rb2Click(Sender: TObject);
+    procedure rb3Click(Sender: TObject);
 
   private
     { Private declarations }
@@ -94,6 +102,7 @@ type
   end;
 
 var
+  hardness:hard;
   Form1: TForm1;
   mode:TMode;
   isShow:Boolean;
@@ -490,6 +499,49 @@ end;
       end;
       KillShip:=isKilled;
   end;
+  procedure Easy_bot(player1matrix:TStringGrid; lvl:Byte) ;
+  var AIX,AIY:Byte;
+  var k:Integer;
+  var hit:Boolean;
+  begin
+  k:=lvl;
+  hit:=False;
+   while (k>0) and not(hit) do
+   begin
+     repeat
+     AIX:=Random(10)+1;
+     AIY:=Random(10)+1;
+     until   ((player1matrix.Cells[AIX,AIY] <> '*') and (player1matrix.Cells[AIX,AIY] <> 'R') and (player1matrix.Cells[AIX,AIY] <> 'K'))   ;
+    if (player1matrix.Cells[AIX,AIY] = 'R') or (player1matrix.Cells[AIX,AIY] = 'S') then
+     begin
+       hit:=True;
+     end;
+     Dec(k);
+   end;
+   if player1matrix.Cells[AIX,AIY] = '' then
+        begin
+          player1matrix.Cells[AIX,AIY] := '*';
+
+          // Прое... промазал
+          currplayer := 1;
+        end
+        else
+        begin
+          if (player1matrix.Cells[AIX,AIY] = 'S') then
+          begin
+            Dec(P1N);
+            player1matrix.Cells[AIX,AIY] := 'R';
+            // Парамошка попал
+            if(KillShip(Form1.P1F, player1matrix,AIX,AIY)) then  // Проверяем,
+            // Убил ли наш ИИ корабль. И если да - отрисовываем гениальной
+            // Процедурой убитые корабли и рекурсивно вызываем AIShotShotShot
+              Easy_bot(player1matrix,lvl);
+          end;
+        end;
+
+
+
+  end;
   procedure AIShotShotShot(player1matrix:TStringGrid);
   var
     missed,second:Boolean;
@@ -822,7 +874,11 @@ begin
       Canvas.FillRect(Rect);
       Sleep(600);
       currplayer:=2;
-      AIShotShotShot(player1matrix); // ИИ наносит еще раз удар
+       case hardness of
+      easy:Easy_bot(player1matrix,4);
+      medium:Easy_bot(player1matrix,8);
+      paramon: AIShotShotShot(player1matrix);
+      end; // ИИ наносит еще раз удар
       //Sleep(500);
     end;
     if (Cells[ACol,ARow] = 'K')   then
@@ -1070,7 +1126,12 @@ begin
       //pnl5.Visible := false;
       AntiKick:=true;
       sleep(800);
-      AIShotShotShot(player1matrix);
+      case hardness of
+      easy:Easy_bot(player1matrix,4);
+      medium:Easy_bot(player1matrix,8);
+      paramon: AIShotShotShot(player1matrix);
+      end;
+
       lbP1N.Caption := IntToStr(P1n);
       currplayer := 1;
       flag:=false;
@@ -1157,6 +1218,25 @@ begin
       ShowMessage('Парамошка победил, поэтому может и продолжать не выставлять модули');
   end;
 end;
+procedure TForm1.rb1Click(Sender: TObject);
+begin
+   hardness:=easy;
+
+end;
+
+procedure TForm1.rb2Click(Sender: TObject);
+begin
+  hardness:=medium;
+
+end;
+
+procedure TForm1.rb3Click(Sender: TObject);
+begin
+  hardness:=paramon;
+
+
+end;
+
 procedure TForm1.btNextClick(Sender: TObject);
 // если пользователю надоел Парамошка, он нажимает далее
 // И карочи скрываются ненужные блоки, показываеются нужные

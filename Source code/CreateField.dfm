@@ -125,13 +125,22 @@ object Form1: TForm1
       Height = 13
       Caption = #1080#1079' 4'
     end
+    object lbl1: TLabel
+      Left = 48
+      Top = 144
+      Width = 106
+      Height = 13
+      Caption = #1042#1099#1073#1077#1088#1080' '#1089#1074#1086#1102' '#1089#1091#1076#1100#1073#1091
+      Color = clRed
+      ParentColor = False
+    end
     object pnl2: TPanel
       Left = 0
       Top = 303
       Width = 193
       Height = 80
       Align = alBottom
-      TabOrder = 0
+      TabOrder = 3
       object lbInfo: TLabel
         Left = 1
         Top = 1
@@ -144,6 +153,33 @@ object Form1: TForm1
         WordWrap = True
         ExplicitWidth = 182
       end
+    end
+    object rb1: TRadioButton
+      Left = 32
+      Top = 168
+      Width = 113
+      Height = 17
+      Caption = #1051#1077#1075#1082#1086
+      TabOrder = 0
+      OnClick = rb1Click
+    end
+    object rb2: TRadioButton
+      Left = 32
+      Top = 192
+      Width = 121
+      Height = 17
+      Caption = #1057#1088#1077#1076#1085#1077
+      TabOrder = 1
+      OnClick = rb2Click
+    end
+    object rb3: TRadioButton
+      Left = 32
+      Top = 215
+      Width = 113
+      Height = 17
+      Caption = #1055#1072#1088#1072#1084#1086#1085#1086#1074
+      TabOrder = 2
+      OnClick = rb3Click
     end
   end
   object pnl3: TPanel
