@@ -86,6 +86,8 @@ var
   Form1: TForm1;
   mode:TMode;
   isShow:Boolean;
+  LSX, LSY:byte;
+  isRevers:Boolean;
 
 implementation
 
@@ -357,6 +359,7 @@ end;
 
           if(currplayer = 2) then
           begin
+            //ShowMessage('kek');
             LSX:=0;
             LSY:=0;
           end;
@@ -427,8 +430,12 @@ end;
               if((x-1) in [1..10]) then
                 EnemyMatrix.Cells[x-1, j] := '*';
             end;
-            LSX:=0;
-            LSY:=0;
+            if(currplayer = 2) then
+            begin
+              //ShowMessage('kek');
+              LSX:=0;
+              LSY:=0;
+            end;
           end;
         end
         else
@@ -450,8 +457,12 @@ end;
             EnemyMatrix.Cells[x+1, y-1] := '*';
           if ( ((y+1) in [1..10] ) and ((x+1) in [1..10])) then
             EnemyMatrix.Cells[x+1, y+1] := '*';
+          if(currplayer = 2) then
+          begin
+            //ShowMessage('kek');
             LSX:=0;
             LSY:=0;
+          end;
         end;
       end;
   end;
@@ -463,45 +474,154 @@ end;
     //lbWalk.Caption := 'Ходит: ИИ';
     missed := False;
     second := False;
-    for UtilI := 1 to 10 do
+    {for UtilI := 1 to 10 do
       for UtilJ := 1 to 10 do
         if player1matrix.Cells[UtilI,UtilJ]='R' then
           begin
           second:=true;
           AIX:=UtilI;
           AIY:=UtilJ;
-          end;
-    while (not missed) and (P1N>0) do
+          end;}
+    while ((currplayer = 2) and (not missed) and (P1N>0)) do
     begin
-    if not second then
+      if (player1matrix.Cells[LSX,LSY] = 'K') then
+      begin
+        lsx:=0;
+        lsy:=0;
+      end;
+      if (LSX = 0) then
       repeat
-      AIX := Random(10) +1;
-      AIY := Random(10) +1;
-      until ((player1matrix.Cells[AIX,AIY] <> '*') and (player1matrix.Cells[AIX,AIY] <> 'R') and (player1matrix.Cells[AIX,AIY] <> 'K'));
-    if (second) and (P1N>0) then isHitted_wow(player1matrix,AIX,AIY);
-       if player1matrix.Cells[AIX,AIY] = '' then
+        //ShowMessage('Full Random');
+        AIX := Random(10) +1;
+        AIY := Random(10) +1;
+      until ((player1matrix.Cells[AIX,AIY] <> '*') and (player1matrix.Cells[AIX,AIY] <> 'R') and (player1matrix.Cells[AIX,AIY] <> 'K'))
+      else
+      begin
+        // Если мы еще не ранили ничего в округе (мы знаем ток одну клетку)
+        if (((AIX = 10) or (player1matrix.Cells[AIX+1,AIY] <> 'R')) and
+            ((AIX = 0) or (player1matrix.Cells[AIX-1,AIY] <> 'R')) and
+            ((AIY = 10) or (player1matrix.Cells[AIX,AIY+1] <> 'R')) and
+            ( (AIY = 0) or (player1matrix.Cells[AIX,AIY-1] <> 'R')))
+        then
+        begin
+          repeat
+            AIX := LSX;
+            AIY := LSY;
+            case Random(4) + 1 of
+              1: Inc(AIX);
+              2: Inc(AIY);
+              3: Dec(AIX);
+              4: Dec(AIY);
+            end;
+            //ShowMessage('Рандомим соседнюю, X: ' + IntToStr(AIX) + ' Y: ' + IntToStr(AIY));
+          until((AIX in [1..10]) and (AIY in [1..10]) and (player1matrix.Cells[AIX,AIY] <> '*') and (player1matrix.Cells[AIX,AIY] <> 'R') and (player1matrix.Cells[AIX,AIY] <> 'K'));
+        end
+        else
+        begin
+          if((AIX <> 10) and (player1matrix.Cells[AIX+1,AIY] = 'R')) or ((AIX <> 0) and(player1matrix.Cells[AIX-1,AIY] = 'R')) then
+          begin
+            //ShowMessage('Рандомим столбец');
+            isRevers:= false;
+            AIX := LSX;
+            AIY := LSY;
+            while(((player1matrix.Cells[AIX,AIY]) <> 'S') or ((player1matrix.Cells[AIX,AIY]) <> '')) do
+            begin
+              //ShowMessage(IntToStr(AIX) + ' Content : ' + player1matrix.Cells[aix,AIY]);
+              if ((AIX in [1..10]) and (player1matrix.Cells[AIX,AIY] = 'S')) then Break;
+              if ((AIX in [1..10]) and (player1matrix.Cells[AIX,AIY] = '')) then Break;
+              if (not isRevers) then
+              begin
+                inc(AIX);
+                if (not (AIX in [1..10]) or (player1matrix.Cells[AIX,AIY] = '*')) then
+                  isRevers:= True;
+              end
+              else
+              begin
+                Dec(AIX);
+              end;
+            end;
+          end
+          else
+          begin
+            if((AIY <> 10) and (player1matrix.Cells[AIX,AIY+1] = 'R')) or ((AIX <> 0) and(player1matrix.Cells[AIX,AIY-1] = 'R')) then
+            begin
+              AIX := LSX;
+              AIY := LSY;
+              // ShowMessage('Рандомим строку');
+              isRevers:= false;
+              while(((player1matrix.Cells[AIX,AIY]) <> 'S') or ((player1matrix.Cells[AIX,AIY]) <> '')) do
+              begin
+                if ((AIY in [1..10]) and (player1matrix.Cells[AIX,AIY] = 'S')) then Break;
+                if ((AIY in [1..10]) and (player1matrix.Cells[AIX,AIY] = '')) then Break;
+                //ShowMessage(IntToStr(AIY) + ' Content : ' + player1matrix.Cells[aix,AIY]);
+                if (not isRevers) then
+                begin
+                  inc(AIY);
+                  if ((not (AIY in [1..10]) or (player1matrix.Cells[AIX,AIY] = '*'))) then
+                    isRevers:= True;
+                end
+                else
+                begin
+                  Dec(AIY);
+                end;
+              end;
+            end;
+          end;
+
+
+        end;
+      end;
+
+    //if (second) and (P1N>0) then isHitted_wow(player1matrix,AIX,AIY);
+      if player1matrix.Cells[AIX,AIY] = '' then
       begin
         player1matrix.Cells[AIX,AIY] := '*';
         missed:=true;
+        //ShowMessage('Miss');
+        currplayer := 1;
+        Break;
       end
       else
       begin
         if (player1matrix.Cells[AIX,AIY] = 'S') then
         begin
           Dec(P1N);
-
           player1matrix.Cells[AIX,AIY] := 'R';
-          KillShip(Form1.P1F, player1matrix,AIX,AIY);
           LSX:=AIX;
           LSY:=AIY;
-          //ShowMessage('Большой ИИ попал в тебя');
+          KillShip(Form1.P1F, player1matrix,AIX,AIY);
+                               //\\
+                              //  \\
+                             //    \\
+                            //      \\
+                           //        \\
+                          //          \\
+                         //            \\
+                        //              \\
+                       //                \\
+                      //                  \\
+                     //                    \\
+                    //                      \\
+                   //                        \\
+                  //                          \\
+                 //                            \\
+                //                              \\
+               //                                \\
+              //                                  \\
+             //                                    \\
+            //                                      \\
+           //                                        \\
+          //  ShowMessage('Большой ИИ попал в тебя')  \\
+         //============================================\\
           second:=true;
+
         end;
       end;
 
 
     end;
-
+    //ShowMessage('Sibasa');
+    currplayer := 1;
   end;
 
 procedure Seabattle_fieldAI_generator(var P2F:TPF);
@@ -850,9 +970,11 @@ begin
     end;
   mode:=Fcreate;
   pnl1.Visible := true;
-  pnIsFin.Visible := true;
+  pnIsFin.Visible := false;
   player2matrix.Visible := false;
-  pnl4.Visible := false;
+  pnl4.Visible := False;
+  lbP1N.Caption:= '20';
+  lbP2N.Caption := '20';
   pnlName.Visible := false;
   img2.Visible := false;
   lbP1N.Visible := false;
@@ -864,6 +986,7 @@ procedure TForm1.player1matrixDrawCell(Sender: TObject; ACol, ARow: Integer;
   Rect: TRect; State: TGridDrawState);
 var X: Real;
 begin
+ // pnlName.Caption := 'X : ' + IntToStr(LSX) + ' Y : ' + IntToStr (LSY);
  with player1matrix do
   begin
     if(Cells[ACol,ARow] = '*') then
@@ -889,6 +1012,7 @@ begin
       Canvas.Brush.Color:= RGB(255,170,55);//Orange;
       Rect.Left:=Rect.Left-10;
       Canvas.FillRect(Rect);
+      //Sleep(500);
     end;
     if (Cells[ACol,ARow] = 'K')   then
     begin
@@ -1099,7 +1223,9 @@ begin
     if(Cells[ACol,ARow] = '*') then
     begin
       Canvas.Brush.Color:=clWhite;
-      flag:=true;
+      //pnlName.Caption := IntToStr(currplayer);
+      if currplayer = 2 then
+        flag:=true;
       Canvas.FillRect(Rect);
       Canvas.TextOut(Rect.Left+10, Rect.Top+5, '•');
     end;
@@ -1107,7 +1233,7 @@ begin
 
   if (flag) then
   begin
-
+    //ShowMessage('Sho Za xernya ' +  IntToStr(currplayer));
     if (currplayer = 2) then
     begin
       //pnl5.Visible := false;
@@ -1115,8 +1241,12 @@ begin
       // ShowMessage('Стреляет ПАРАМОШКА!!!!');
       AIShotShotShot(player1matrix);
       lbP1N.Caption := IntToStr(P1n);
-      Currplayer := 1;
+      //ShowMessage('kek');
+      currplayer := 1;
+      //ShowMessage(IntToStr(currplayer));
+      flag:=false;
     end;
+    //ShowMessage(IntToStr(currplayer));
     pnl5.Visible := true;
     pnl5.color := RGB(34,180,34);
     pnl5.Caption := 'Ваш ход, ' + form3.UserName;
@@ -1152,6 +1282,7 @@ begin
         begin
           // ТУТ ПУСТОЕ ПОЛЕ
           player2matrix.Cells[ACol,ARow] := '*';
+          //ShowMessage('xerasebe');
           currplayer:=2;
           pnl5.Caption := 'Ходит ИИ';
           pnl5.color := RGB(0,50,0);

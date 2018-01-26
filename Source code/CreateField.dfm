@@ -5,8 +5,8 @@ object Form1: TForm1
   ClientHeight = 424
   ClientWidth = 721
   Color = clBtnFace
-  Constraints.MinHeight = 380
-  Constraints.MinWidth = 695
+  Constraints.MinHeight = 483
+  Constraints.MinWidth = 737
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
@@ -20,9 +20,9 @@ object Form1: TForm1
   PixelsPerInch = 96
   TextHeight = 13
   object pnl1: TPanel
-    Left = 544
+    Left = 528
     Top = 41
-    Width = 177
+    Width = 193
     Height = 383
     Align = alRight
     BevelOuter = bvNone
@@ -128,14 +128,15 @@ object Form1: TForm1
     object pnl2: TPanel
       Left = 0
       Top = 303
-      Width = 177
+      Width = 193
       Height = 80
       Align = alBottom
       TabOrder = 0
+      ExplicitWidth = 177
       object lbInfo: TLabel
         Left = 1
         Top = 1
-        Width = 175
+        Width = 191
         Height = 52
         Align = alTop
         Caption = 
@@ -149,7 +150,7 @@ object Form1: TForm1
   object pnl3: TPanel
     Left = 0
     Top = 41
-    Width = 544
+    Width = 528
     Height = 383
     Align = alClient
     BevelOuter = bvNone
@@ -158,6 +159,7 @@ object Form1: TForm1
     ParentBackground = False
     ShowCaption = False
     TabOrder = 1
+    ExplicitWidth = 544
     object img2: TImage
       Left = 514
       Top = -5

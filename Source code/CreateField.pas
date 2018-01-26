@@ -88,12 +88,13 @@ var
   isShow:Boolean;
   LSX, LSY:byte;
   isRevers:Boolean;
-
+  CurrPlayer:1..2;
+  P1N, P2N: 0..20;
 implementation
 
 {$R *.dfm}
 
-uses ErrorPage, MainPage,game, AboutUs;
+uses ErrorPage, MainPage, AboutUs;
 
 // resourcestring PlacingRules = 'Игровое поле — обычно квадрат 10×10 каждого игрока, на котором размещается флот кораблей. Горизонтали обычно нумеруются сверху вниз, а вертикали помечаются буквами слева направо. При этом используются буквы русского алфавита от «а» до «к» (буквы «ё» и «й» обычно пропускаются) либо от «а» до «и» (с использованием буквы «ё»), либо буквы латинского алфавита от «a» до «j». Иногда используется слово «республика» или «снегурочка», так как в этих 10-буквенных словах ни одна буква не повторяется. Поскольку существуют различные варианты задания системы координат, то об этом лучше заранее договориться.' + #1013 'Размещаются:';
 procedure isHitted_wow(var player1matrix:TStringGrid; var i,j:byte);
@@ -362,6 +363,8 @@ end;
             //ShowMessage('kek');
             LSX:=0;
             LSY:=0;
+
+
           end;
         end;
       end
@@ -435,6 +438,7 @@ end;
               //ShowMessage('kek');
               LSX:=0;
               LSY:=0;
+
             end;
           end;
         end
@@ -460,8 +464,7 @@ end;
           if(currplayer = 2) then
           begin
             //ShowMessage('kek');
-            LSX:=0;
-            LSY:=0;
+
           end;
         end;
       end;
@@ -474,15 +477,7 @@ end;
     //lbWalk.Caption := 'Ходит: ИИ';
     missed := False;
     second := False;
-    {for UtilI := 1 to 10 do
-      for UtilJ := 1 to 10 do
-        if player1matrix.Cells[UtilI,UtilJ]='R' then
-          begin
-          second:=true;
-          AIX:=UtilI;
-          AIY:=UtilJ;
-          end;}
-    while ((currplayer = 2) and (not missed) and (P1N>0)) do
+    if (currplayer = 2) then
     begin
       if (player1matrix.Cells[LSX,LSY] = 'K') then
       begin
@@ -497,6 +492,8 @@ end;
       until ((player1matrix.Cells[AIX,AIY] <> '*') and (player1matrix.Cells[AIX,AIY] <> 'R') and (player1matrix.Cells[AIX,AIY] <> 'K'))
       else
       begin
+        AIX := LSX;
+        AIY := LSY;
         // Если мы еще не ранили ничего в округе (мы знаем ток одну клетку)
         if (((AIX = 10) or (player1matrix.Cells[AIX+1,AIY] <> 'R')) and
             ((AIX = 0) or (player1matrix.Cells[AIX-1,AIY] <> 'R')) and
@@ -504,11 +501,14 @@ end;
             ( (AIY = 0) or (player1matrix.Cells[AIX,AIY-1] <> 'R')))
         then
         begin
+
           repeat
             AIX := LSX;
             AIY := LSY;
+            //ShowMessage('Ищем соседа' + player1matrix.Cells[AIX+1,AIY] +  player1matrix.Cells[AIX-1,AIY] + player1matrix.Cells[AIX,AIY+1] + player1matrix.Cells[AIX,AIY-1] <> 'R');
+            IF(LSX) = 0 then Break;
             case Random(4) + 1 of
-              1: Inc(AIX);
+              1: Inc(AIX);   // Рандомим ячейку в окрестности раненой
               2: Inc(AIY);
               3: Dec(AIX);
               4: Dec(AIY);
@@ -573,48 +573,26 @@ end;
       end;
 
     //if (second) and (P1N>0) then isHitted_wow(player1matrix,AIX,AIY);
-      if player1matrix.Cells[AIX,AIY] = '' then
+      if (currplayer = 2) then
       begin
-        player1matrix.Cells[AIX,AIY] := '*';
-        missed:=true;
-        //ShowMessage('Miss');
-        currplayer := 1;
-        Break;
-      end
-      else
-      begin
-        if (player1matrix.Cells[AIX,AIY] = 'S') then
+        if player1matrix.Cells[AIX,AIY] = '' then
         begin
-          Dec(P1N);
-          player1matrix.Cells[AIX,AIY] := 'R';
-          LSX:=AIX;
-          LSY:=AIY;
-          KillShip(Form1.P1F, player1matrix,AIX,AIY);
-                               //\\
-                              //  \\
-                             //    \\
-                            //      \\
-                           //        \\
-                          //          \\
-                         //            \\
-                        //              \\
-                       //                \\
-                      //                  \\
-                     //                    \\
-                    //                      \\
-                   //                        \\
-                  //                          \\
-                 //                            \\
-                //                              \\
-               //                                \\
-              //                                  \\
-             //                                    \\
-            //                                      \\
-           //                                        \\
-          //  ShowMessage('Большой ИИ попал в тебя')  \\
-         //============================================\\
-          second:=true;
-
+          player1matrix.Cells[AIX,AIY] := '*';
+          missed:=true;
+          //ShowMessage('Miss');\\
+          currplayer := 1;
+        end
+        else
+        begin
+          if (player1matrix.Cells[AIX,AIY] = 'S') then
+          begin
+            Dec(P1N);
+            player1matrix.Cells[AIX,AIY] := 'R';
+            LSX:=AIX;
+            LSY:=AIY;
+            KillShip(Form1.P1F, player1matrix,AIX,AIY);
+            //sleep(100);
+          end;
         end;
       end;
 
@@ -826,6 +804,7 @@ end;
 procedure TForm1.FormCreate(Sender: TObject);
 var i:Byte;
 begin
+  currplayer:=1;
   isShow:=false;
   for i:=1 to 10 do
   begin
@@ -986,7 +965,7 @@ procedure TForm1.player1matrixDrawCell(Sender: TObject; ACol, ARow: Integer;
   Rect: TRect; State: TGridDrawState);
 var X: Real;
 begin
- // pnlName.Caption := 'X : ' + IntToStr(LSX) + ' Y : ' + IntToStr (LSY);
+  pnlName.Caption := 'X : ' + IntToStr(LSX) + ' Y : ' + IntToStr (LSY);
  with player1matrix do
   begin
     if(Cells[ACol,ARow] = '*') then
@@ -1012,6 +991,9 @@ begin
       Canvas.Brush.Color:= RGB(255,170,55);//Orange;
       Rect.Left:=Rect.Left-10;
       Canvas.FillRect(Rect);
+      Sleep(600);
+      currplayer:=2;
+      AIShotShotShot(player1matrix);
       //Sleep(500);
     end;
     if (Cells[ACol,ARow] = 'K')   then
@@ -1019,12 +1001,18 @@ begin
       Canvas.Brush.Color:= clRed;//Red;
       Rect.Left:=Rect.Left-5;
       Canvas.FillRect(Rect);
+      currplayer:=2;
+      //AIShotShotShot(player1matrix);
     end;
     if ((ACol = 0) and (ARow = 0)) then
     begin
       Canvas.Brush.Color:=clWhite;
       Rect.Left:=Rect.Left-5;
       Canvas.FillRect(Rect);
+    end;
+    if(CurrPlayer = 2) then
+    begin
+      AIShotShotShot(player1matrix);
     end;
   end;
 
@@ -1091,7 +1079,7 @@ var
   i,j,k:byte;
   count:byte;
 begin
-  // ************* Подсчет кораблей в строчу ****************
+  // /\/\************* Подсчет кораблей в строчу ****************
   for i:=1 to 10 do
   begin
     j:=1;
