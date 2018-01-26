@@ -100,9 +100,6 @@
             <Form>Form1</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="Game.pas">
-            <Form>FieldForm</Form>
-        </DCCReference>
         <DCCReference Include="AboutUs.pas">
             <Form>FieldForm</Form>
         </DCCReference>

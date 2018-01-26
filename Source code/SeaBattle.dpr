@@ -4,7 +4,6 @@ uses
   Vcl.Forms,
   MainPage in 'MainPage.pas' {Form1},
   CreateField in 'CreateField.pas' {Form1},
-  Game in 'Game.pas' {FieldForm},
   AboutUs in 'AboutUs.pas' {FieldForm},
   ErrorPage in 'ErrorPage.pas' {Form2};
 

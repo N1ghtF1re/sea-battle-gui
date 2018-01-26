@@ -37,7 +37,7 @@ implementation
 
 {$R *.dfm}
 
-uses CreateField, Game;
+uses CreateField;
 
 procedure TForm3.btn1Click(Sender: TObject);
 begin
@@ -54,7 +54,7 @@ end;
 procedure TForm3.edt1KeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
-       if (Key = 13) then
+  if (Key = 13) then
     btn1Click(btn1);
 end;
 

@@ -98,7 +98,7 @@ uses ErrorPage, MainPage, AboutUs;
 
 // resourcestring PlacingRules = 'Игровое поле — обычно квадрат 10×10 каждого игрока, на котором размещается флот кораблей. Горизонтали обычно нумеруются сверху вниз, а вертикали помечаются буквами слева направо. При этом используются буквы русского алфавита от «а» до «к» (буквы «ё» и «й» обычно пропускаются) либо от «а» до «и» (с использованием буквы «ё»), либо буквы латинского алфавита от «a» до «j». Иногда используется слово «республика» или «снегурочка», так как в этих 10-буквенных словах ни одна буква не повторяется. Поскольку существуют различные варианты задания системы координат, то об этом лучше заранее договориться.' + #1013 'Размещаются:';
 procedure isHitted_wow(var player1matrix:TStringGrid; var i,j:byte);
-var rand, g, l, iDamaged, jDamaged, K, trigr:integer;
+var rand,  iDamaged, jDamaged, K, trigr:integer;
     stem,limit:Boolean;
 begin
 stem:=False;
@@ -288,9 +288,7 @@ if not(stem) then
   end;
 end;
 
-
-
-  procedure KillShip(const fullmatrix: TPF; var EnemyMatrix: TStringGrid; const x,y:Byte);
+  function KillShip(const fullmatrix: TPF; var EnemyMatrix: TStringGrid; const x,y:Byte):Boolean;
     var flag, iskilled:Boolean;
     i,j,lasttop, lastdown,lastleft,lastright:byte;
   begin
@@ -468,11 +466,12 @@ end;
           end;
         end;
       end;
+      KillShip:=isKilled;
   end;
   procedure AIShotShotShot(player1matrix:TStringGrid);
   var
     missed,second:Boolean;
-    AIX, AIY, UtilI, UtilJ: byte;
+    AIX, AIY: byte;
   begin
     //lbWalk.Caption := 'Ходит: ИИ';
     missed := False;
@@ -568,7 +567,6 @@ end;
             end;
           end;
 
-
         end;
       end;
 
@@ -590,7 +588,8 @@ end;
             player1matrix.Cells[AIX,AIY] := 'R';
             LSX:=AIX;
             LSY:=AIY;
-            KillShip(Form1.P1F, player1matrix,AIX,AIY);
+            if(KillShip(Form1.P1F, player1matrix,AIX,AIY)) then
+              AIShotShotShot(player1matrix);
             //sleep(100);
           end;
         end;
@@ -965,7 +964,8 @@ procedure TForm1.player1matrixDrawCell(Sender: TObject; ACol, ARow: Integer;
   Rect: TRect; State: TGridDrawState);
 var X: Real;
 begin
-  pnlName.Caption := 'X : ' + IntToStr(LSX) + ' Y : ' + IntToStr (LSY);
+  //pnlName.Caption := 'X : ' + IntToStr(LSX) + ' Y : ' + IntToStr (LSY);
+
  with player1matrix do
   begin
     if(Cells[ACol,ARow] = '*') then
@@ -1010,10 +1010,6 @@ begin
       Rect.Left:=Rect.Left-5;
       Canvas.FillRect(Rect);
     end;
-    if(CurrPlayer = 2) then
-    begin
-      AIShotShotShot(player1matrix);
-    end;
   end;
 
 end;
@@ -1034,7 +1030,7 @@ var
   i,j,k:byte;
   count:byte;
 begin
-  // ************* Подсчет кораблей в столбец ****************
+  // ************* Подсчет кораблей в столбец **************** \\
   for i:=1 to 10 do
   begin
     j:=1;
@@ -1171,7 +1167,7 @@ procedure TForm1.player2matrixDrawCell(Sender: TObject; ACol, ARow: Integer;
   Rect: TRect; State: TGridDrawState);
 var flag:Boolean;
 begin
-  {case currplayer of
+  { case currplayer of
     1: lbWalk.Caption := 'Ходит: ' + form3.UserName;
     2: lbWalk.Caption := 'Ходит: ИИ';
   end;  }
