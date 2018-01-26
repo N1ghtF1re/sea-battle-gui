@@ -101,6 +101,7 @@ var
   isRevers:Boolean;
   CurrPlayer:1..2;
   P1N, P2N: 0..20;
+  AntiKick:Boolean;
 implementation
 
 {$R *.dfm}
@@ -795,6 +796,7 @@ begin
 
  with player1matrix do
   begin
+  AntiKick:=true;
     if(Cells[ACol,ARow] = '*') then
     begin
       Canvas.Brush.Color:=clWhite;
@@ -837,7 +839,8 @@ begin
       Canvas.FillRect(Rect);
     end;
   end;
-
+  if CurrPlayer = 1 then
+AntiKick:=False;
 end;
 
 procedure TForm1.player1matrixMouseUp(Sender: TObject; Button: TMouseButton;
@@ -1065,6 +1068,7 @@ begin
     if (currplayer = 2) then
     begin
       //pnl5.Visible := false;
+      AntiKick:=true;
       sleep(800);
       AIShotShotShot(player1matrix);
       lbP1N.Caption := IntToStr(P1n);
@@ -1085,7 +1089,7 @@ begin
 end;
 
 
-procedure TForm1.player2matrixMouseUp(Sender: TObject; Button: TMouseButton;
+procedure TForm1.player2matrixMouseUp (Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 // Игра имеет несколько режимов.
 // Переменная перечисляемого типа mode
@@ -1099,9 +1103,14 @@ var
 begin
   if (mode = battaly) then
   begin
-    if (currplayer = 2) then  // Как без угроз
-      ShowMessage('Соблюдай очередь, иначе придет большой ИИ и накажет тебя :c');
-    if (currplayer = 1) then
+  if (CurrPlayer = 2) and (LSX = 0) then
+    begin
+    CurrPlayer := 1;
+    AntiKick := false;
+    end;
+    if (AntiKick or (currplayer = 2)) then // Как без угроз
+    ShowMessage('Соблюдай очередь, иначе придет большой ИИ и накажет тебя :c');
+    if ((not AntiKick) and (currplayer = 1)) then
     begin
       player2matrix.MouseToCell(X, Y, ACol, ARow); // Отслеживаем клик юзера
       // В ACol and Arow возвращаются координаты Колонки и Строки

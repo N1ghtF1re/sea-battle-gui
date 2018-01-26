@@ -1,4 +1,4 @@
-{*******************************************************}
+﻿{*******************************************************}
 {                                                       }
 {       Sea Battle GUI                                  }
 {       The trademark is not registered                 }
@@ -63,10 +63,6 @@ type
     N10: TMenuItem;
     btnAutoCreate: TButton;
     N11: TMenuItem;
-    lbl1: TLabel;
-    rb1: TRadioButton;
-    rb2: TRadioButton;
-    rb3: TRadioButton;
     procedure FormCreate(Sender: TObject);
     procedure player1matrixMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
@@ -105,7 +101,6 @@ var
   isRevers:Boolean;
   CurrPlayer:1..2;
   P1N, P2N: 0..20;
-  AntiKick:Boolean;
 implementation
 
 {$R *.dfm}
@@ -661,8 +656,7 @@ procedure Seabattle_fieldAI_generator(var P2F:TPF);
  var exiter,exc:Boolean;
  function Quick_math(x,y:integer):boolean;
  var count:integer;
-  // Процедура чекает можно ли в данную клетку впихнуть кусок корабля, если
-  //рядом стоят корабли то возращает - нет
+
  begin
 
    if (P2F[x-1,y]='K') or (P2F[x,y-1]='K') or (P2F[x-1,y-1]='K')
@@ -672,19 +666,19 @@ procedure Seabattle_fieldAI_generator(var P2F:TPF);
    else quick_math:=false;
  end;
  begin
- while counter<>20 do //счётчик на всякий случй
+ while counter<>20 do
   begin
 
  n:=10;
  for I := 1 to n do
    for j := 1 to n do
-     P2F[i,j]:='S';   //заполняем матрицу морем
+     P2F[i,j]:='S';
 
  Randomize;
  exiter:=False;
  Ship_size:=4;
  ship_amount:=1;
-  for k := 1 to 4 do      //количество размеров кораблей
+  for k := 1 to 4 do
   begin
 
     for j := 1 to ship_amount do
@@ -692,10 +686,10 @@ procedure Seabattle_fieldAI_generator(var P2F:TPF);
     repeat
       exiter:=False;
       repeat
-        ib:=Random(n)+1;  //рандомим начальную координату))
-        jb:=Random(n)+1;  //чекаем что б влез корабль
+        ib:=Random(n)+1;
+        jb:=Random(n)+1;
       until not (quick_math(ib,jb)) or ( (jb+ship_size-1>10) and (ib+ship_size-1>10)) ;
-      direction:=random(2)+1;           //рандомим направление
+      direction:=random(2)+1;             //1-Right 2-Bottom 3-Left 4-up
       if ship_size>1 then
       begin
       case direction of
@@ -704,13 +698,13 @@ procedure Seabattle_fieldAI_generator(var P2F:TPF);
         begin
 
         exc:=True;
-        for I := 1 to ship_size-1 do    //чекаем влезет ли
+        for I := 1 to ship_size-1 do
         if Quick_math(ib+i,jb) then
         exc:=False;
          if exc  then
          for I := 1 to ship_size-1 do
          begin
-         P2F[ib,jb]:='K';       //если влазит записываем, снизу тоже самое
+         P2F[ib,jb]:='K';
          P2F[ib+i,jb]:='K';
          exiter:=true;
          end;
@@ -801,7 +795,6 @@ begin
 
  with player1matrix do
   begin
-  AntiKick:=true;
     if(Cells[ACol,ARow] = '*') then
     begin
       Canvas.Brush.Color:=clWhite;
@@ -844,8 +837,6 @@ begin
       Canvas.FillRect(Rect);
     end;
   end;
-  if CurrPlayer = 1 then
-AntiKick:=False;
 
 end;
 
@@ -1060,7 +1051,6 @@ begin
     if(Cells[ACol,ARow] = '*') then
     begin
       Canvas.Brush.Color:=clWhite;
-
       //pnlName.Caption := IntToStr(currplayer);
       if currplayer = 2 then
         flag:=true;
@@ -1075,7 +1065,6 @@ begin
     if (currplayer = 2) then
     begin
       //pnl5.Visible := false;
-      AntiKick:=true;
       sleep(800);
       AIShotShotShot(player1matrix);
       lbP1N.Caption := IntToStr(P1n);
@@ -1110,14 +1099,9 @@ var
 begin
   if (mode = battaly) then
   begin
-    if (CurrPlayer = 2) and (LSX = 0) then
-  begin
-  CurrPlayer := 1;
-  AntiKick := false;
-  end;
-    if (AntiKick or (currplayer = 2)) then // Как без угроз
-    ShowMessage('Соблюдай очередь, иначе придет большой ИИ и накажет тебя :c');
-    if ((not AntiKick) and (currplayer = 1)) then
+    if (currplayer = 2) then  // Как без угроз
+      ShowMessage('Соблюдай очередь, иначе придет большой ИИ и накажет тебя :c');
+    if (currplayer = 1) then
     begin
       player2matrix.MouseToCell(X, Y, ACol, ARow); // Отслеживаем клик юзера
       // В ACol and Arow возвращаются координаты Колонки и Строки

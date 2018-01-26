@@ -32,7 +32,7 @@ object Form1: TForm1
     ParentBiDiMode = False
     ParentBackground = False
     ParentCtl3D = False
-    TabOrder = 0
+    TabOrder = 2
     StyleElements = [seClient]
     object lb1: TLabel
       Left = 20
@@ -5495,7 +5495,7 @@ object Form1: TForm1
       ParentBackground = False
       ParentDoubleBuffered = False
       ShowCaption = False
-      TabOrder = 1
+      TabOrder = 3
       Visible = False
       StyleElements = [seFont, seClient]
       object img1: TImage
@@ -11464,7 +11464,7 @@ object Form1: TForm1
       GridLineWidth = 2
       Options = [goVertLine, goHorzLine]
       ScrollBars = ssNone
-      TabOrder = 2
+      TabOrder = 1
       Visible = False
       OnDrawCell = player2matrixDrawCell
       OnMouseUp = player2matrixMouseUp
@@ -11475,7 +11475,7 @@ object Form1: TForm1
       Width = 123
       Height = 49
       Caption = #1040#1074#1090#1086#1084#1072#1090#1080#1095#1077#1089#1082#1072#1103' '#1088#1072#1089#1089#1090#1072#1085#1086#1074#1082#1072
-      TabOrder = 3
+      TabOrder = 2
       WordWrap = True
       OnClick = btnAutoCreateClick
     end
@@ -11490,7 +11490,7 @@ object Form1: TForm1
     Caption = 'kkkkkkkkkkkkkkk'
     Color = clWhite
     ParentBackground = False
-    TabOrder = 2
+    TabOrder = 0
     Visible = False
     object pnl5: TPanel
       Left = 0
