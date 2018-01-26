@@ -1,4 +1,15 @@
-﻿unit CreateField;
+﻿{*******************************************************}
+{                                                       }
+{       Sea Battle GUI                                  }
+{       The trademark is not registered                 }
+{       no rights are protected                         }
+{       (c) 2018,  BrakhMen Corp                        }
+{       SITE: brakhmen.info                             {
+{                                                       }
+{*******************************************************}
+
+
+unit CreateField;
 
 interface
 
@@ -88,16 +99,17 @@ var
   isShow:Boolean;
   LSX, LSY:byte;
   isRevers:Boolean;
-
+  CurrPlayer:1..2;
+  P1N, P2N: 0..20;
 implementation
 
 {$R *.dfm}
 
-uses ErrorPage, MainPage,game, AboutUs;
+uses ErrorPage, MainPage, AboutUs;
 
 // resourcestring PlacingRules = 'Игровое поле — обычно квадрат 10×10 каждого игрока, на котором размещается флот кораблей. Горизонтали обычно нумеруются сверху вниз, а вертикали помечаются буквами слева направо. При этом используются буквы русского алфавита от «а» до «к» (буквы «ё» и «й» обычно пропускаются) либо от «а» до «и» (с использованием буквы «ё»), либо буквы латинского алфавита от «a» до «j». Иногда используется слово «республика» или «снегурочка», так как в этих 10-буквенных словах ни одна буква не повторяется. Поскольку существуют различные варианты задания системы координат, то об этом лучше заранее договориться.' + #1013 'Размещаются:';
 procedure isHitted_wow(var player1matrix:TStringGrid; var i,j:byte);
-var rand, g, l, iDamaged, jDamaged, K, trigr:integer;
+var rand,  iDamaged, jDamaged, K, trigr:integer;
     stem,limit:Boolean;
 begin
 stem:=False;
@@ -287,12 +299,18 @@ if not(stem) then
   end;
 end;
 
+  function KillShip(const fullmatrix: TPF; var EnemyMatrix: TStringGrid; const x,y:Byte):Boolean;
+  // Функция возвращает true если корабль убит, false если еще не убит
+  // В ней же происходит "убийство" корабля (заменя "R" на "S" если убили
+  // Корабль
+  // В прочем, тут ничего интересного
 
-
-  procedure KillShip(const fullmatrix: TPF; var EnemyMatrix: TStringGrid; const x,y:Byte);
     var flag, iskilled:Boolean;
     i,j,lasttop, lastdown,lastleft,lastright:byte;
   begin
+      // Честно говоря, писал я ее давным давно, поэтому сильно
+      // не помню, как она работает, поэтому лучше ее не трогать
+      // да и работает она идеально
       if ((fullmatrix[x+1, y] = 'K') or (fullmatrix[x-1, y] = 'K')) then
       begin
         flag:=True;
@@ -360,8 +378,10 @@ end;
           if(currplayer = 2) then
           begin
             //ShowMessage('kek');
-            LSX:=0;
-            LSY:=0;
+            LSX:=0;    // ИИ убил корабль - обнуляем координаты
+            LSY:=0;    // Последнего раненого корабля (подробнее в процедуре AIShotShotShot
+
+
           end;
         end;
       end
@@ -433,8 +453,9 @@ end;
             if(currplayer = 2) then
             begin
               //ShowMessage('kek');
-              LSX:=0;
-              LSY:=0;
+              LSX:=0;    // ИИ убил корабль - обнуляем координаты
+              LSY:=0;    // Последнего раненого корабля (подробнее в процедуре AIShotShotShot
+
             end;
           end;
         end
@@ -459,44 +480,40 @@ end;
             EnemyMatrix.Cells[x+1, y+1] := '*';
           if(currplayer = 2) then
           begin
-            //ShowMessage('kek');
-            LSX:=0;
-            LSY:=0;
+            LSX:=0;    // ИИ убил корабль - обнуляем координаты
+            LSY:=0;    // Последнего раненого корабля (подробнее в процедуре AIShotShotShot
           end;
         end;
       end;
+      KillShip:=isKilled;
   end;
   procedure AIShotShotShot(player1matrix:TStringGrid);
   var
     missed,second:Boolean;
-    AIX, AIY, UtilI, UtilJ: byte;
+    AIX, AIY: byte;
   begin
     //lbWalk.Caption := 'Ходит: ИИ';
     missed := False;
     second := False;
-    {for UtilI := 1 to 10 do
-      for UtilJ := 1 to 10 do
-        if player1matrix.Cells[UtilI,UtilJ]='R' then
-          begin
-          second:=true;
-          AIX:=UtilI;
-          AIY:=UtilJ;
-          end;}
-    while ((currplayer = 2) and (not missed) and (P1N>0)) do
+    if (currplayer = 2) then
     begin
       if (player1matrix.Cells[LSX,LSY] = 'K') then
       begin
-        lsx:=0;
-        lsy:=0;
+        lsx:=0;   // На всякий случай, если в клетке K
+        lsy:=0;   // Обнуляем
       end;
       if (LSX = 0) then
       repeat
-        //ShowMessage('Full Random');
+        // LSX, LSY - содержат координаты последнего раненого корабля
+        // Если корабль убивается, то они равны нулю.
+        // Если равны нулю, то рандомим по красоте
         AIX := Random(10) +1;
         AIY := Random(10) +1;
       until ((player1matrix.Cells[AIX,AIY] <> '*') and (player1matrix.Cells[AIX,AIY] <> 'R') and (player1matrix.Cells[AIX,AIY] <> 'K'))
       else
       begin
+        AIX := LSX;
+        AIY := LSY;
         // Если мы еще не ранили ничего в округе (мы знаем ток одну клетку)
         if (((AIX = 10) or (player1matrix.Cells[AIX+1,AIY] <> 'R')) and
             ((AIX = 0) or (player1matrix.Cells[AIX-1,AIY] <> 'R')) and
@@ -504,11 +521,14 @@ end;
             ( (AIY = 0) or (player1matrix.Cells[AIX,AIY-1] <> 'R')))
         then
         begin
+
           repeat
             AIX := LSX;
             AIY := LSY;
+            //ShowMessage('Ищем соседа' + player1matrix.Cells[AIX+1,AIY] +  player1matrix.Cells[AIX-1,AIY] + player1matrix.Cells[AIX,AIY+1] + player1matrix.Cells[AIX,AIY-1] <> 'R');
+            IF(LSX) = 0 then Break;
             case Random(4) + 1 of
-              1: Inc(AIX);
+              1: Inc(AIX);   // Рандомим ячейку в окрестности раненой
               2: Inc(AIY);
               3: Dec(AIX);
               4: Dec(AIY);
@@ -518,12 +538,19 @@ end;
         end
         else
         begin
+          // Если слева/справа от нашей последней раненой ячейки есть еще
+          // одна раненая, то заходим сюда
           if((AIX <> 10) and (player1matrix.Cells[AIX+1,AIY] = 'R')) or ((AIX <> 0) and(player1matrix.Cells[AIX-1,AIY] = 'R')) then
           begin
-            //ShowMessage('Рандомим столбец');
+            // Рандомим столбец
             isRevers:= false;
             AIX := LSX;
             AIY := LSY;
+            // Пока мы не наткнемся на 'S' или '' гуляем по циклу
+            // слева направо, если натыкаемся на "Мимо" ("*"), то
+            // теперь идем справа налево. Если натыкаемся на 'S'
+            // или '', то пиу-пау в корабль игрока
+            // ну и тестим, что не вышли на границы цикла
             while(((player1matrix.Cells[AIX,AIY]) <> 'S') or ((player1matrix.Cells[AIX,AIY]) <> '')) do
             begin
               //ShowMessage(IntToStr(AIX) + ' Content : ' + player1matrix.Cells[aix,AIY]);
@@ -543,12 +570,19 @@ end;
           end
           else
           begin
+            // Если верху/внизу от нашей последней раненой ячейки есть еще
+            // одна раненая, то заходим сюда
             if((AIY <> 10) and (player1matrix.Cells[AIX,AIY+1] = 'R')) or ((AIX <> 0) and(player1matrix.Cells[AIX,AIY-1] = 'R')) then
             begin
               AIX := LSX;
               AIY := LSY;
-              // ShowMessage('Рандомим строку');
+              // Рандомим строку
               isRevers:= false;
+              // Пока мы не наткнемся на 'S' или '' гуляем по циклу
+              // снизу вверх, если натыкаемся на "Мимо" ("*"), то
+              // теперь идем серху вниз. Если натыкаемся на 'S'
+              // или '', то пиу-пау в корабль игрока
+              // ну и тестим, что не вышли на границы цикла
               while(((player1matrix.Cells[AIX,AIY]) <> 'S') or ((player1matrix.Cells[AIX,AIY]) <> '')) do
               begin
                 if ((AIY in [1..10]) and (player1matrix.Cells[AIX,AIY] = 'S')) then Break;
@@ -568,53 +602,40 @@ end;
             end;
           end;
 
-
         end;
       end;
-
+      {
+      ### Затем в процедуре player1matrixDrawCell идет повторный вызов
+      AIShotShotShot (где отрисовываются раненые корабли)
+      Это было сделано для того, что бы была хоть какая задержка
+      И наш Парамошка не стрелял из дробовика, раня сразу весь корабль
+      Одним выстрелом
+      }
     //if (second) and (P1N>0) then isHitted_wow(player1matrix,AIX,AIY);
-      if player1matrix.Cells[AIX,AIY] = '' then
+      if (currplayer = 2) then // Проверяем, попал ли наш
+      // Парамошка по кораблю, иль промазал
       begin
-        player1matrix.Cells[AIX,AIY] := '*';
-        missed:=true;
-        //ShowMessage('Miss');
-        currplayer := 1;
-        Break;
-      end
-      else
-      begin
-        if (player1matrix.Cells[AIX,AIY] = 'S') then
+        if player1matrix.Cells[AIX,AIY] = '' then
         begin
-          Dec(P1N);
-          player1matrix.Cells[AIX,AIY] := 'R';
-          LSX:=AIX;
-          LSY:=AIY;
-          KillShip(Form1.P1F, player1matrix,AIX,AIY);
-                               //\\
-                              //  \\
-                             //    \\
-                            //      \\
-                           //        \\
-                          //          \\
-                         //            \\
-                        //              \\
-                       //                \\
-                      //                  \\
-                     //                    \\
-                    //                      \\
-                   //                        \\
-                  //                          \\
-                 //                            \\
-                //                              \\
-               //                                \\
-              //                                  \\
-             //                                    \\
-            //                                      \\
-           //                                        \\
-          //  ShowMessage('Большой ИИ попал в тебя')  \\
-         //============================================\\
-          second:=true;
-
+          player1matrix.Cells[AIX,AIY] := '*';
+          missed:=true;
+          // Прое... промазал
+          currplayer := 1;
+        end
+        else
+        begin
+          if (player1matrix.Cells[AIX,AIY] = 'S') then
+          begin
+            Dec(P1N);
+            player1matrix.Cells[AIX,AIY] := 'R';
+            LSX:=AIX;
+            LSY:=AIY;
+            // Парамошка попал
+            if(KillShip(Form1.P1F, player1matrix,AIX,AIY)) then  // Проверяем,
+            // Убил ли наш ИИ корабль. И если да - отрисовываем гениальной
+            // Процедурой убитые корабли и рекурсивно вызываем AIShotShotShot
+              AIShotShotShot(player1matrix);
+          end;
         end;
       end;
 
@@ -625,6 +646,9 @@ end;
   end;
 
 procedure Seabattle_fieldAI_generator(var P2F:TPF);
+// Эт функция Никиты. Никита хороший парень, больше ничего сказать
+// Не могу. Ну только, что сейчас процедура работает ну просто
+// Идеально. ЗЫ Никита, если не трудно, можешь закомментить))
   const ships = 20;
    var ib,jb,ie,je,i,j,k,ship_size,ship_amount,direction,n,counter:Integer ;
  var exiter,exc:Boolean;
@@ -728,6 +752,8 @@ procedure Seabattle_fieldAI_generator(var P2F:TPF);
   end;
   end;
 procedure TForm1.btnAutoCreateClick(Sender: TObject);
+// Если юзверь нажимает "Автогенерация", юзаем процедуру Никиты
+// И даем юзверю то, что он жаждет - хорошее поле
 var i,j:Integer;
 begin
   for i:=1 to 10 do
@@ -745,15 +771,386 @@ begin
         'M' : player1matrix.Cells[i,j] := '';
         'K' : player1matrix.Cells[i,j] := 'S';
       End;
-  lbnum1.Caption := '4';
+  lbnum1.Caption := '4'; // Обновляем счетчики справа
   lbNum2.Caption := '3';
   lbNum3.Caption := '2';
   lbNum4.Caption := '1';
-  pnIsFin.Visible := true
+  pnIsFin.Visible := true; // Даем лицезреть полузигующего Парамошку
 
 end;
 
+procedure TForm1.player1matrixDrawCell(Sender: TObject; ACol, ARow: Integer;
+  Rect: TRect; State: TGridDrawState);
+var X: Real;
+begin
+  // Тут уже очень даже интересно. Отрисовываем ячейки матрицы первого
+  // Игрока.
+  // Если там '' - белым. если 'S' - синим (корабль)
+  // Если '*' - белым + рисуем там точку посреди
+  // Если 'R' - оранжевым. Если 'K' - красным
+  // Ну и тип эт, если отрисовывается R, там же вызывается AIShotShotShot
+  // (Если ИИ попал и ранил кого-то кроме себя, то он стреляет еще раз)
+
+ with player1matrix do
+  begin
+    if(Cells[ACol,ARow] = '*') then
+    begin
+      Canvas.Brush.Color:=clWhite;
+      Canvas.FillRect(Rect);
+      Canvas.TextOut(Rect.Left+10, Rect.Top+5, '•');
+    end;
+    if (Cells[ACol,ARow] = 'S')   then
+    begin
+      Canvas.Brush.Color:= RGB(82,158,235);//clBlue;
+      Rect.Left:=Rect.Left-5;
+      Canvas.FillRect(Rect);
+    end;
+    if (Cells[ACol,ARow] = '') then
+    begin
+      Canvas.Brush.Color:=clWhite;
+      Rect.Left:=Rect.Left-5;
+      Canvas.FillRect(Rect);
+    end;
+    if (Cells[ACol,ARow] = 'R')   then
+    begin
+      Canvas.Brush.Color:= RGB(255,170,55);//Orange;
+      Rect.Left:=Rect.Left-10;
+      Canvas.FillRect(Rect);
+      Sleep(600);
+      currplayer:=2;
+      AIShotShotShot(player1matrix); // ИИ наносит еще раз удар
+      //Sleep(500);
+    end;
+    if (Cells[ACol,ARow] = 'K')   then
+    begin
+      Canvas.Brush.Color:= clRed;//Red;
+      Rect.Left:=Rect.Left-5;
+      Canvas.FillRect(Rect);
+      currplayer:=2;
+    end;
+    if ((ACol = 0) and (ARow = 0)) then
+    begin
+      Canvas.Brush.Color:=clWhite;
+      Rect.Left:=Rect.Left-5;
+      Canvas.FillRect(Rect);
+    end;
+  end;
+
+end;
+
+procedure TForm1.player1matrixMouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+// Найс процедура. Первое мое творение в этом приложении.
+// Игра имеет несколько режимов.
+// Переменная перечисляемого типа mode
+// Режимы: создание поля, игра, завершение игры
+// Когда идем режим создания поля, то эта процедура будет работать,
+// Обрабатывать клики и создавать поле для игрока. Повторный клик -
+// Очистка ячейки
+// Процедуры checkInCol и checkInRow внутри этой процедуры тупо
+// корабли. Подробнее внутри их, но особо интересного ничего там нет
+var
+  ACol, ARow: Integer;
+  num1,num2,num3,num4: Byte;
+procedure showError;
+begin
+  Form2.ShowModal; // if юзверь налажал then показываем ему Парамошку с ошибкой
+  player1matrix.Cells[ACol,ARow] := '';
+end;
+
+procedure checkInCol(var num1,num2,num3,num4:byte);
+var
+  i,j,k:byte;
+  count:byte;
+begin
+  // ************* Подсчет кораблей в столбец **************** \\
+  for i:=1 to 10 do   // Перебираем столбцы
+  begin
+    j:=1;
+    while(j<=10) do // Перебираем строки                 // i - столбец, j - строка
+    begin                            // [Col, Row]  ([Столбец, Строка])
+      if( (player1matrix.Cells[i,j] = 'S') // Найден коарбль, считаем кол-во кораблей подряд. Если находим не корабль - выходим
+      and
+      ( (player1matrix.Cells[i+1,j] <> 'S') and (player1matrix.Cells[i-1,j] <> 'S')))
+      then
+      begin
+        count:=0;
+        k:=j;
+        while(player1matrix.Cells[i,k] = 'S') do
+        begin
+          inc(count);
+          inc(k);
+          //lbText4.Caption := IntToStr(i) + 'S' + IntToStr(j);
+          //player1matrix.Cells[i,j+1] := 'suka';
+        end;
+        j:=k+1;
+        case count of
+          1: ;//inc(num1);
+          2: inc(num2);
+          3: inc(num3);
+          4: inc(num4);
+        else showError;
+        end;
+        end;
+      inc(j);
+    end;
+  end;
+  lbNum1.Caption := IntToStr(num1);
+  lbNum2.Caption := IntToStr(num2);
+  lbNum3.Caption := IntToStr(num3);
+  lbNum4.Caption := IntToStr(num4);
+  player1matrix.Col:=ACol;
+  player1matrix.Row:=ARow;
+end;
+
+procedure checkInRow(var num1,num2,num3,num4:byte);
+// Полностью аналогично прошлой процедуре. Писать - лень
+var
+  i,j,k:byte;
+  count:byte;
+begin
+  // /\/\************* Подсчет кораблей в строчу ****************
+  for i:=1 to 10 do
+  begin
+    j:=1;
+    while(j<=10) do
+    begin
+      if( (player1matrix.Cells[j,i] = 'S')
+      and
+      ( (player1matrix.Cells[j,i+1] <> 'S') and (player1matrix.Cells[j,i-1] <> 'S')))
+      then
+      begin
+        count:=1;
+        k:=j+1;
+        while(player1matrix.Cells[k,i] = 'S') do
+        begin
+          inc(count);
+          inc(k);
+        end;
+        j:=k+1;
+        case count of
+          1: inc(num1);
+          2: inc(num2);
+          3: inc(num3);
+          4: inc(num4);
+        else showError;
+        end;
+        end;
+      inc(j);
+    end;
+  end;
+  lbNum1.Caption := IntToStr(num1);
+  lbNum2.Caption := IntToStr(num2);
+  lbNum3.Caption := IntToStr(num3);
+  lbNum4.Caption := IntToStr(num4);
+  player1matrix.Col:=ACol;
+  player1matrix.Row:=ARow;
+end;
+
+begin
+  if((mode = FCreate) and (x < 440)) then // При смене мода клики
+  // по полю первого игрока не будут обрабатываться
+
+  begin
+    player1matrix.MouseToCell(X, Y, ACol, ARow); // Отслеживаем, куда же кликнул
+    // Наш юзер. Acol, Arow - возвращаемые адрес Колонки и Строки, по которой
+    // Произведен клик
+    if( (ACol <> 0) and (ARow <> 0)) then
+    begin
+      if (player1matrix.Cells[ACol,ARow] = '') then
+      begin
+        player1matrix.Cells[ACol,ARow] := 'S'; // Если было пусто, ставим кораблик
+      end
+      else
+      begin
+        player1matrix.Cells[ACol,ARow] := '';  // Если был корабль - то ставим пусто
+      end;
+      // ОСТОРОЖНО! Просьба отойти от мониторов людей с нервными заболеваниями,
+      // непеносимостью кучи условий, беременных женщик, инвалидов и т.д.
+      // ДАЛЕЕ ОЧЕНЬ МНОГО УСЛОВИЙ. Я предупредил...
+
+      // Далее идет проверка на корректность расстановки (Низя по диагонали и
+      // Треугольниками
+      if((player1matrix.Cells[ACol+1,ARow+1] = 'S')
+          or
+          (player1matrix.Cells[ACol+1,ARow-1] = 'S')
+          or
+          (player1matrix.Cells[ACol-1,ARow+1] = 'S')
+          or
+          (player1matrix.Cells[ACol-1,ARow-1] = 'S')
+          or
+          ((player1matrix.Cells[ACol,ARow+1] = 'S') and (player1matrix.Cells[ACol+1,ARow] = 'S'))
+          or
+          ((player1matrix.Cells[ACol,ARow-1] = 'S') and (player1matrix.Cells[ACol-1,ARow] = 'S'))
+          or
+          ((player1matrix.Cells[ACol,ARow+1] = 'S') and (player1matrix.Cells[ACol-1,ARow] = 'S'))
+          or
+          ((player1matrix.Cells[ACol,ARow-1] = 'S') and (player1matrix.Cells[ACol+1,ARow] = 'S')))
+      then
+      begin
+        showError; // Показываем Парамошку
+      end;
+      num1:=0;
+      num2:=0;
+      num3:=0;
+      num4:=0;
+      checkInRow(num1,num2,num3,num4);
+      checkInCol(num1,num2,num3,num4);
+      if ((num1 = 4) and (num2 = 3) and (num3 = 2) and (num4 = 1)) then
+        pnIsFin.Visible := true // Если все хорошо, разрешаем идти дальше
+      else
+        pnIsFin.Visible := false;
+      // pnIsFin.Visible := true
+    end;
+  end;
+end;
+
+procedure TForm1.player2matrixDrawCell(Sender: TObject; ACol, ARow: Integer;
+  Rect: TRect; State: TGridDrawState);
+  // Отрисовываем ячейки матрицы второго игрока
+  // Если там '' - белым. Если там корабль('S') - белым.
+  // Если '*' - белым + рисуем там точку посреди
+  // Если 'R' - оранжевым. Если 'K' - красным
+var flag:Boolean;
+begin
+  flag:=false;
+  with player2matrix do
+  begin
+    if (Cells[ACol,ARow] = 'S')   then
+    begin
+      Canvas.Brush.Color:= clWhite;//RGB(82,158,235);//clBlue;
+      Rect.Left:=Rect.Left-5;
+      Canvas.FillRect(Rect);
+    end;
+    if (Cells[ACol,ARow] = 'R')   then
+    begin
+      Canvas.Brush.Color:= RGB(255,170,55);//Orange;
+      Rect.Left:=Rect.Left-10;
+      Canvas.FillRect(Rect);
+    end;
+    if (Cells[ACol,ARow] = 'K')   then
+    begin
+      Canvas.Brush.Color:= clRed;//Red;
+      Rect.Left:=Rect.Left-5;
+      Canvas.FillRect(Rect);
+    end;
+    if (Cells[ACol,ARow] = '') then
+    begin
+      Canvas.Brush.Color:=clWhite;
+      Rect.Left:=Rect.Left-5;
+      Canvas.FillRect(Rect);
+    end;
+    if ((ACol = 0) and (ARow = 0)) then
+    begin
+      Canvas.Brush.Color:=clWhite;
+      Rect.Left:=Rect.Left-5;
+      Canvas.FillRect(Rect);
+    end;
+    if(Cells[ACol,ARow] = '*') then
+    begin
+      Canvas.Brush.Color:=clWhite;
+      //pnlName.Caption := IntToStr(currplayer);
+      if currplayer = 2 then
+        flag:=true;
+      Canvas.FillRect(Rect);
+      Canvas.TextOut(Rect.Left+10, Rect.Top+5, '•');
+    end;
+  end;
+
+  if (flag) then       // Небольшая махинация. Если игрок промазывает,
+  // Показывается табличка "Ходит ИИ"
+  begin
+    if (currplayer = 2) then
+    begin
+      //pnl5.Visible := false;
+      sleep(800);
+      AIShotShotShot(player1matrix);
+      lbP1N.Caption := IntToStr(P1n);
+      currplayer := 1;
+      flag:=false;
+    end;
+    pnl5.Visible := true;
+    pnl5.color := RGB(34,180,34);
+    pnl5.Caption := 'Ваш ход, ' + form3.UserName;
+    if ((P1N =  0) and (mode = battaly)) then
+    begin
+      ShowMessage('Game Over');
+      mode := GameOver;
+      if (P1N = 0) then
+        ShowMessage('Парамошка победил, поэтому может и продолжать не выставлять модули');
+    end;
+  end;
+end;
+
+
+procedure TForm1.player2matrixMouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+// Игра имеет несколько режимов.
+// Переменная перечисляемого типа mode
+// Режимы: создание поля, игра, завершение игры
+// Когда идем режим игры, то эта процедура будет работать,
+// В процедуре стреляет игрок в ИИ
+var
+  ACol, ARow: Integer;
+  type TEM = array[1..10,1..10] of string;
+
+begin
+  if (mode = battaly) then
+  begin
+    if (currplayer = 2) then  // Как без угроз
+      ShowMessage('Соблюдай очередь, иначе придет большой ИИ и накажет тебя :c');
+    if (currplayer = 1) then
+    begin
+      player2matrix.MouseToCell(X, Y, ACol, ARow); // Отслеживаем клик юзера
+      // В ACol and Arow возвращаются координаты Колонки и Строки
+      // В которые "Тыкнул" юзуер
+      if( (ACol <> 0) and (ARow <> 0)) then
+      begin
+        if (player2matrix.Cells[ACol,ARow] = '') then
+        begin
+          // Юзер промазал, теперь стреляет наш
+          // Мистер сдвиг
+          player2matrix.Cells[ACol,ARow] := '*';
+          currplayer:=2;
+          pnl5.Caption := 'Ходит ИИ';
+          pnl5.color := RGB(0,50,0);
+          pnl5.Font.Color := clWhite;
+        end
+        else
+        begin
+          case player2matrix.Cells[ACol,ARow][1] of
+            '*','R','K': ShowMessage('Ты уже стрелял сюда :c');
+            'S':   // ИИ ПОРАЖЕН! МЫ ЕГО РАНИЛИ (ИЛИ УБИЛИ, НО ЭТ НЕ ТОЧНО)
+            begin
+              Dec(P2N);
+              lbP2N.Caption := IntToStr(P2n); // Изменяем счетчик оставшихся ячеек
+              // корабликов внизу
+              player2matrix.Cells[ACol,ARow] := 'R';
+              KillShip(Form1.P2F, player2matrix,ACol,ARow); // Если мы убили, заменяем 'R' на 'K'
+            end;
+          else ShowMessage('error :C'); // На всякий случай. Такого быть не может, но
+          // В военное впемя и синус может быть равен трем (с)
+          end;
+
+        end;
+      end;
+    end;
+    //lbP1N.Caption := IntToStr(P1N);
+    //lbP2N.Caption := IntToStr(P2N);
+  end;
+  if ((P1N =  0) or (P2N = 0)) then // ее, игра кончилась... Или не еее
+  begin
+    ShowMessage('Game Over');
+    mode := GameOver;
+    if (P1N = 0) then
+      ShowMessage('Парамошка победил, поэтому может и продолжать не выставлять модули');
+  end;
+end;
 procedure TForm1.btNextClick(Sender: TObject);
+// если пользователю надоел Парамошка, он нажимает далее
+// И карочи скрываются ненужные блоки, показываеются нужные
+// Вообщем, в этой процедуре довольно таки скучно.
+// Чуть веселее, чем на лекциях Дубовца (хотя от куда мне знать)
 var i,j:Byte;
 // Test1:string;
 begin
@@ -809,6 +1206,9 @@ begin
 end;
 
 procedure TForm1.FormActivate(Sender: TObject);
+// Ну тут изи. Када форма открывается и уже отображается, то
+// Предлагаем юзеру ввести имя.
+// isShow - чтобы запускалась она онли один раз за сессию
 begin
   if(not isShow)then
   begin
@@ -818,14 +1218,19 @@ begin
 end;
 
 procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
+// Это можно удалить, но как-то жалко. История, все таки.
+
 begin
   //Form3.Close;    // ЭТО ПОТОМ НУЖНО БУДЕТ УБРАТЬ, КОГДА ПОЙДЕМ В РЕЛИЗ
   //  ОНО ЧТОБЫ НЕ ВЫЛАЗИЛА ГРЕБАННАЯ ОШИБКА OUTPUT ERROR
+
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
+// При создании формы инициализируем все шо надо
 var i:Byte;
 begin
+  currplayer:=1;
   isShow:=false;
   for i:=1 to 10 do
   begin
@@ -840,6 +1245,7 @@ end;
 
 
 procedure TForm1.N10Click(Sender: TObject);
+// ОСТОРОЖНО!!!1 Многа букаф, это страница "Выйгрышная стратегия". Сворачивай и листай дальше
 var
   savedTitle : String;
   rule:string;
@@ -874,16 +1280,19 @@ end;
 
 procedure TForm1.N11Click(Sender: TObject);
 begin
+  // Наша шикарная страница "О разработчиках"
   FormAboutDevelopers.Show;
 end;
 
 procedure TForm1.N3Click(Sender: TObject);
 begin
+  // Когда нажимают "Завершить игру" В менюхе
   ShowMessage('Я еще вернусь!');
   Form1.Close;
 end;
 
 procedure TForm1.N5Click(Sender: TObject);
+// ОСТОРОЖНО!!!1 Многа букаф, это страница "Управление". Сворачивай и листай дальше
 var
   savedTitle : String;
   rule:string;
@@ -903,6 +1312,7 @@ begin
 end;
 
 procedure TForm1.N6Click(Sender: TObject);
+// Шикарное описание нашей проги от Кирилла
   var
   savedTitle : String;
   rule:string;
@@ -940,6 +1350,7 @@ begin
 end;
 
 procedure TForm1.N9Click(Sender: TObject);
+// ОСТОРОЖНО!!!1 Многа букаф, это страница "Правила размещения кораблей". Сворачивай и листай дальше
 var
   savedTitle : String;
   rule:string;
@@ -960,6 +1371,10 @@ begin
 end;
 
 procedure TForm1.newGame(Sender: TObject);
+// Опять скучно, как на лекциях у Дубовца (но эт не точно)
+// Когда юзер нажимает "Новая игра" в меню, то исчезают ненужные блоки
+// появляются нужные и все возвращается в исходное состояние
+// и обнуляется
   var i,j: byte;
 begin
   for i:=1 to 10 do
@@ -972,356 +1387,14 @@ begin
   pnl1.Visible := true;
   pnIsFin.Visible := false;
   player2matrix.Visible := false;
-  pnl4.Visible := false;
+  pnl4.Visible := False;
+  lbP1N.Caption:= '20';
+  lbP2N.Caption := '20';
   pnlName.Visible := false;
   img2.Visible := false;
   lbP1N.Visible := false;
   lbP2N.Visible := false;
   btnAutoCreate.Visible := true;
 end;
-
-procedure TForm1.player1matrixDrawCell(Sender: TObject; ACol, ARow: Integer;
-  Rect: TRect; State: TGridDrawState);
-var X: Real;
-begin
- // pnlName.Caption := 'X : ' + IntToStr(LSX) + ' Y : ' + IntToStr (LSY);
- with player1matrix do
-  begin
-    if(Cells[ACol,ARow] = '*') then
-    begin
-      Canvas.Brush.Color:=clWhite;
-      Canvas.FillRect(Rect);
-      Canvas.TextOut(Rect.Left+10, Rect.Top+5, '•');
-    end;
-    if (Cells[ACol,ARow] = 'S')   then
-    begin
-      Canvas.Brush.Color:= RGB(82,158,235);//clBlue;
-      Rect.Left:=Rect.Left-5;
-      Canvas.FillRect(Rect);
-    end;
-    if (Cells[ACol,ARow] = '') then
-    begin
-      Canvas.Brush.Color:=clWhite;
-      Rect.Left:=Rect.Left-5;
-      Canvas.FillRect(Rect);
-    end;
-    if (Cells[ACol,ARow] = 'R')   then
-    begin
-      Canvas.Brush.Color:= RGB(255,170,55);//Orange;
-      Rect.Left:=Rect.Left-10;
-      Canvas.FillRect(Rect);
-      //Sleep(500);
-    end;
-    if (Cells[ACol,ARow] = 'K')   then
-    begin
-      Canvas.Brush.Color:= clRed;//Red;
-      Rect.Left:=Rect.Left-5;
-      Canvas.FillRect(Rect);
-    end;
-    if ((ACol = 0) and (ARow = 0)) then
-    begin
-      Canvas.Brush.Color:=clWhite;
-      Rect.Left:=Rect.Left-5;
-      Canvas.FillRect(Rect);
-    end;
-  end;
-
-end;
-
-procedure TForm1.player1matrixMouseUp(Sender: TObject; Button: TMouseButton;
-  Shift: TShiftState; X, Y: Integer);
-var
-  ACol, ARow: Integer;
-  num1,num2,num3,num4: Byte;
-procedure showError;
-begin
-  Form2.ShowModal;
-  player1matrix.Cells[ACol,ARow] := '';
-end;
-
-procedure checkInCol(var num1,num2,num3,num4:byte);
-var
-  i,j,k:byte;
-  count:byte;
-begin
-  // ************* Подсчет кораблей в столбец ****************
-  for i:=1 to 10 do
-  begin
-    j:=1;
-    while(j<=10) do                  // i - столбец, j - строка
-    begin                            // [Col, Row]  ([Столбец, Строка])
-      if( (player1matrix.Cells[i,j] = 'S')
-      and
-      ( (player1matrix.Cells[i+1,j] <> 'S') and (player1matrix.Cells[i-1,j] <> 'S')))
-      then
-      begin
-        count:=0;
-        k:=j;
-        while(player1matrix.Cells[i,k] = 'S') do
-        begin
-          inc(count);
-          inc(k);
-          //lbText4.Caption := IntToStr(i) + 'S' + IntToStr(j);
-          //player1matrix.Cells[i,j+1] := 'suka';
-        end;
-        j:=k+1;
-        case count of
-          1: ;//inc(num1);
-          2: inc(num2);
-          3: inc(num3);
-          4: inc(num4);
-        else showError;
-        end;
-        end;
-      inc(j);
-    end;
-  end;
-  lbNum1.Caption := IntToStr(num1);
-  lbNum2.Caption := IntToStr(num2);
-  lbNum3.Caption := IntToStr(num3);
-  lbNum4.Caption := IntToStr(num4);
-  player1matrix.Col:=ACol;
-  player1matrix.Row:=ARow;
-end;
-
-procedure checkInRow(var num1,num2,num3,num4:byte);
-var
-  i,j,k:byte;
-  count:byte;
-begin
-  // ************* Подсчет кораблей в строчу ****************
-  for i:=1 to 10 do
-  begin
-    j:=1;
-    while(j<=10) do
-    begin
-      if( (player1matrix.Cells[j,i] = 'S')
-      and
-      ( (player1matrix.Cells[j,i+1] <> 'S') and (player1matrix.Cells[j,i-1] <> 'S')))
-      then
-      begin
-        count:=1;
-        k:=j+1;
-        while(player1matrix.Cells[k,i] = 'S') do
-        begin
-          inc(count);
-          inc(k);
-        end;
-        j:=k+1;
-        case count of
-          1: inc(num1);
-          2: inc(num2);
-          3: inc(num3);
-          4: inc(num4);
-        else showError;
-        end;
-        end;
-      inc(j);
-    end;
-  end;
-  lbNum1.Caption := IntToStr(num1);
-  lbNum2.Caption := IntToStr(num2);
-  lbNum3.Caption := IntToStr(num3);
-  lbNum4.Caption := IntToStr(num4);
-  player1matrix.Col:=ACol;
-  player1matrix.Row:=ARow;
-end;
-
-begin
-  if((mode = FCreate) and (x < 440)) then
-  begin
-    player1matrix.MouseToCell(X, Y, ACol, ARow);
-    if( (ACol <> 0) and (ARow <> 0)) then
-    begin
-      if (player1matrix.Cells[ACol,ARow] = '') then
-      begin
-        player1matrix.Cells[ACol,ARow] := 'S';
-      end
-      else
-      begin
-        player1matrix.Cells[ACol,ARow] := '';
-      end;
-      // Далее идет проверка на корректность расстановки (Низя по диагонали и
-      // Треугольниками
-      if((player1matrix.Cells[ACol+1,ARow+1] = 'S')
-          or
-          (player1matrix.Cells[ACol+1,ARow-1] = 'S')
-          or
-          (player1matrix.Cells[ACol-1,ARow+1] = 'S')
-          or
-          (player1matrix.Cells[ACol-1,ARow-1] = 'S')
-          or
-          ((player1matrix.Cells[ACol,ARow+1] = 'S') and (player1matrix.Cells[ACol+1,ARow] = 'S'))
-          or
-          ((player1matrix.Cells[ACol,ARow-1] = 'S') and (player1matrix.Cells[ACol-1,ARow] = 'S'))
-          or
-          ((player1matrix.Cells[ACol,ARow+1] = 'S') and (player1matrix.Cells[ACol-1,ARow] = 'S'))
-          or
-          ((player1matrix.Cells[ACol,ARow-1] = 'S') and (player1matrix.Cells[ACol+1,ARow] = 'S')))
-      then
-      begin
-        showError;
-      end;
-      num1:=0;
-      num2:=0;
-      num3:=0;
-      num4:=0;
-      checkInRow(num1,num2,num3,num4);
-      checkInCol(num1,num2,num3,num4);
-      if ((num1 = 4) and (num2 = 3) and (num3 = 2) and (num4 = 1)) then
-        pnIsFin.Visible := true
-      else
-        pnIsFin.Visible := false;
-      // pnIsFin.Visible := true
-    end;
-  end;
-end;
-
-procedure TForm1.player2matrixDrawCell(Sender: TObject; ACol, ARow: Integer;
-  Rect: TRect; State: TGridDrawState);
-var flag:Boolean;
-begin
-  {case currplayer of
-    1: lbWalk.Caption := 'Ходит: ' + form3.UserName;
-    2: lbWalk.Caption := 'Ходит: ИИ';
-  end;  }
-  flag:=false;
-  with player2matrix do
-  begin
-    if (Cells[ACol,ARow] = 'S')   then
-    begin
-      Canvas.Brush.Color:= clWhite;//RGB(82,158,235);//clBlue;
-      Rect.Left:=Rect.Left-5;
-      Canvas.FillRect(Rect);
-    end;
-    if (Cells[ACol,ARow] = 'R')   then
-    begin
-      Canvas.Brush.Color:= RGB(255,170,55);//Orange;
-      Rect.Left:=Rect.Left-10;
-      Canvas.FillRect(Rect);
-    end;
-    if (Cells[ACol,ARow] = 'K')   then
-    begin
-      Canvas.Brush.Color:= clRed;//Red;
-      Rect.Left:=Rect.Left-5;
-      Canvas.FillRect(Rect);
-    end;
-    if (Cells[ACol,ARow] = '') then
-    begin
-      Canvas.Brush.Color:=clWhite;
-      Rect.Left:=Rect.Left-5;
-      Canvas.FillRect(Rect);
-    end;
-    if ((ACol = 0) and (ARow = 0)) then
-    begin
-      Canvas.Brush.Color:=clWhite;
-      Rect.Left:=Rect.Left-5;
-      Canvas.FillRect(Rect);
-    end;
-    if(Cells[ACol,ARow] = '*') then
-    begin
-      Canvas.Brush.Color:=clWhite;
-      //pnlName.Caption := IntToStr(currplayer);
-      if currplayer = 2 then
-        flag:=true;
-      Canvas.FillRect(Rect);
-      Canvas.TextOut(Rect.Left+10, Rect.Top+5, '•');
-    end;
-  end;
-
-  if (flag) then
-  begin
-    //ShowMessage('Sho Za xernya ' +  IntToStr(currplayer));
-    if (currplayer = 2) then
-    begin
-      //pnl5.Visible := false;
-      sleep(800);
-      // ShowMessage('Стреляет ПАРАМОШКА!!!!');
-      AIShotShotShot(player1matrix);
-      lbP1N.Caption := IntToStr(P1n);
-      //ShowMessage('kek');
-      currplayer := 1;
-      //ShowMessage(IntToStr(currplayer));
-      flag:=false;
-    end;
-    //ShowMessage(IntToStr(currplayer));
-    pnl5.Visible := true;
-    pnl5.color := RGB(34,180,34);
-    pnl5.Caption := 'Ваш ход, ' + form3.UserName;
-    if ((P1N =  0) and (mode = battaly)) then
-    begin
-      ShowMessage('Game Over');
-      mode := GameOver;
-      if (P1N = 0) then
-        ShowMessage('Парамошка победил, поэтому может и продолжать не выставлять модули');
-    end;
-  end;
-end;
-
-
-procedure TForm1.player2matrixMouseUp(Sender: TObject; Button: TMouseButton;
-  Shift: TShiftState; X, Y: Integer);
-var
-  ACol, ARow: Integer;
-  type TEM = array[1..10,1..10] of string;
-
-begin
-  if (mode = battaly) then
-  begin
-    if (currplayer = 2) then
-      ShowMessage('Соблюдай очередь, иначе придет большой ИИ и накажет тебя :c');
-    if (currplayer = 1) then
-    begin
-      player2matrix.MouseToCell(X, Y, ACol, ARow);
-      if( (ACol <> 0) and (ARow <> 0)) then
-      begin
-        // ShowMessage(IntToStr(ACol));
-        if (player2matrix.Cells[ACol,ARow] = '') then
-        begin
-          // ТУТ ПУСТОЕ ПОЛЕ
-          player2matrix.Cells[ACol,ARow] := '*';
-          //ShowMessage('xerasebe');
-          currplayer:=2;
-          pnl5.Caption := 'Ходит ИИ';
-          pnl5.color := RGB(0,50,0);
-          pnl5.Font.Color := clWhite;
-        end
-        else
-        begin
-          case player2matrix.Cells[ACol,ARow][1] of
-            '*','R','K': ShowMessage('Ты уже стрелял сюда :c');
-            'S':   // МЫ ПОПАЛИ!!!
-            begin
-              Dec(P2N);
-              lbP2N.Caption := IntToStr(P2n);
-              player2matrix.Cells[ACol,ARow] := 'R';
-              KillShip(Form1.P2F, player2matrix,ACol,ARow);
-            end;
-          else ShowMessage('error :C');
-          end;
-          {if(player2matrix.Cells[ACol,ARow] = '*') then
-          begin
-
-          end
-          else
-          begin
-            player2matrix.Cells[ACol,ARow] := '*';
-          end;  }
-
-        end;
-      end;
-    end;
-    //lbP1N.Caption := IntToStr(P1N);
-    //lbP2N.Caption := IntToStr(P2N);
-  end;
-  if ((P1N =  0) or (P2N = 0)) then
-  begin
-    ShowMessage('Game Over');
-    mode := GameOver;
-    if (P1N = 0) then
-      ShowMessage('Парамошка победил, поэтому может и продолжать не выставлять модули');
-  end;
-end;
-
 
 end.
