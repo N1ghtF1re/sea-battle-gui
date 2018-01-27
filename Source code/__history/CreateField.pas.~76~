@@ -671,10 +671,10 @@ procedure Easy_bot(player1matrix:TStringGrid; lvl:Byte) ;
      AIX:=Random(10)+1;
      AIY:=Random(10)+1;
      Dec(k);
-     until((player1matrix.Cells[AIX,AIY] <> '*') and (player1matrix.Cells[AIX,AIY] <> 'R') and (player1matrix.Cells[AIX,AIY] <> 'K'))   ;
+     until   ((player1matrix.Cells[AIX,AIY] <> '*') and (player1matrix.Cells[AIX,AIY] <> 'R') and (player1matrix.Cells[AIX,AIY] <> 'K'))   ;
     if (player1matrix.Cells[AIX,AIY] = 'R') or (player1matrix.Cells[AIX,AIY] = 'S') then
      begin
-     hit:=True;
+       hit:=True;
      end;
      Dec(k);
    end;
