@@ -499,7 +499,49 @@ end;
       end;
       KillShip:=isKilled;
   end;
+  procedure Easy_bot(player1matrix:TStringGrid; lvl:Byte) ;
+  var AIX,AIY:Byte;
+  var k:Integer;
+  var hit:Boolean;
+  begin
+  k:=lvl;
+  hit:=False;
+   while (k>0) and not(hit) do
+   begin
+     repeat
+     AIX:=Random(10)+1;
+     AIY:=Random(10)+1;
+     until   ((player1matrix.Cells[AIX,AIY] <> '*') and (player1matrix.Cells[AIX,AIY] <> 'R') and (player1matrix.Cells[AIX,AIY] <> 'K'))   ;
+    if (player1matrix.Cells[AIX,AIY] = 'R') or (player1matrix.Cells[AIX,AIY] = 'S') then
+     begin
+       hit:=True;
+     end;
+     Dec(k);
+   end;
+   if player1matrix.Cells[AIX,AIY] = '' then
+        begin
+          player1matrix.Cells[AIX,AIY] := '*';
 
+          // Прое... промазал
+          currplayer := 1;
+        end
+        else
+        begin
+          if (player1matrix.Cells[AIX,AIY] = 'S') then
+          begin
+            Dec(P1N);
+            player1matrix.Cells[AIX,AIY] := 'R';
+            // Парамошка попал
+            if(KillShip(Form1.P1F, player1matrix,AIX,AIY)) then  // Проверяем,
+            // Убил ли наш ИИ корабль. И если да - отрисовываем гениальной
+            // Процедурой убитые корабли и рекурсивно вызываем AIShotShotShot
+              Easy_bot(player1matrix,lvl);
+          end;
+        end;
+
+
+
+  end;
   procedure AIShotShotShot(player1matrix:TStringGrid);
   var
     missed,second:Boolean;
@@ -656,52 +698,6 @@ end;
     end;
     //ShowMessage('Sibasa');
     currplayer := 1;
-  end;
-
-procedure Easy_bot(player1matrix:TStringGrid; lvl:Byte) ;
-  var AIX,AIY:Byte;
-  var k:Integer;
-  var hit:Boolean;
-  begin
-  k:=lvl;
-  hit:=False;
-   while (k>0) and not(hit) do
-   begin
-     repeat
-     AIX:=Random(10)+1;
-     AIY:=Random(10)+1;
-     Dec(k);
-     until((player1matrix.Cells[AIX,AIY] <> '*') and (player1matrix.Cells[AIX,AIY] <> 'R') and (player1matrix.Cells[AIX,AIY] <> 'K'))   ;
-    if (player1matrix.Cells[AIX,AIY] = 'R') or (player1matrix.Cells[AIX,AIY] = 'S') then
-     begin
-     hit:=True;
-     end;
-     Dec(k);
-   end;
-   if player1matrix.Cells[AIX,AIY] = '' then
-        begin
-          player1matrix.Cells[AIX,AIY] := '*';
-
-          // Прое... промазал
-          currplayer := 1;
-        end
-        else
-        begin
-          if (player1matrix.Cells[AIX,AIY] = 'S') then
-          begin
-            Dec(P1N);
-            player1matrix.Cells[AIX,AIY] := 'R';
-            // Парамошка попал
-            if(KillShip(Form1.P1F, player1matrix,AIX,AIY)) then  // Проверяем,
-            // Убил ли наш ИИ корабль. И если да - отрисовываем гениальной
-            // Процедурой убитые корабли и рекурсивно вызываем AIShotShotShot
-            if lvl>0 then  AIShotShotShot(player1matrix)else
-            Easy_bot(player1matrix,lvl);
-          end;
-        end;
-
-
-
   end;
 
 procedure Seabattle_fieldAI_generator(var P2F:TPF);
@@ -879,8 +875,8 @@ begin
       Sleep(600);
       currplayer:=2;
        case hardness of
-      easy:Easy_bot(player1matrix,1);
-      medium:Easy_bot(player1matrix,2);
+      easy:Easy_bot(player1matrix,4);
+      medium:Easy_bot(player1matrix,8);
       paramon: AIShotShotShot(player1matrix);
       end; // ИИ наносит еще раз удар
       //Sleep(500);
@@ -1131,8 +1127,8 @@ begin
       AntiKick:=true;
       sleep(800);
       case hardness of
-      easy:Easy_bot(player1matrix,1);
-      medium:Easy_bot(player1matrix,2);
+      easy:Easy_bot(player1matrix,4);
+      medium:Easy_bot(player1matrix,8);
       paramon: AIShotShotShot(player1matrix);
       end;
 

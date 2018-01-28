@@ -657,8 +657,7 @@ end;
     //ShowMessage('Sibasa');
     currplayer := 1;
   end;
-
-procedure Easy_bot(player1matrix:TStringGrid; lvl:Byte) ;
+    procedure Easy_bot(player1matrix:TStringGrid; lvl:Byte) ;
   var AIX,AIY:Byte;
   var k:Integer;
   var hit:Boolean;
@@ -671,10 +670,10 @@ procedure Easy_bot(player1matrix:TStringGrid; lvl:Byte) ;
      AIX:=Random(10)+1;
      AIY:=Random(10)+1;
      Dec(k);
-     until((player1matrix.Cells[AIX,AIY] <> '*') and (player1matrix.Cells[AIX,AIY] <> 'R') and (player1matrix.Cells[AIX,AIY] <> 'K'))   ;
+     until   ((player1matrix.Cells[AIX,AIY] <> '*') and (player1matrix.Cells[AIX,AIY] <> 'R') and (player1matrix.Cells[AIX,AIY] <> 'K'))   ;
     if (player1matrix.Cells[AIX,AIY] = 'R') or (player1matrix.Cells[AIX,AIY] = 'S') then
      begin
-     hit:=True;
+       hit:=True;
      end;
      Dec(k);
    end;
@@ -1131,8 +1130,8 @@ begin
       AntiKick:=true;
       sleep(800);
       case hardness of
-      easy:Easy_bot(player1matrix,1);
-      medium:Easy_bot(player1matrix,2);
+      easy:Easy_bot(player1matrix,2);
+      medium:Easy_bot(player1matrix,3);
       paramon: AIShotShotShot(player1matrix);
       end;
 
