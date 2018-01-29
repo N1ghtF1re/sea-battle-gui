@@ -5,8 +5,8 @@ object Form1: TForm1
   ClientHeight = 424
   ClientWidth = 721
   Color = clBtnFace
-  Constraints.MinHeight = 380
-  Constraints.MinWidth = 695
+  Constraints.MinHeight = 483
+  Constraints.MinWidth = 737
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
@@ -20,9 +20,9 @@ object Form1: TForm1
   PixelsPerInch = 96
   TextHeight = 13
   object pnl1: TPanel
-    Left = 544
+    Left = 528
     Top = 41
-    Width = 177
+    Width = 193
     Height = 383
     Align = alRight
     BevelOuter = bvNone
@@ -32,7 +32,7 @@ object Form1: TForm1
     ParentBiDiMode = False
     ParentBackground = False
     ParentCtl3D = False
-    TabOrder = 0
+    TabOrder = 2
     StyleElements = [seClient]
     object lb1: TLabel
       Left = 20
@@ -125,30 +125,67 @@ object Form1: TForm1
       Height = 13
       Caption = #1080#1079' 4'
     end
+    object lbl1: TLabel
+      Left = 48
+      Top = 144
+      Width = 106
+      Height = 13
+      Caption = #1042#1099#1073#1077#1088#1080' '#1089#1074#1086#1102' '#1089#1091#1076#1100#1073#1091
+      Color = clRed
+      ParentColor = False
+    end
     object pnl2: TPanel
       Left = 0
       Top = 303
-      Width = 177
+      Width = 193
       Height = 80
       Align = alBottom
-      TabOrder = 0
+      TabOrder = 3
       object lbInfo: TLabel
         Left = 1
         Top = 1
-        Width = 169
+        Width = 191
         Height = 52
         Align = alTop
         Caption = 
           #1055#1086#1078#1072#1083#1091#1081#1089#1090#1072', '#1079#1072#1087#1086#1083#1085#1080#1090#1077' '#1080#1075#1088#1086#1074#1086#1077' '#1087#1086#1083#1077' '#1082#1086#1088#1072#1073#1083#1103#1084#1080' '#1050#1072#1082' '#1090#1086#1083#1100#1082#1086' '#1074#1099' '#1101#1090#1086' '#1089 +
           #1076#1077#1083#1072#1077#1090#1077', '#1087#1086#1103#1074#1080#1090#1089#1103' '#1082#1085#1086#1087#1082#1072' '#1087#1088#1086#1076#1086#1083#1078#1077#1085#1080#1103' '
         WordWrap = True
+        ExplicitWidth = 182
       end
+    end
+    object rb1: TRadioButton
+      Left = 32
+      Top = 168
+      Width = 113
+      Height = 17
+      Caption = #1051#1077#1075#1082#1086
+      TabOrder = 0
+      OnClick = rb1Click
+    end
+    object rb2: TRadioButton
+      Left = 32
+      Top = 192
+      Width = 121
+      Height = 17
+      Caption = #1057#1088#1077#1076#1085#1077
+      TabOrder = 1
+      OnClick = rb2Click
+    end
+    object rb3: TRadioButton
+      Left = 32
+      Top = 215
+      Width = 113
+      Height = 17
+      Caption = #1055#1072#1088#1072#1084#1086#1085#1086#1074
+      TabOrder = 2
+      OnClick = rb3Click
     end
   end
   object pnl3: TPanel
     Left = 0
     Top = 41
-    Width = 544
+    Width = 528
     Height = 383
     Align = alClient
     BevelOuter = bvNone
@@ -5494,7 +5531,7 @@ object Form1: TForm1
       ParentBackground = False
       ParentDoubleBuffered = False
       ShowCaption = False
-      TabOrder = 1
+      TabOrder = 3
       Visible = False
       StyleElements = [seFont, seClient]
       object img1: TImage
@@ -11450,6 +11487,7 @@ object Form1: TForm1
       Top = 60
       Width = 286
       Height = 286
+      Cursor = crCross
       BevelInner = bvNone
       BorderStyle = bsNone
       ColCount = 11
@@ -11462,7 +11500,7 @@ object Form1: TForm1
       GridLineWidth = 2
       Options = [goVertLine, goHorzLine]
       ScrollBars = ssNone
-      TabOrder = 2
+      TabOrder = 1
       Visible = False
       OnDrawCell = player2matrixDrawCell
       OnMouseUp = player2matrixMouseUp
@@ -11473,7 +11511,7 @@ object Form1: TForm1
       Width = 123
       Height = 49
       Caption = #1040#1074#1090#1086#1084#1072#1090#1080#1095#1077#1089#1082#1072#1103' '#1088#1072#1089#1089#1090#1072#1085#1086#1074#1082#1072
-      TabOrder = 3
+      TabOrder = 2
       WordWrap = True
       OnClick = btnAutoCreateClick
     end
@@ -11488,7 +11526,7 @@ object Form1: TForm1
     Caption = 'kkkkkkkkkkkkkkk'
     Color = clWhite
     ParentBackground = False
-    TabOrder = 2
+    TabOrder = 0
     Visible = False
     object pnl5: TPanel
       Left = 0
@@ -11555,17 +11593,18 @@ object Form1: TForm1
       end
     end
     object N4: TMenuItem
-      Caption = #1055#1086#1084#1086#1097#1100
+      Caption = #1048#1085#1092#1086#1088#1084#1072#1094#1080#1103
       object N5: TMenuItem
         Caption = #1059#1087#1088#1072#1074#1083#1077#1085#1080#1077
         OnClick = N5Click
       end
       object N11: TMenuItem
-        Caption = #1054' '#1088#1072#1079#1088#1072#1073#1086#1090#1095#1082#1072#1093
+        Caption = #1054' '#1088#1072#1079#1088#1072#1073#1086#1090#1095#1080#1082#1072#1093
         OnClick = N11Click
       end
       object N6: TMenuItem
         Caption = #1054' '#1087#1088#1086#1075#1088#1072#1084#1084#1077
+        OnClick = N6Click
       end
     end
   end

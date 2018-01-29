@@ -504,117 +504,138 @@ procedure AIShotShotShot(player1matrix:TStringGrid);
   var
     missed,second:Boolean;
     AIX, AIY: byte;
+    flag:Boolean;
   begin
     //lbWalk.Caption := 'Ходит: ИИ';
     missed := False;
     second := False;
     if (currplayer = 2) then
     begin
-      if (player1matrix.Cells[LSX,LSY] = 'K') then
+      if (hardness = easy) then  // Если левел изи, то тупо рандомим
       begin
-        lsx:=0;   // На всякий случай, если в клетке K
-        lsy:=0;   // Обнуляем
-      end;
-      if (LSX = 0) then
-      repeat
-        // LSX, LSY - содержат координаты последнего раненого корабля
-        // Если корабль убивается, то они равны нулю.
-        // Если равны нулю, то рандомим по красоте
-        AIX := Random(10) +1;
-        AIY := Random(10) +1;
-      until ((player1matrix.Cells[AIX,AIY] <> '*') and (player1matrix.Cells[AIX,AIY] <> 'R') and (player1matrix.Cells[AIX,AIY] <> 'K'))
+        repeat
+          AIX := Random(10) +1;
+          AIY := Random(10) +1;
+        until ((player1matrix.Cells[AIX,AIY] <> '*') and (player1matrix.Cells[AIX,AIY] <> 'R') and (player1matrix.Cells[AIX,AIY] <> 'K'))
+      end
       else
       begin
-        AIX := LSX;
-        AIY := LSY;
-        // Если мы еще не ранили ничего в округе (мы знаем ток одну клетку)
-        if (((AIX = 10) or (player1matrix.Cells[AIX+1,AIY] <> 'R')) and
-            ((AIX = 0) or (player1matrix.Cells[AIX-1,AIY] <> 'R')) and
-            ((AIY = 10) or (player1matrix.Cells[AIX,AIY+1] <> 'R')) and
-            ( (AIY = 0) or (player1matrix.Cells[AIX,AIY-1] <> 'R')))
-        then
+        if (player1matrix.Cells[LSX,LSY] = 'K') then
         begin
-
-          repeat
-            AIX := LSX;
-            AIY := LSY;
-            //ShowMessage('Ищем соседа' + player1matrix.Cells[AIX+1,AIY] +  player1matrix.Cells[AIX-1,AIY] + player1matrix.Cells[AIX,AIY+1] + player1matrix.Cells[AIX,AIY-1] <> 'R');
-            IF(LSX) = 0 then Break;
-            case Random(4) + 1 of
-              1: Inc(AIX);   // Рандомим ячейку в окрестности раненой
-              2: Inc(AIY);
-              3: Dec(AIX);
-              4: Dec(AIY);
-            end;
-            //ShowMessage('Рандомим соседнюю, X: ' + IntToStr(AIX) + ' Y: ' + IntToStr(AIY));
-          until((AIX in [1..10]) and (AIY in [1..10]) and (player1matrix.Cells[AIX,AIY] <> '*') and (player1matrix.Cells[AIX,AIY] <> 'R') and (player1matrix.Cells[AIX,AIY] <> 'K'));
+          lsx:=0;   // На всякий случай, если в клетке K
+          lsy:=0;   // Обнуляем
+        end;
+        if (hardness = paramon) then
+        begin
+          case Random(2) of
+            0: flag:=false;
+            1: flag:=True;
+          end;
         end
         else
+          flag:=true;
+        if (LSX = 0) then
+        repeat
+          // LSX, LSY - содержат координаты последнего раненого корабля
+          // Если корабль убивается, то они равны нулю.
+          // Если равны нулю, то рандомим по красоте
+          AIX := Random(10) +1;
+          AIY := Random(10) +1;
+          if (player1matrix.Cells[AIX,AIY] = 'S') then flag:=True;
+        until ( flag and (player1matrix.Cells[AIX,AIY] <> '*') and (player1matrix.Cells[AIX,AIY] <> 'R') and (player1matrix.Cells[AIX,AIY] <> 'K'))
+        else
         begin
-          // Если слева/справа от нашей последней раненой ячейки есть еще
-          // одна раненая, то заходим сюда
-          if((AIX <> 10) and (player1matrix.Cells[AIX+1,AIY] = 'R')) or ((AIX <> 0) and(player1matrix.Cells[AIX-1,AIY] = 'R')) then
+          AIX := LSX;
+          AIY := LSY;
+          // Если мы еще не ранили ничего в округе (мы знаем ток одну клетку)
+          if (((AIX = 10) or (player1matrix.Cells[AIX+1,AIY] <> 'R')) and
+              ((AIX = 0) or (player1matrix.Cells[AIX-1,AIY] <> 'R')) and
+              ((AIY = 10) or (player1matrix.Cells[AIX,AIY+1] <> 'R')) and
+              ( (AIY = 0) or (player1matrix.Cells[AIX,AIY-1] <> 'R')))
+          then
           begin
-            // Рандомим столбец
-            isRevers:= false;
-            AIX := LSX;
-            AIY := LSY;
-            // Пока мы не наткнемся на 'S' или '' гуляем по циклу
-            // слева направо, если натыкаемся на "Мимо" ("*"), то
-            // теперь идем справа налево. Если натыкаемся на 'S'
-            // или '', то пиу-пау в корабль игрока
-            // ну и тестим, что не вышли на границы цикла
-            while(((player1matrix.Cells[AIX,AIY]) <> 'S') or ((player1matrix.Cells[AIX,AIY]) <> '')) do
-            begin
-              //ShowMessage(IntToStr(AIX) + ' Content : ' + player1matrix.Cells[aix,AIY]);
-              if ((AIX in [1..10]) and (player1matrix.Cells[AIX,AIY] = 'S')) then Break;
-              if ((AIX in [1..10]) and (player1matrix.Cells[AIX,AIY] = '')) then Break;
-              if (not isRevers) then
-              begin
-                inc(AIX);
-                if (not (AIX in [1..10]) or (player1matrix.Cells[AIX,AIY] = '*')) then
-                  isRevers:= True;
-              end
-              else
-              begin
-                Dec(AIX);
+
+            repeat
+              AIX := LSX;
+              AIY := LSY;
+              //ShowMessage('Ищем соседа' + player1matrix.Cells[AIX+1,AIY] +  player1matrix.Cells[AIX-1,AIY] + player1matrix.Cells[AIX,AIY+1] + player1matrix.Cells[AIX,AIY-1] <> 'R');
+              IF(LSX) = 0 then Break;
+              case Random(4) + 1 of
+                1: Inc(AIX);   // Рандомим ячейку в окрестности раненой
+                2: Inc(AIY);
+                3: Dec(AIX);
+                4: Dec(AIY);
               end;
-            end;
+              //ShowMessage('Рандомим соседнюю, X: ' + IntToStr(AIX) + ' Y: ' + IntToStr(AIY));
+            until((AIX in [1..10]) and (AIY in [1..10]) and (player1matrix.Cells[AIX,AIY] <> '*') and (player1matrix.Cells[AIX,AIY] <> 'R') and (player1matrix.Cells[AIX,AIY] <> 'K'));
           end
           else
           begin
-            // Если верху/внизу от нашей последней раненой ячейки есть еще
+            // Если слева/справа от нашей последней раненой ячейки есть еще
             // одна раненая, то заходим сюда
-            if((AIY <> 10) and (player1matrix.Cells[AIX,AIY+1] = 'R')) or ((AIX <> 0) and(player1matrix.Cells[AIX,AIY-1] = 'R')) then
+            if((AIX <> 10) and (player1matrix.Cells[AIX+1,AIY] = 'R')) or ((AIX <> 0) and(player1matrix.Cells[AIX-1,AIY] = 'R')) then
             begin
+              // Рандомим столбец
+              isRevers:= false;
               AIX := LSX;
               AIY := LSY;
-              // Рандомим строку
-              isRevers:= false;
               // Пока мы не наткнемся на 'S' или '' гуляем по циклу
-              // снизу вверх, если натыкаемся на "Мимо" ("*"), то
-              // теперь идем серху вниз. Если натыкаемся на 'S'
+              // слева направо, если натыкаемся на "Мимо" ("*"), то
+              // теперь идем справа налево. Если натыкаемся на 'S'
               // или '', то пиу-пау в корабль игрока
               // ну и тестим, что не вышли на границы цикла
               while(((player1matrix.Cells[AIX,AIY]) <> 'S') or ((player1matrix.Cells[AIX,AIY]) <> '')) do
               begin
-                if ((AIY in [1..10]) and (player1matrix.Cells[AIX,AIY] = 'S')) then Break;
-                if ((AIY in [1..10]) and (player1matrix.Cells[AIX,AIY] = '')) then Break;
-                //ShowMessage(IntToStr(AIY) + ' Content : ' + player1matrix.Cells[aix,AIY]);
+                //ShowMessage(IntToStr(AIX) + ' Content : ' + player1matrix.Cells[aix,AIY]);
+                if ((AIX in [1..10]) and (player1matrix.Cells[AIX,AIY] = 'S')) then Break;
+                if ((AIX in [1..10]) and (player1matrix.Cells[AIX,AIY] = '')) then Break;
                 if (not isRevers) then
                 begin
-                  inc(AIY);
-                  if ((not (AIY in [1..10]) or (player1matrix.Cells[AIX,AIY] = '*'))) then
+                  inc(AIX);
+                  if (not (AIX in [1..10]) or (player1matrix.Cells[AIX,AIY] = '*')) then
                     isRevers:= True;
                 end
                 else
                 begin
-                  Dec(AIY);
+                  Dec(AIX);
+                end;
+              end;
+            end
+            else
+            begin
+              // Если верху/внизу от нашей последней раненой ячейки есть еще
+              // одна раненая, то заходим сюда
+              if((AIY <> 10) and (player1matrix.Cells[AIX,AIY+1] = 'R')) or ((AIX <> 0) and(player1matrix.Cells[AIX,AIY-1] = 'R')) then
+              begin
+                AIX := LSX;
+                AIY := LSY;
+                // Рандомим строку
+                isRevers:= false;
+                // Пока мы не наткнемся на 'S' или '' гуляем по циклу
+                // снизу вверх, если натыкаемся на "Мимо" ("*"), то
+                // теперь идем серху вниз. Если натыкаемся на 'S'
+                // или '', то пиу-пау в корабль игрока
+                // ну и тестим, что не вышли на границы цикла
+                while(((player1matrix.Cells[AIX,AIY]) <> 'S') or ((player1matrix.Cells[AIX,AIY]) <> '')) do
+                begin
+                  if ((AIY in [1..10]) and (player1matrix.Cells[AIX,AIY] = 'S')) then Break;
+                  if ((AIY in [1..10]) and (player1matrix.Cells[AIX,AIY] = '')) then Break;
+                  //ShowMessage(IntToStr(AIY) + ' Content : ' + player1matrix.Cells[aix,AIY]);
+                  if (not isRevers) then
+                  begin
+                    inc(AIY);
+                    if ((not (AIY in [1..10]) or (player1matrix.Cells[AIX,AIY] = '*'))) then
+                      isRevers:= True;
+                  end
+                  else
+                  begin
+                    Dec(AIY);
+                  end;
                 end;
               end;
             end;
-          end;
 
+          end;
         end;
       end;
       {
@@ -660,52 +681,6 @@ procedure AIShotShotShot(player1matrix:TStringGrid);
     end;
     //ShowMessage('Sibasa');
     currplayer := 1;
-  end;
-
-procedure Easy_bot(player1matrix:TStringGrid; lvl:Byte) ;
-  var AIX,AIY:Byte;
-  var k:Integer;
-  var hit:Boolean;
-  begin
-  k:=lvl;
-  hit:=False;
-   while (k>0) and not(hit) do
-   begin
-     repeat
-     AIX:=Random(10)+1;
-     AIY:=Random(10)+1;
-     Dec(k);
-     until((player1matrix.Cells[AIX,AIY] <> '*') and (player1matrix.Cells[AIX,AIY] <> 'R') and (player1matrix.Cells[AIX,AIY] <> 'K'))   ;
-    if (player1matrix.Cells[AIX,AIY] = 'R') or (player1matrix.Cells[AIX,AIY] = 'S') then
-     begin
-     hit:=True;
-     end;
-     Dec(k);
-   end;
-   if player1matrix.Cells[AIX,AIY] = '' then
-        begin
-          player1matrix.Cells[AIX,AIY] := '*';
-
-          // Прое... промазал
-          currplayer := 1;
-        end
-        else
-        begin
-          if (player1matrix.Cells[AIX,AIY] = 'S') then
-          begin
-            Dec(P1N);
-            player1matrix.Cells[AIX,AIY] := 'R';
-            // Парамошка попал
-            if(KillShip(Form1.P1F, player1matrix,AIX,AIY)) then  // Проверяем,
-            // Убил ли наш ИИ корабль. И если да - отрисовываем гениальной
-            // Процедурой убитые корабли и рекурсивно вызываем AIShotShotShot
-            if lvl>0 then  AIShotShotShot(player1matrix)else
-            Easy_bot(player1matrix,lvl);
-          end;
-        end;
-
-
-
   end;
 
 procedure Seabattle_fieldAI_generator(var P2F:TPF);
@@ -814,6 +789,7 @@ procedure Seabattle_fieldAI_generator(var P2F:TPF);
    end;
   end;
   end;
+
 procedure TForm1.btnAutoCreateClick(Sender: TObject);
 // Если юзверь нажимает "Автогенерация", юзаем процедуру Никиты
 // И даем юзверю то, что он жаждет - хорошее поле
@@ -883,11 +859,8 @@ begin
       Canvas.FillRect(Rect);
       Sleep(600);
       currplayer:=2;
-       case hardness of
-      easy:Easy_bot(player1matrix,1);
-      medium:Easy_bot(player1matrix,2);
-      paramon: AIShotShotShot(player1matrix);
-      end; // ИИ наносит еще раз удар
+      AIShotShotShot(player1matrix);
+      // ИИ наносит еще раз удар
       //Sleep(500);
     end;
     if (Cells[ACol,ARow] = 'K')   then
@@ -1145,12 +1118,7 @@ begin
       //pnl5.Visible := false;
       AntiKick:=true;
       sleep(800);
-      case hardness of
-      easy:Easy_bot(player1matrix,1);
-      medium:Easy_bot(player1matrix,2);
-      paramon: AIShotShotShot(player1matrix);
-      end;
-
+      AIShotShotShot(player1matrix);
       lbP1N.Caption := IntToStr(P1n);
       currplayer := 1;
       flag:=false;
@@ -1233,6 +1201,7 @@ begin
       ShowMessage('Парамошка победил, поэтому может и продолжать не выставлять модули');
   end;
 end;
+
 procedure TForm1.rb1Click(Sender: TObject);
 begin
    hardness:=easy;
@@ -1335,6 +1304,7 @@ var i:Byte;
 begin
   currplayer:=1;
   isShow:=false;
+  hardness := medium;
   for i:=1 to 10 do
   begin
     player1matrix.Cells[i,0]:=IntToStr(i);

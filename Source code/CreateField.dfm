@@ -169,7 +169,9 @@ object Form1: TForm1
       Width = 121
       Height = 17
       Caption = #1057#1088#1077#1076#1085#1077
+      Checked = True
       TabOrder = 1
+      TabStop = True
       OnClick = rb2Click
     end
     object rb3: TRadioButton
