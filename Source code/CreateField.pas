@@ -509,7 +509,7 @@ procedure AIShotShotShot(player1matrix:TStringGrid);
     //lbWalk.Caption := 'Ходит: ИИ';
     missed := False;
     second := False;
-    if (currplayer = 2) then
+    if ((currplayer = 2) and (P1N > 0) )  then
     begin
       if (hardness = easy) then  // Если левел изи, то тупо рандомим
       begin
@@ -666,13 +666,7 @@ procedure AIShotShotShot(player1matrix:TStringGrid);
             LSX:=AIX;
             LSY:=AIY;
             // Парамошка попал
-            if(KillShip(Form1.P1F, player1matrix,AIX,AIY)) then  // Проверяем,
-            // Убил ли наш ИИ корабль. И если да - отрисовываем гениальной
-            // Процедурой убитые корабли и рекурсивно вызываем AIShotShotShot
-              //ShowMessage('Shot Shot Shot');
-            begin
-              AIShotShotShot(player1matrix);
-            end;
+
           end;
         end;
       end;
@@ -820,7 +814,7 @@ end;
 
 procedure TForm1.player1matrixDrawCell(Sender: TObject; ACol, ARow: Integer;
   Rect: TRect; State: TGridDrawState);
-var X: Real;
+var X: Real;rept:Boolean;
 begin
   // Тут уже очень даже интересно. Отрисовываем ячейки матрицы первого
   // Игрока.
@@ -829,7 +823,7 @@ begin
   // Если 'R' - оранжевым. Если 'K' - красным
   // Ну и тип эт, если отрисовывается R, там же вызывается AIShotShotShot
   // (Если ИИ попал и ранил кого-то кроме себя, то он стреляет еще раз)
-
+  rept:=false;
  with player1matrix do
   begin
   AntiKick:=true;
@@ -862,6 +856,12 @@ begin
       AIShotShotShot(player1matrix);
       // ИИ наносит еще раз удар
       //Sleep(500);
+      if KillShip(Form1.P1F, player1matrix,ACol,Arow) then  // Проверяем,
+            // Убил ли наш ИИ корабль. И если да - отрисовываем гениальной
+            // Процедурой убитые корабли и вызываем AIShotShotShot
+      begin
+        rept:=true;
+      end;
     end;
     if (Cells[ACol,ARow] = 'K')   then
     begin
@@ -877,14 +877,20 @@ begin
       Canvas.FillRect(Rect);
     end;
   end;
+  if (rept) then
+  begin
+    rept:=false;
+    AIShotShotShot(player1matrix);
+  end;
   if CurrPlayer = 1 then
     AntiKick:=False;
   if CurrPlayer = 1 then
-    begin
-      pnl5.Visible := true;
-      pnl5.color := RGB(34,180,34);
-      pnl5.Caption := 'Ваш ход, ' + form3.UserName;
-    end;
+  begin
+    pnl5.Visible := true;
+    pnl5.color := RGB(34,180,34);
+    pnl5.Caption := 'Ваш ход, ' + form3.UserName;
+  end;
+
 end;
 
 procedure TForm1.player1matrixMouseUp(Sender: TObject; Button: TMouseButton;
