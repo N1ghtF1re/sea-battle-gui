@@ -4,7 +4,7 @@
 {       The trademark is not registered                 }
 {       no rights are protected                         }
 {       (c) 2018,  BrakhMen Corp                        }
-{       SITE: brakhmen.info                             {
+{       SITE: brakhmen.info                             }
 {                                                       }
 {*******************************************************}
 
@@ -19,6 +19,7 @@ uses
   Vcl.Imaging.pngimage, Vcl.Buttons, Vcl.Menus;
 
 type
+  hard = (easy,medium,paramon);
   TPF = array[1..10, 1..10] of Char;
   TMode = (Fcreate, battaly, GameOver);
   TForm1 = class(TForm)
@@ -63,6 +64,10 @@ type
     N10: TMenuItem;
     btnAutoCreate: TButton;
     N11: TMenuItem;
+    rb1: TRadioButton;
+    rb2: TRadioButton;
+    rb3: TRadioButton;
+    lbl1: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure player1matrixMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
@@ -84,6 +89,9 @@ type
     procedure btnAutoCreateClick(Sender: TObject);
     procedure N11Click(Sender: TObject);
     procedure N6Click(Sender: TObject);
+    procedure rb1Click(Sender: TObject);
+    procedure rb2Click(Sender: TObject);
+    procedure rb3Click(Sender: TObject);
 
   private
     { Private declarations }
@@ -94,6 +102,7 @@ type
   end;
 
 var
+  hardness:hard;
   Form1: TForm1;
   mode:TMode;
   isShow:Boolean;
@@ -101,14 +110,17 @@ var
   isRevers:Boolean;
   CurrPlayer:1..2;
   P1N, P2N: 0..20;
+  AntiKick:Boolean;
 implementation
 
 {$R *.dfm}
 
 uses ErrorPage, MainPage, AboutUs;
 
-// resourcestring PlacingRules = 'Игровое поле — обычно квадрат 10×10 каждого игрока, на котором размещается флот кораблей. Горизонтали обычно нумеруются сверху вниз, а вертикали помечаются буквами слева направо. При этом используются буквы русского алфавита от «а» до «к» (буквы «ё» и «й» обычно пропускаются) либо от «а» до «и» (с использованием буквы «ё»), либо буквы латинского алфавита от «a» до «j». Иногда используется слово «республика» или «снегурочка», так как в этих 10-буквенных словах ни одна буква не повторяется. Поскольку существуют различные варианты задания системы координат, то об этом лучше заранее договориться.' + #1013 'Размещаются:';
 procedure isHitted_wow(var player1matrix:TStringGrid; var i,j:byte);
+// Старый ИИ от Кирилла, а может и не старый.
+// Время покажет... Но возможно этот код скоро
+// Придется удалить :c
 var rand,  iDamaged, jDamaged, K, trigr:integer;
     stem,limit:Boolean;
 begin
@@ -299,7 +311,7 @@ if not(stem) then
   end;
 end;
 
-  function KillShip(const fullmatrix: TPF; var EnemyMatrix: TStringGrid; const x,y:Byte):Boolean;
+function KillShip(const fullmatrix: TPF; var EnemyMatrix: TStringGrid; const x,y:Byte):Boolean;
   // Функция возвращает true если корабль убит, false если еще не убит
   // В ней же происходит "убийство" корабля (заменя "R" на "S" если убили
   // Корабль
@@ -487,7 +499,8 @@ end;
       end;
       KillShip:=isKilled;
   end;
-  procedure AIShotShotShot(player1matrix:TStringGrid);
+
+procedure AIShotShotShot(player1matrix:TStringGrid);
   var
     missed,second:Boolean;
     AIX, AIY: byte;
@@ -645,6 +658,52 @@ end;
     currplayer := 1;
   end;
 
+procedure Easy_bot(player1matrix:TStringGrid; lvl:Byte) ;
+  var AIX,AIY:Byte;
+  var k:Integer;
+  var hit:Boolean;
+  begin
+  k:=lvl;
+  hit:=False;
+   while (k>0) and not(hit) do
+   begin
+     repeat
+     AIX:=Random(10)+1;
+     AIY:=Random(10)+1;
+     Dec(k);
+     until((player1matrix.Cells[AIX,AIY] <> '*') and (player1matrix.Cells[AIX,AIY] <> 'R') and (player1matrix.Cells[AIX,AIY] <> 'K'))   ;
+    if (player1matrix.Cells[AIX,AIY] = 'R') or (player1matrix.Cells[AIX,AIY] = 'S') then
+     begin
+     hit:=True;
+     end;
+     Dec(k);
+   end;
+   if player1matrix.Cells[AIX,AIY] = '' then
+        begin
+          player1matrix.Cells[AIX,AIY] := '*';
+
+          // Прое... промазал
+          currplayer := 1;
+        end
+        else
+        begin
+          if (player1matrix.Cells[AIX,AIY] = 'S') then
+          begin
+            Dec(P1N);
+            player1matrix.Cells[AIX,AIY] := 'R';
+            // Парамошка попал
+            if(KillShip(Form1.P1F, player1matrix,AIX,AIY)) then  // Проверяем,
+            // Убил ли наш ИИ корабль. И если да - отрисовываем гениальной
+            // Процедурой убитые корабли и рекурсивно вызываем AIShotShotShot
+            if lvl>0 then  AIShotShotShot(player1matrix)else
+            Easy_bot(player1matrix,lvl);
+          end;
+        end;
+
+
+
+  end;
+
 procedure Seabattle_fieldAI_generator(var P2F:TPF);
 // Эт функция Никиты. Никита хороший парень, больше ничего сказать
 // Не могу. Ну только, что сейчас процедура работает ну просто
@@ -793,6 +852,7 @@ begin
 
  with player1matrix do
   begin
+  AntiKick:=true;
     if(Cells[ACol,ARow] = '*') then
     begin
       Canvas.Brush.Color:=clWhite;
@@ -818,7 +878,11 @@ begin
       Canvas.FillRect(Rect);
       Sleep(600);
       currplayer:=2;
-      AIShotShotShot(player1matrix); // ИИ наносит еще раз удар
+       case hardness of
+      easy:Easy_bot(player1matrix,1);
+      medium:Easy_bot(player1matrix,2);
+      paramon: AIShotShotShot(player1matrix);
+      end; // ИИ наносит еще раз удар
       //Sleep(500);
     end;
     if (Cells[ACol,ARow] = 'K')   then
@@ -835,7 +899,8 @@ begin
       Canvas.FillRect(Rect);
     end;
   end;
-
+  if CurrPlayer = 1 then
+AntiKick:=False;
 end;
 
 procedure TForm1.player1matrixMouseUp(Sender: TObject; Button: TMouseButton;
@@ -871,7 +936,9 @@ begin
     begin                            // [Col, Row]  ([Столбец, Строка])
       if( (player1matrix.Cells[i,j] = 'S') // Найден коарбль, считаем кол-во кораблей подряд. Если находим не корабль - выходим
       and
-      ( (player1matrix.Cells[i+1,j] <> 'S') and (player1matrix.Cells[i-1,j] <> 'S')))
+      ( ((i = 10) or (player1matrix.Cells[i+1,j] <> 'S'))
+        and
+        ((i = 1) or (player1matrix.Cells[i-1,j] <> 'S'))))
       then
       begin
         count:=0;
@@ -883,7 +950,7 @@ begin
           //lbText4.Caption := IntToStr(i) + 'S' + IntToStr(j);
           //player1matrix.Cells[i,j+1] := 'suka';
         end;
-        j:=k+1;
+        j:=k;
         case count of
           1: ;//inc(num1);
           2: inc(num2);
@@ -916,8 +983,10 @@ begin
     while(j<=10) do
     begin
       if( (player1matrix.Cells[j,i] = 'S')
-      and
-      ( (player1matrix.Cells[j,i+1] <> 'S') and (player1matrix.Cells[j,i-1] <> 'S')))
+        and
+        (((i = 10) or (player1matrix.Cells[j,i+1] <> 'S'))
+          and
+        ((i = 1) or (player1matrix.Cells[j,i-1] <> 'S'))))
       then
       begin
         count:=1;
@@ -927,7 +996,7 @@ begin
           inc(count);
           inc(k);
         end;
-        j:=k+1;
+        j:=k;
         case count of
           1: inc(num1);
           2: inc(num2);
@@ -1063,8 +1132,14 @@ begin
     if (currplayer = 2) then
     begin
       //pnl5.Visible := false;
+      AntiKick:=true;
       sleep(800);
-      AIShotShotShot(player1matrix);
+      case hardness of
+      easy:Easy_bot(player1matrix,1);
+      medium:Easy_bot(player1matrix,2);
+      paramon: AIShotShotShot(player1matrix);
+      end;
+
       lbP1N.Caption := IntToStr(P1n);
       currplayer := 1;
       flag:=false;
@@ -1082,8 +1157,7 @@ begin
   end;
 end;
 
-
-procedure TForm1.player2matrixMouseUp(Sender: TObject; Button: TMouseButton;
+procedure TForm1.player2matrixMouseUp (Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 // Игра имеет несколько режимов.
 // Переменная перечисляемого типа mode
@@ -1097,9 +1171,14 @@ var
 begin
   if (mode = battaly) then
   begin
-    if (currplayer = 2) then  // Как без угроз
-      ShowMessage('Соблюдай очередь, иначе придет большой ИИ и накажет тебя :c');
-    if (currplayer = 1) then
+  if (CurrPlayer = 2) and (LSX = 0) then
+    begin
+    CurrPlayer := 1;
+    AntiKick := false;
+    end;
+    if (AntiKick or (currplayer = 2)) then // Как без угроз
+    ShowMessage('Соблюдай очередь, иначе придет большой ИИ и накажет тебя :c');
+    if ((not AntiKick) and (currplayer = 1)) then
     begin
       player2matrix.MouseToCell(X, Y, ACol, ARow); // Отслеживаем клик юзера
       // В ACol and Arow возвращаются координаты Колонки и Строки
@@ -1146,6 +1225,22 @@ begin
       ShowMessage('Парамошка победил, поэтому может и продолжать не выставлять модули');
   end;
 end;
+procedure TForm1.rb1Click(Sender: TObject);
+begin
+   hardness:=easy;
+end;
+
+procedure TForm1.rb2Click(Sender: TObject);
+begin
+  hardness:=medium;
+
+end;
+
+procedure TForm1.rb3Click(Sender: TObject);
+begin
+  hardness:=paramon;
+end;
+
 procedure TForm1.btNextClick(Sender: TObject);
 // если пользователю надоел Парамошка, он нажимает далее
 // И карочи скрываются ненужные блоки, показываеются нужные
@@ -1242,7 +1337,6 @@ begin
   player1matrix.Cells[0,10]:='К';
   player2matrix.Cells[0,10]:='К';
 end;
-
 
 procedure TForm1.N10Click(Sender: TObject);
 // ОСТОРОЖНО!!!1 Многа букаф, это страница "Выйгрышная стратегия". Сворачивай и листай дальше

@@ -634,6 +634,7 @@ procedure AIShotShotShot(player1matrix:TStringGrid);
           missed:=true;
           // Прое... промазал
           currplayer := 1;
+          //ShowMessage('Miss');
         end
         else
         begin
@@ -647,7 +648,10 @@ procedure AIShotShotShot(player1matrix:TStringGrid);
             if(KillShip(Form1.P1F, player1matrix,AIX,AIY)) then  // Проверяем,
             // Убил ли наш ИИ корабль. И если да - отрисовываем гениальной
             // Процедурой убитые корабли и рекурсивно вызываем AIShotShotShot
+              //ShowMessage('Shot Shot Shot');
+            begin
               AIShotShotShot(player1matrix);
+            end;
           end;
         end;
       end;
@@ -858,6 +862,7 @@ begin
       Canvas.Brush.Color:=clWhite;
       Canvas.FillRect(Rect);
       Canvas.TextOut(Rect.Left+10, Rect.Top+5, '•');
+      currplayer:=1;
     end;
     if (Cells[ACol,ARow] = 'S')   then
     begin
@@ -900,7 +905,13 @@ begin
     end;
   end;
   if CurrPlayer = 1 then
-AntiKick:=False;
+    AntiKick:=False;
+  if CurrPlayer = 1 then
+    begin
+      pnl5.Visible := true;
+      pnl5.color := RGB(34,180,34);
+      pnl5.Caption := 'Ваш ход, ' + form3.UserName;
+    end;
 end;
 
 procedure TForm1.player1matrixMouseUp(Sender: TObject; Button: TMouseButton;
@@ -1144,9 +1155,6 @@ begin
       currplayer := 1;
       flag:=false;
     end;
-    pnl5.Visible := true;
-    pnl5.color := RGB(34,180,34);
-    pnl5.Caption := 'Ваш ход, ' + form3.UserName;
     if ((P1N =  0) and (mode = battaly)) then
     begin
       ShowMessage('Game Over');
@@ -1171,10 +1179,10 @@ var
 begin
   if (mode = battaly) then
   begin
-  if (CurrPlayer = 2) and (LSX = 0) then
+    if (CurrPlayer = 2) and (LSX = 0) then
     begin
-    CurrPlayer := 1;
-    AntiKick := false;
+      CurrPlayer := 1;
+      AntiKick := false;
     end;
     if (AntiKick or (currplayer = 2)) then // Как без угроз
     ShowMessage('Соблюдай очередь, иначе придет большой ИИ и накажет тебя :c');
@@ -1490,5 +1498,4 @@ begin
   lbP2N.Visible := false;
   btnAutoCreate.Visible := true;
 end;
-
 end.
