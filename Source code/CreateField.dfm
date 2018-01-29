@@ -15,7 +15,6 @@ object Form1: TForm1
   Menu = mm1
   OldCreateOrder = False
   OnActivate = FormActivate
-  OnClose = FormClose
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
@@ -179,7 +178,7 @@ object Form1: TForm1
       Top = 215
       Width = 113
       Height = 17
-      Caption = #1055#1072#1088#1072#1084#1086#1085#1086#1074
+      Caption = #1052#1080#1089#1090#1077#1088' '#1089#1076#1074#1080#1075
       TabOrder = 2
       OnClick = rb3Click
     end
@@ -5505,6 +5504,7 @@ object Form1: TForm1
       Top = 60
       Width = 286
       Height = 286
+      ParentCustomHint = False
       BevelInner = bvNone
       BorderStyle = bsNone
       ColCount = 11
@@ -5518,6 +5518,8 @@ object Form1: TForm1
       Options = [goVertLine, goHorzLine]
       ScrollBars = ssNone
       TabOrder = 0
+      Touch.ParentTabletOptions = False
+      Touch.TabletOptions = []
       OnDrawCell = player1matrixDrawCell
       OnMouseUp = player1matrixMouseUp
     end
@@ -11607,6 +11609,28 @@ object Form1: TForm1
       object N6: TMenuItem
         Caption = #1054' '#1087#1088#1086#1075#1088#1072#1084#1084#1077
         OnClick = N6Click
+      end
+    end
+    object N12: TMenuItem
+      Caption = #1053#1072#1089#1090#1088#1086#1081#1082#1080
+      object N13: TMenuItem
+        Caption = #1057#1083#1086#1078#1085#1086#1089#1090#1100
+        object mneasy: TMenuItem
+          Caption = #1051#1077#1075#1082#1086
+          RadioItem = True
+          OnClick = mneasyClick
+        end
+        object mnmedium: TMenuItem
+          Caption = #1057#1088#1077#1076#1085#1077
+          Checked = True
+          RadioItem = True
+          OnClick = mnmediumClick
+        end
+        object mnmrshift: TMenuItem
+          Caption = #1052#1080#1089#1090#1077#1088' '#1089#1076#1074#1080#1075
+          RadioItem = True
+          OnClick = mnmrshiftClick
+        end
       end
     end
   end

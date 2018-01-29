@@ -68,12 +68,16 @@ type
     rb2: TRadioButton;
     rb3: TRadioButton;
     lbl1: TLabel;
+    N12: TMenuItem;
+    N13: TMenuItem;
+    mneasy: TMenuItem;
+    mnmedium: TMenuItem;
+    mnmrshift: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure player1matrixMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure player1matrixDrawCell(Sender: TObject; ACol, ARow: Integer;
       Rect: TRect; State: TGridDrawState);
-    procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btNextClick(Sender: TObject);
     procedure player2matrixDrawCell(Sender: TObject; ACol, ARow: Integer;
       Rect: TRect; State: TGridDrawState);
@@ -92,6 +96,9 @@ type
     procedure rb1Click(Sender: TObject);
     procedure rb2Click(Sender: TObject);
     procedure rb3Click(Sender: TObject);
+    procedure mneasyClick(Sender: TObject);
+    procedure mnmediumClick(Sender: TObject);
+    procedure mnmrshiftClick(Sender: TObject);
 
   private
     { Private declarations }
@@ -473,6 +480,7 @@ function KillShip(const fullmatrix: TPF; var EnemyMatrix: TStringGrid; const x,y
         end
         else
         begin
+          isKilled:=True;
           EnemyMatrix.Cells[x, y] := 'K';
           if ( (x+1) in [1..10] ) then
             EnemyMatrix.Cells[x+1, y] := '*';
@@ -531,6 +539,7 @@ procedure AIShotShotShot(player1matrix:TStringGrid);
             0: flag:=false;
             1: flag:=True;
           end;
+
         end
         else
           flag:=true;
@@ -576,7 +585,10 @@ procedure AIShotShotShot(player1matrix:TStringGrid);
             if((AIX <> 10) and (player1matrix.Cells[AIX+1,AIY] = 'R')) or ((AIX <> 0) and(player1matrix.Cells[AIX-1,AIY] = 'R')) then
             begin
               // Рандомим столбец
-              isRevers:= false;
+              case Random(2) of
+                0: isRevers := true;
+                1: isRevers := false;
+              end;
               AIX := LSX;
               AIY := LSY;
               // Пока мы не наткнемся на 'S' или '' гуляем по циклу
@@ -598,6 +610,8 @@ procedure AIShotShotShot(player1matrix:TStringGrid);
                 else
                 begin
                   Dec(AIX);
+                  if (not (AIX in [1..10]) or (player1matrix.Cells[AIX,AIY] = '*')) then
+                    isRevers:= false;
                 end;
               end;
             end
@@ -610,7 +624,10 @@ procedure AIShotShotShot(player1matrix:TStringGrid);
                 AIX := LSX;
                 AIY := LSY;
                 // Рандомим строку
-                isRevers:= false;
+                case Random(2) of
+                  0: isRevers := true;
+                  1: isRevers := false;
+                end;
                 // Пока мы не наткнемся на 'S' или '' гуляем по циклу
                 // снизу вверх, если натыкаемся на "Мимо" ("*"), то
                 // теперь идем серху вниз. Если натыкаемся на 'S'
@@ -630,6 +647,8 @@ procedure AIShotShotShot(player1matrix:TStringGrid);
                   else
                   begin
                     Dec(AIY);
+                    if ((not (AIY in [1..10]) or (player1matrix.Cells[AIX,AIY] = '*'))) then
+                      isRevers:= false;
                   end;
                 end;
               end;
@@ -666,7 +685,6 @@ procedure AIShotShotShot(player1matrix:TStringGrid);
             LSX:=AIX;
             LSY:=AIY;
             // Парамошка попал
-
           end;
         end;
       end;
@@ -890,7 +908,7 @@ begin
     pnl5.color := RGB(34,180,34);
     pnl5.Caption := 'Ваш ход, ' + form3.UserName;
   end;
-
+  lbP1N.Caption := IntToStr(P1n);
 end;
 
 procedure TForm1.player1matrixMouseUp(Sender: TObject; Button: TMouseButton;
@@ -1125,7 +1143,6 @@ begin
       AntiKick:=true;
       sleep(800);
       AIShotShotShot(player1matrix);
-      lbP1N.Caption := IntToStr(P1n);
       currplayer := 1;
       flag:=false;
     end;
@@ -1211,17 +1228,19 @@ end;
 procedure TForm1.rb1Click(Sender: TObject);
 begin
    hardness:=easy;
+   mneasy.Checked := True;
 end;
 
 procedure TForm1.rb2Click(Sender: TObject);
 begin
   hardness:=medium;
-
+  mnmedium.Checked := true;
 end;
 
 procedure TForm1.rb3Click(Sender: TObject);
 begin
   hardness:=paramon;
+  mnmrshift.Checked := True;
 end;
 
 procedure TForm1.btNextClick(Sender: TObject);
@@ -1295,15 +1314,6 @@ begin
   end;
 end;
 
-procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
-// Это можно удалить, но как-то жалко. История, все таки.
-
-begin
-  //Form3.Close;    // ЭТО ПОТОМ НУЖНО БУДЕТ УБРАТЬ, КОГДА ПОЙДЕМ В РЕЛИЗ
-  //  ОНО ЧТОБЫ НЕ ВЫЛАЗИЛА ГРЕБАННАЯ ОШИБКА OUTPUT ERROR
-
-end;
-
 procedure TForm1.FormCreate(Sender: TObject);
 // При создании формы инициализируем все шо надо
 var i:Byte;
@@ -1320,6 +1330,27 @@ begin
   end;
   player1matrix.Cells[0,10]:='К';
   player2matrix.Cells[0,10]:='К';
+end;
+
+procedure TForm1.mneasyClick(Sender: TObject);
+begin
+  mneasy.Checked := true;
+  rb1.Checked := True;
+  hardness := easy;
+end;
+
+procedure TForm1.mnmediumClick(Sender: TObject);
+begin
+  mnmedium.Checked := true;
+  rb2.Checked := True;
+  hardness := medium;
+end;
+
+procedure TForm1.mnmrshiftClick(Sender: TObject);
+begin
+  mnmrshift.Checked := True;
+  rb3.Checked := True;
+  hardness := paramon;
 end;
 
 procedure TForm1.N10Click(Sender: TObject);
