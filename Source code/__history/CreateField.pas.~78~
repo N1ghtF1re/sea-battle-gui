@@ -983,9 +983,9 @@ begin
     while(j<=10) do
     begin
       if( (player1matrix.Cells[j,i] = 'S')
+      and
+      ( ((i = 10) or (player1matrix.Cells[j,i+1] <> 'S'))
         and
-        (((i = 10) or (player1matrix.Cells[j,i+1] <> 'S'))
-          and
         ((i = 1) or (player1matrix.Cells[j,i-1] <> 'S'))))
       then
       begin

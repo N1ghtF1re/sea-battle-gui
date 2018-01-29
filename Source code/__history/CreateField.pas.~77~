@@ -4,7 +4,7 @@
 {       The trademark is not registered                 }
 {       no rights are protected                         }
 {       (c) 2018,  BrakhMen Corp                        }
-{       SITE: brakhmen.info                             }
+{       SITE: brakhmen.info                             {
 {                                                       }
 {*******************************************************}
 
@@ -311,7 +311,7 @@ if not(stem) then
   end;
 end;
 
-function KillShip(const fullmatrix: TPF; var EnemyMatrix: TStringGrid; const x,y:Byte):Boolean;
+  function KillShip(const fullmatrix: TPF; var EnemyMatrix: TStringGrid; const x,y:Byte):Boolean;
   // Функция возвращает true если корабль убит, false если еще не убит
   // В ней же происходит "убийство" корабля (заменя "R" на "S" если убили
   // Корабль
@@ -500,7 +500,7 @@ function KillShip(const fullmatrix: TPF; var EnemyMatrix: TStringGrid; const x,y
       KillShip:=isKilled;
   end;
 
-procedure AIShotShotShot(player1matrix:TStringGrid);
+  procedure AIShotShotShot(player1matrix:TStringGrid);
   var
     missed,second:Boolean;
     AIX, AIY: byte;
@@ -936,9 +936,7 @@ begin
     begin                            // [Col, Row]  ([Столбец, Строка])
       if( (player1matrix.Cells[i,j] = 'S') // Найден коарбль, считаем кол-во кораблей подряд. Если находим не корабль - выходим
       and
-      ( ((i = 10) or (player1matrix.Cells[i+1,j] <> 'S'))
-        and
-        ((i = 1) or (player1matrix.Cells[i-1,j] <> 'S'))))
+      ( (player1matrix.Cells[i+1,j] <> 'S') and (player1matrix.Cells[i-1,j] <> 'S')))
       then
       begin
         count:=0;
@@ -950,7 +948,7 @@ begin
           //lbText4.Caption := IntToStr(i) + 'S' + IntToStr(j);
           //player1matrix.Cells[i,j+1] := 'suka';
         end;
-        j:=k;
+        j:=k+1;
         case count of
           1: ;//inc(num1);
           2: inc(num2);
@@ -983,10 +981,8 @@ begin
     while(j<=10) do
     begin
       if( (player1matrix.Cells[j,i] = 'S')
-        and
-        (((i = 10) or (player1matrix.Cells[j,i+1] <> 'S'))
-          and
-        ((i = 1) or (player1matrix.Cells[j,i-1] <> 'S'))))
+      and
+      ( (player1matrix.Cells[j,i+1] <> 'S') and (player1matrix.Cells[j,i-1] <> 'S')))
       then
       begin
         count:=1;
@@ -996,7 +992,7 @@ begin
           inc(count);
           inc(k);
         end;
-        j:=k;
+        j:=k+1;
         case count of
           1: inc(num1);
           2: inc(num2);
@@ -1157,6 +1153,7 @@ begin
   end;
 end;
 
+
 procedure TForm1.player2matrixMouseUp (Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 // Игра имеет несколько режимов.
@@ -1228,6 +1225,7 @@ end;
 procedure TForm1.rb1Click(Sender: TObject);
 begin
    hardness:=easy;
+
 end;
 
 procedure TForm1.rb2Click(Sender: TObject);
@@ -1239,6 +1237,8 @@ end;
 procedure TForm1.rb3Click(Sender: TObject);
 begin
   hardness:=paramon;
+
+
 end;
 
 procedure TForm1.btNextClick(Sender: TObject);
@@ -1337,6 +1337,7 @@ begin
   player1matrix.Cells[0,10]:='К';
   player2matrix.Cells[0,10]:='К';
 end;
+
 
 procedure TForm1.N10Click(Sender: TObject);
 // ОСТОРОЖНО!!!1 Многа букаф, это страница "Выйгрышная стратегия". Сворачивай и листай дальше
