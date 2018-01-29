@@ -585,10 +585,7 @@ procedure AIShotShotShot(player1matrix:TStringGrid);
             if((AIX <> 10) and (player1matrix.Cells[AIX+1,AIY] = 'R')) or ((AIX <> 0) and(player1matrix.Cells[AIX-1,AIY] = 'R')) then
             begin
               // Рандомим столбец
-              case Random(2) of
-                0: isRevers := true;
-                1: isRevers := false;
-              end;
+              isRevers:= false;
               AIX := LSX;
               AIY := LSY;
               // Пока мы не наткнемся на 'S' или '' гуляем по циклу
@@ -610,8 +607,6 @@ procedure AIShotShotShot(player1matrix:TStringGrid);
                 else
                 begin
                   Dec(AIX);
-                  if (not (AIX in [1..10]) or (player1matrix.Cells[AIX,AIY] = '*')) then
-                    isRevers:= false;
                 end;
               end;
             end
@@ -624,10 +619,7 @@ procedure AIShotShotShot(player1matrix:TStringGrid);
                 AIX := LSX;
                 AIY := LSY;
                 // Рандомим строку
-                case Random(2) of
-                  0: isRevers := true;
-                  1: isRevers := false;
-                end;
+                isRevers:= false;
                 // Пока мы не наткнемся на 'S' или '' гуляем по циклу
                 // снизу вверх, если натыкаемся на "Мимо" ("*"), то
                 // теперь идем серху вниз. Если натыкаемся на 'S'
@@ -647,8 +639,6 @@ procedure AIShotShotShot(player1matrix:TStringGrid);
                   else
                   begin
                     Dec(AIY);
-                    if ((not (AIY in [1..10]) or (player1matrix.Cells[AIX,AIY] = '*'))) then
-                      isRevers:= false;
                   end;
                 end;
               end;
