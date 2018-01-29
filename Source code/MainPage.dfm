@@ -14,6 +14,7 @@ object Form3: TForm3
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  OnActivate = FormActivate
   OnCanResize = FormCanResize
   PixelsPerInch = 96
   TextHeight = 13

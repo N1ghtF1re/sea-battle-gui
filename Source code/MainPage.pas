@@ -20,6 +20,7 @@ type
       var Resize: Boolean);
     procedure btn1Click(Sender: TObject);
     procedure edt1KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormActivate(Sender: TObject);
 
   private
     { Private declarations }
@@ -53,9 +54,19 @@ end;
 
 procedure TForm3.edt1KeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
+var
+  Mgs: TMsg;
 begin
   if (Key = 13) then
-    btn1Click(btn1);
+  begin
+      PeekMessage(Mgs, 0, WM_CHAR, WM_CHAR, PM_REMOVE);
+      btn1Click(btn1);
+  end;
+end;
+
+procedure TForm3.FormActivate(Sender: TObject);
+begin
+edt1.SetFocus;
 end;
 
 procedure TForm3.FormCanResize(Sender: TObject; var NewWidth,
