@@ -38,7 +38,7 @@ implementation
 
 {$R *.dfm}
 
-uses CreateField;
+uses Game;
 
 procedure TForm3.btn1Click(Sender: TObject);
 begin
