@@ -118,6 +118,7 @@ var
   CurrPlayer:1..2;
   P1N, P2N: 0..20;
   AntiKick:Boolean;
+  BGColor:Integer;
 implementation
 
 {$R *.dfm}
@@ -703,6 +704,11 @@ begin
       else
          Canvas.TextOut(Rect.Left+8, Rect.Top+8, Cells[ACol, ARow]);
     end;
+    if ((ACol = 0) and (ARow = 0)) then
+    begin
+      Canvas.Brush.Color := BGColor;
+      Canvas.FillRect(Rect);
+    end;
 
 
   end;
@@ -962,6 +968,11 @@ begin
       else
          Canvas.TextOut(Rect.Left+8, Rect.Top+8, Cells[ACol, ARow]);
     end;
+    if ((ACol = 0) and (ARow = 0)) then
+    begin
+      Canvas.Brush.Color := BGColor;
+      Canvas.FillRect(Rect);
+    end;
   end;
 
   if (flag) then       // Небольшая махинация. Если игрок промазывает,
@@ -1148,10 +1159,16 @@ procedure TForm1.FormCreate(Sender: TObject);
 // При создании формы инициализируем все шо надо
 var i:Byte;
 begin
+  BGColor := rgb(235,240,244); // Цвет фона
+  Form1.Color := BGColor;
+  pnl3.Color := BGColor;
+  pnIsFin.Color := BGColor;
+  pnlName.Color := BGColor;
   player1matrix.Width := player1matrix.ColCount*player1matrix.DefaultColWidth + player1matrix.ColCount;
   player1matrix.Height := player1matrix.RowCount*player1matrix.DefaultRowHeight + player1matrix.RowCount;
   player2matrix.Width := player2matrix.ColCount*player2matrix.DefaultColWidth + player2matrix.ColCount;
   player2matrix.Height := player2matrix.RowCount*player2matrix.DefaultRowHeight + player2matrix.RowCount;
+
   currplayer:=1;
   isShow:=false;
   hardness := medium;
