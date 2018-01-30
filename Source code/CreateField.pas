@@ -839,25 +839,25 @@ begin
     begin
       Canvas.Brush.Color:=clWhite;
       Canvas.FillRect(Rect);
-      Canvas.TextOut(Rect.Left+10, Rect.Top+5, '•');
+      Canvas.TextOut(Rect.Left+15, Rect.Top+7, '•');
       currplayer:=1;
     end;
     if (Cells[ACol,ARow] = 'S')   then
     begin
       Canvas.Brush.Color:= RGB(82,158,235);//clBlue;
-      Rect.Left:=Rect.Left-5;
+      Rect.Left:=Rect.Left;
       Canvas.FillRect(Rect);
     end;
     if (Cells[ACol,ARow] = '') then
     begin
       Canvas.Brush.Color:=clWhite;
-      Rect.Left:=Rect.Left-5;
+      Rect.Left:=Rect.Left;
       Canvas.FillRect(Rect);
     end;
     if (Cells[ACol,ARow] = 'R')   then
     begin
       Canvas.Brush.Color:= RGB(255,170,55);//Orange;
-      Rect.Left:=Rect.Left-10;
+      Rect.Left:=Rect.Left;
       Canvas.FillRect(Rect);
       Sleep(600);
       currplayer:=2;
@@ -874,16 +874,31 @@ begin
     if (Cells[ACol,ARow] = 'K')   then
     begin
       Canvas.Brush.Color:= clRed;//Red;
-      Rect.Left:=Rect.Left-5;
+      Rect.Left:=Rect.Left;
       Canvas.FillRect(Rect);
       currplayer:=2;
     end;
-    if ((ACol = 0) and (ARow = 0)) then
+    if (Acol = 0) xor (ARow = 0) then
     begin
-      Canvas.Brush.Color:=clWhite;
-      Rect.Left:=Rect.Left-5;
+      Canvas.Brush.Color:=clBlack;
       Canvas.FillRect(Rect);
+      if ACol = 0 then
+        Rect.Left:=Rect.Left+1;
+      if ACol <> 0 then
+      begin
+         Rect.Top:=Rect.Top+1;
+         Rect.Bottom:=Rect.Bottom;
+      end;
+
+      Canvas.Brush.Color:=rgb(144,206,183);
+      Canvas.FillRect(Rect); //Текст тоже будет закрашен, его нужно перерисовать:
+      if (ACol <> 10) then
+        Canvas.TextOut(Rect.Left+12, Rect.Top+8, Cells[ACol, ARow])
+      else
+         Canvas.TextOut(Rect.Left+8, Rect.Top+8, Cells[ACol, ARow]);
     end;
+
+
   end;
   if (rept) then
   begin
@@ -1086,25 +1101,25 @@ begin
     if (Cells[ACol,ARow] = 'S')   then
     begin
       Canvas.Brush.Color:= clWhite;//RGB(82,158,235);//clBlue;
-      Rect.Left:=Rect.Left-5;
+      Rect.Left:=Rect.Left;
       Canvas.FillRect(Rect);
     end;
     if (Cells[ACol,ARow] = 'R')   then
     begin
       Canvas.Brush.Color:= RGB(255,170,55);//Orange;
-      Rect.Left:=Rect.Left-10;
+      Rect.Left:=Rect.Left-5;
       Canvas.FillRect(Rect);
     end;
     if (Cells[ACol,ARow] = 'K')   then
     begin
       Canvas.Brush.Color:= clRed;//Red;
-      Rect.Left:=Rect.Left-5;
+      Rect.Left:=Rect.Left;
       Canvas.FillRect(Rect);
     end;
     if (Cells[ACol,ARow] = '') then
     begin
       Canvas.Brush.Color:=clWhite;
-      Rect.Left:=Rect.Left-5;
+      Rect.Left:=Rect.Left;
       Canvas.FillRect(Rect);
     end;
     if ((ACol = 0) and (ARow = 0)) then
@@ -1120,7 +1135,26 @@ begin
       if currplayer = 2 then
         flag:=true;
       Canvas.FillRect(Rect);
-      Canvas.TextOut(Rect.Left+10, Rect.Top+5, '•');
+      Canvas.TextOut(Rect.Left+15, Rect.Top+7, '•');
+    end;
+    if (Acol = 0) xor (ARow = 0) then
+    begin
+      Canvas.Brush.Color:=clBlack;
+      Canvas.FillRect(Rect);
+      if ACol = 0 then
+        Rect.Left:=Rect.Left+1;
+      if ACol <> 0 then
+      begin
+         Rect.Top:=Rect.Top+1;
+         Rect.Bottom:=Rect.Bottom;
+      end;
+
+      Canvas.Brush.Color:=rgb(144,206,183);
+      Canvas.FillRect(Rect); //Текст тоже будет закрашен, его нужно перерисовать:
+      if (ACol <> 10) then
+        Canvas.TextOut(Rect.Left+12, Rect.Top+8, Cells[ACol, ARow])
+      else
+         Canvas.TextOut(Rect.Left+8, Rect.Top+8, Cells[ACol, ARow]);
     end;
   end;
 
@@ -1308,6 +1342,10 @@ procedure TForm1.FormCreate(Sender: TObject);
 // При создании формы инициализируем все шо надо
 var i:Byte;
 begin
+  player1matrix.Width := player1matrix.ColCount*player1matrix.DefaultColWidth + player1matrix.ColCount;
+  player1matrix.Height := player1matrix.RowCount*player1matrix.DefaultRowHeight + player1matrix.RowCount;
+  player2matrix.Width := player2matrix.ColCount*player2matrix.DefaultColWidth + player2matrix.ColCount;
+  player2matrix.Height := player2matrix.RowCount*player2matrix.DefaultRowHeight + player2matrix.RowCount;
   currplayer:=1;
   isShow:=false;
   hardness := medium;
