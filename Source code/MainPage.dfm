@@ -16,6 +16,7 @@ object Form3: TForm3
   OldCreateOrder = False
   OnActivate = FormActivate
   OnCanResize = FormCanResize
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
   object pnl1: TPanel
@@ -55,6 +56,28 @@ object Form3: TForm3
         ExplicitWidth = 404
       end
     end
+    object pnl4: TPanel
+      Left = 0
+      Top = 216
+      Width = 496
+      Height = 92
+      Align = alBottom
+      BevelOuter = bvNone
+      Caption = 'pnl4'
+      ParentShowHint = False
+      ShowCaption = False
+      ShowHint = False
+      TabOrder = 1
+      object btn1: TButton
+        Left = 176
+        Top = 24
+        Width = 153
+        Height = 41
+        Caption = #1048#1075#1088#1072#1090#1100' '#1089' '#1082#1086#1084#1087#1100#1102#1090#1077#1088#1086#1084
+        TabOrder = 0
+        OnClick = btn1Click
+      end
+    end
     object pnl3: TPanel
       Left = 0
       Top = 97
@@ -62,7 +85,9 @@ object Form3: TForm3
       Height = 119
       Align = alClient
       BevelOuter = bvNone
-      TabOrder = 1
+      TabOrder = 2
+      ExplicitTop = 0
+      ExplicitHeight = 92
       object lbYourName: TLabel
         Left = 0
         Top = 0
@@ -80,7 +105,7 @@ object Form3: TForm3
         Font.Style = []
         ParentFont = False
         WordWrap = True
-        ExplicitWidth = 479
+        ExplicitLeft = 24
       end
       object edt1: TEdit
         Left = 48
@@ -95,28 +120,6 @@ object Form3: TForm3
         ParentFont = False
         TabOrder = 0
         OnKeyDown = edt1KeyDown
-      end
-    end
-    object pnl4: TPanel
-      Left = 0
-      Top = 216
-      Width = 496
-      Height = 92
-      Align = alBottom
-      BevelOuter = bvNone
-      Caption = 'pnl4'
-      ParentShowHint = False
-      ShowCaption = False
-      ShowHint = False
-      TabOrder = 2
-      object btn1: TButton
-        Left = 176
-        Top = 24
-        Width = 153
-        Height = 41
-        Caption = #1048#1075#1088#1072#1090#1100' '#1089' '#1082#1086#1084#1087#1100#1102#1090#1077#1088#1086#1084
-        TabOrder = 0
-        OnClick = btn1Click
       end
     end
   end

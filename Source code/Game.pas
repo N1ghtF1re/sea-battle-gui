@@ -130,7 +130,7 @@ uses ErrorPage, MainPage, AboutUs;
 procedure showGameOverMessage(var player2matrix:TStringGrid; var mode:TMode);
 var i,j:byte;
 begin
-  ShowMessage('Game Over' + #10#13 + 'Чтобы начать новую игру, нажмите в меню' + #10#13 ' "Файл -> новая игра"');
+  ShowMessage('Game Over' + #10#13 + 'Чтобы начать новую игру, нажмите в меню' + #10#13 + ' "Файл -> новая игра"');
   mode := GameOver;
 
   if (P1N = 0) then

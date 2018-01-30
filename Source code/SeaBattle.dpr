@@ -5,7 +5,15 @@ uses
   MainPage in 'MainPage.pas' {Form1},
   Game in 'Game.pas' {Form1},
   AboutUs in 'AboutUs.pas' {FieldForm},
-  ErrorPage in 'ErrorPage.pas' {Form2};
+  ErrorPage in 'ErrorPage.pas' {Form2},
+  NewVersion in 'NewVersion.pas' {Form2},
+  blcksock in 'lib/blcksock.pas',
+  synafpc in 'lib/synafpc.pas',
+  synsock in 'lib/synsock.pas',
+  synautil in 'lib/synautil.pas', 
+  synacode in 'lib/synacode.pas', 
+  synaip in 'lib/synaip.pas',
+  HTTPSend in 'lib/httpsend.pas';
 
 {$R *.res}
 

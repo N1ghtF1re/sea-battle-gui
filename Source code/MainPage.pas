@@ -4,23 +4,24 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Wininet, HTTPsend;
 
 type
   TForm3 = class(TForm)
     pnl1: TPanel;
-    lbHello: TLabel;
     pnl2: TPanel;
-    pnl3: TPanel;
+    lbHello: TLabel;
     pnl4: TPanel;
+    btn1: TButton;
+    pnl3: TPanel;
     lbYourName: TLabel;
     edt1: TEdit;
-    btn1: TButton;
     procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
       var Resize: Boolean);
     procedure btn1Click(Sender: TObject);
     procedure edt1KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormActivate(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
 
   private
     { Private declarations }
@@ -28,6 +29,8 @@ type
     { Public declarations }
     var
       UserName: string;
+      version: String;   // версия программы
+      HTMLtext:String;   // полученный ответ от сервера
   end;
 
 var
@@ -38,7 +41,8 @@ implementation
 
 {$R *.dfm}
 
-uses Game;
+uses Game, NewVersion;
+
 
 procedure TForm3.btn1Click(Sender: TObject);
 begin
@@ -78,6 +82,30 @@ begin
   edt1.Top := Trunc( (pnl3.Height + edt1.Height) / 2 );
   btn1.Left := Trunc(pnl4.Width*0.3);
   btn1.Width := Trunc(pnl4.Width*0.4);
+end;
+
+procedure TForm3.FormCreate(Sender: TObject);
+var
+HTTP: THTTPsend;
+HTML: TStringlist;
+begin
+  version:='1.0';                   //  Текущая версия
+  HTML:= TStringlist.Create;
+  HTTP:= THTTPSend.Create;
+  HTTP.HTTPMethod('GET', 'http://brakhmen.info/SB_vers.txt'); // файл на сервере с номером версии
+  HTML.LoadFromStream(HTTP.Document);
+  HTMLtext:=HTML.Text;
+  //ShowMessage( IntToStr(Pos(version,HTMLtext)));
+  if ( (Pos(version,HTMLtext)<>0) or (HTMLtext = ''))  then
+  begin
+    // Обнов нет
+  end
+  else
+  begin
+    Application.CreateForm(TFormVers, FormVers);
+    FormVers.ShowModal;
+    //Button1.Enabled:=True;
+  end;
 end;
 
 end.
