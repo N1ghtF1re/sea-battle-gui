@@ -130,8 +130,9 @@ uses ErrorPage, MainPage, AboutUs;
 procedure showGameOverMessage(var player2matrix:TStringGrid; var mode:TMode);
 var i,j:byte;
 begin
-  ShowMessage('Game Over');
+  ShowMessage('Game Over' + #10#13 + 'Чтобы начать новую игру, нажмите в меню' + #10#13 ' "Файл -> новая игра"');
   mode := GameOver;
+
   if (P1N = 0) then
     ShowMessage('Парамошка победил, поэтому может и продолжать не выставлять модули');
   for i:=1 to 10 do
@@ -1018,6 +1019,7 @@ begin
     if ((P1N =  0) and (mode = battaly)) then
     begin
       showGameOverMessage(player2matrix, mode);
+      pnl5.Caption:= ('Game Over');
     end;
   end;
 end;
@@ -1085,6 +1087,7 @@ begin
   if ((P1N =  0) or (P2N = 0)) then // ее, игра кончилась... Или не еее
   begin
     showGameOverMessage(player2matrix, mode);
+    pnl5.Caption := ('Game Over');
   end;
 end;
 
