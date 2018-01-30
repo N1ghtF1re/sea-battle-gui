@@ -16,6 +16,7 @@ object Form1: TForm1
   OldCreateOrder = False
   OnActivate = FormActivate
   OnCreate = FormCreate
+  OnResize = FormResize
   PixelsPerInch = 96
   TextHeight = 13
   object pnl1: TPanel
@@ -195,6 +196,8 @@ object Form1: TForm1
     ParentBackground = False
     ShowCaption = False
     TabOrder = 1
+    ExplicitLeft = -5
+    ExplicitTop = 47
     object img2: TImage
       Left = 514
       Top = -5
@@ -5528,7 +5531,7 @@ object Form1: TForm1
       OnMouseUp = player1matrixMouseUp
     end
     object pnIsFin: TPanel
-      Left = 303
+      Left = 319
       Top = 168
       Width = 185
       Height = 165
@@ -11555,8 +11558,8 @@ object Form1: TForm1
   end
   object pnlName: TPanel
     Left = 19
-    Top = 54
-    Width = 286
+    Top = 57
+    Width = 278
     Height = 41
     BevelOuter = bvNone
     Caption = #1048#1084#1103

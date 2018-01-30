@@ -99,6 +99,7 @@ type
     procedure mneasyClick(Sender: TObject);
     procedure mnmediumClick(Sender: TObject);
     procedure mnmrshiftClick(Sender: TObject);
+    procedure FormResize(Sender: TObject);
 
   private
     { Private declarations }
@@ -125,6 +126,19 @@ implementation
 
 uses ErrorPage, MainPage, AboutUs;
 
+
+procedure showGameOverMessage(var player2matrix:TStringGrid; var mode:TMode);
+var i,j:byte;
+begin
+  ShowMessage('Game Over');
+  mode := GameOver;
+  if (P1N = 0) then
+    ShowMessage('Парамошка победил, поэтому может и продолжать не выставлять модули');
+  for i:=1 to 10 do
+    for j:=1 to 10 do
+      if(player2matrix.Cells[i,j] = 'S') then
+        player2matrix.Cells[i,j] := 'GOver';
+end;
 function KillShip(const fullmatrix: TPF; var EnemyMatrix: TStringGrid; const x,y:Byte):Boolean;
   // Функция возвращает true если корабль убит, false если еще не убит
   // В ней же происходит "убийство" корабля (заменя "R" на "S" если убили
@@ -1003,10 +1017,7 @@ begin
     end;
     if ((P1N =  0) and (mode = battaly)) then
     begin
-      ShowMessage('Game Over');
-      mode := GameOver;
-      if (P1N = 0) then
-        ShowMessage('Парамошка победил, поэтому может и продолжать не выставлять модули');
+      showGameOverMessage(player2matrix, mode);
     end;
   end;
 end;
@@ -1073,10 +1084,7 @@ begin
   end;
   if ((P1N =  0) or (P2N = 0)) then // ее, игра кончилась... Или не еее
   begin
-    ShowMessage('Game Over');
-    mode := GameOver;
-    if (P1N = 0) then
-      ShowMessage('Парамошка победил, поэтому может и продолжать не выставлять модули');
+    showGameOverMessage(player2matrix, mode);
   end;
 end;
 
@@ -1178,12 +1186,19 @@ begin
   pnl3.Color := BGColor;
   pnIsFin.Color := BGColor;
   pnlName.Color := BGColor;
+  // Адаптивка тип, просчитываем все отступы, размеры и тд
   player1matrix.Width := player1matrix.ColCount*player1matrix.DefaultColWidth + player1matrix.ColCount;
   player1matrix.Height := player1matrix.RowCount*player1matrix.DefaultRowHeight + player1matrix.RowCount;
   player2matrix.Width := player2matrix.ColCount*player2matrix.DefaultColWidth + player2matrix.ColCount;
   player2matrix.Height := player2matrix.RowCount*player2matrix.DefaultRowHeight + player2matrix.RowCount;
+  player1matrix.Left := Round(form1.Width/2) - player1matrix.Width-20 - 70;
+  player2matrix.Left := Round(form1.Width/2) + 70;
   lbP1N.Left := player1matrix.Left + Round((player1matrix.Width + lbP1N.Width)/2);
   lbP2N.Left := player2matrix.Left + Round((player2matrix.Width + lbP2N.Width)/2);
+  pnlName.Left := player1matrix.Left;
+  img2.Left := player2matrix.Left + ((player2matrix.Width - img2.Width) div 2);
+  btnAutoCreate.Left := (player1matrix.Left + player1matrix.Width + (Form1.Width - pnl1.Width) - btnAutoCreate.Width)div 2 -10;
+
   currplayer:=1;
   isShow:=false;
   hardness := medium;
@@ -1196,6 +1211,18 @@ begin
   end;
   player1matrix.Cells[0,10]:='К';
   player2matrix.Cells[0,10]:='К';
+end;
+
+procedure TForm1.FormResize(Sender: TObject);
+begin
+  player1matrix.Left := Round(form1.Width/2) - player1matrix.Width-20 - 70;
+  player2matrix.Left := Round(form1.Width/2) + 70;
+  lbP1N.Left := player1matrix.Left + Round((player1matrix.Width + lbP1N.Width)/2);
+  lbP2N.Left := player2matrix.Left + Round((player2matrix.Width + lbP2N.Width)/2);
+  pnlName.Left := player1matrix.Left;
+  img2.Left := player2matrix.Left + ((player2matrix.Width - img2.Width) div 2);
+  btnAutoCreate.Left := (player1matrix.Left + player1matrix.Width + (Form1.Width - pnl1.Width) - btnAutoCreate.Width)div 2 -10;
+  pnIsFin.Left := (player1matrix.Left + player1matrix.Width + (Form1.Width - pnl1.Width) - pnIsFin.Width)div 2 -10;
 end;
 
 procedure TForm1.mneasyClick(Sender: TObject);
