@@ -697,12 +697,16 @@ begin
          Rect.Bottom:=Rect.Bottom;
       end;
 
-      Canvas.Brush.Color:=rgb(144,206,183);
+      Canvas.Brush.Color:= rgb(81, 129, 184); //rgb(144,206,183);
+      Canvas.Font.Color := clWhite;
+      canvas.Font.Style := canvas.Font.Style  + [fsBold];
       Canvas.FillRect(Rect); //Текст тоже будет закрашен, его нужно перерисовать:
       if (ACol <> 10) then
         Canvas.TextOut(Rect.Left+12, Rect.Top+8, Cells[ACol, ARow])
       else
          Canvas.TextOut(Rect.Left+8, Rect.Top+8, Cells[ACol, ARow]);
+      Canvas.Font.Color:=clBlack;
+      canvas.Font.Style := canvas.Font.Style  - [fsBold];
     end;
     if ((ACol = 0) and (ARow = 0)) then
     begin
@@ -916,6 +920,12 @@ begin
       Rect.Left:=Rect.Left;
       Canvas.FillRect(Rect);
     end;
+    if (Cells[ACol,ARow] = 'GOver')   then
+    begin
+      Canvas.Brush.Color:= RGB(82,158,235);//clBlue;
+      Rect.Left:=Rect.Left;
+      Canvas.FillRect(Rect);
+    end;
     if (Cells[ACol,ARow] = 'R')   then
     begin
       Canvas.Brush.Color:= RGB(255,170,55);//Orange;
@@ -937,7 +947,7 @@ begin
     if ((ACol = 0) and (ARow = 0)) then
     begin
       Canvas.Brush.Color:=clWhite;
-      Rect.Left:=Rect.Left-5;
+      Rect.Left:=Rect.Left;
       Canvas.FillRect(Rect);
     end;
     if(Cells[ACol,ARow] = '*') then
@@ -961,12 +971,16 @@ begin
          Rect.Bottom:=Rect.Bottom;
       end;
 
-      Canvas.Brush.Color:=rgb(144,206,183);
+      Canvas.Brush.Color:= rgb(81, 129, 184); //rgb(144,206,183);
+      Canvas.Font.Color := clWhite;
+      canvas.Font.Style := canvas.Font.Style  + [fsBold];
       Canvas.FillRect(Rect); //Текст тоже будет закрашен, его нужно перерисовать:
       if (ACol <> 10) then
         Canvas.TextOut(Rect.Left+12, Rect.Top+8, Cells[ACol, ARow])
       else
          Canvas.TextOut(Rect.Left+8, Rect.Top+8, Cells[ACol, ARow]);
+      Canvas.Font.Color := clBlack;
+      canvas.Font.Style := canvas.Font.Style  - [fsBold];
     end;
     if ((ACol = 0) and (ARow = 0)) then
     begin
@@ -1168,7 +1182,8 @@ begin
   player1matrix.Height := player1matrix.RowCount*player1matrix.DefaultRowHeight + player1matrix.RowCount;
   player2matrix.Width := player2matrix.ColCount*player2matrix.DefaultColWidth + player2matrix.ColCount;
   player2matrix.Height := player2matrix.RowCount*player2matrix.DefaultRowHeight + player2matrix.RowCount;
-
+  lbP1N.Left := player1matrix.Left + Round((player1matrix.Width + lbP1N.Width)/2);
+  lbP2N.Left := player2matrix.Left + Round((player2matrix.Width + lbP2N.Width)/2);
   currplayer:=1;
   isShow:=false;
   hardness := medium;
