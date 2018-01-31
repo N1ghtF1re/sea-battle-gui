@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls,Wininet,Winapi.ShellAPI;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls,Wininet,HTTPsend,Winapi.ShellAPI;
 
 type
   TFormVers = class(TForm)
@@ -16,6 +16,7 @@ type
     btnDL: TButton;
     lbCurrVersion: TLabel;
     lbNewVersion: TLabel;
+    mmoChangelog: TMemo;
     procedure FormCreate(Sender: TObject);
     procedure btnDLClick(Sender: TObject);
   private
@@ -26,44 +27,12 @@ type
 
 var
   FormVers: TFormVers;
+  Changelog:string;
 
 implementation
 
 {$R *.dfm}
 uses MainPage;
-
-function GetInetFile(const fileURL, FileName: String): boolean;
-const BufferSize = 1024;
-var hSession, hURL: HInternet;
-Buffer: array[1..BufferSize] of Byte;
-BufferLen: DWORD;
-f: File;
-sAppName: string;
-begin
-   Result:=False;
-   sAppName := ExtractFileName(Application.ExeName);
-   hSession := InternetOpen(PChar(sAppName), INTERNET_OPEN_TYPE_PRECONFIG,
-         nil, nil, 0);
-   try
-      hURL := InternetOpenURL(hSession,
-      PChar(fileURL),nil,0,0,0);
-      try
-         AssignFile(f, FileName);
-         Rewrite(f,1);
-         repeat
-            InternetReadFile(hURL, @Buffer, SizeOf(Buffer), BufferLen);
-            BlockWrite(f, Buffer, BufferLen)
-         until BufferLen = 0;
-         CloseFile(f);
-         Result:=True;
-      finally
-      InternetCloseHandle(hURL)
-      end
-   finally
-   InternetCloseHandle(hSession)
-   end
-end;
-
 
 procedure TFormVers.btnDLClick(Sender: TObject);
 begin
@@ -71,9 +40,19 @@ begin
 end;
 
 procedure TFormVers.FormCreate(Sender: TObject);
+var
+  HTTP: THTTPsend;
+  HTML: TStringlist;
 begin
+  HTML:= TStringlist.Create;
+  HTTP:= THTTPSend.Create;
+  HTTP.HTTPMethod('GET', 'http://brakhmen.info/SB_changelog.txt'); // файл на сервере с номером версии
+  HTML.LoadFromStream(HTTP.Document);
+  Changelog:=HTML.Text;
   lbCurrVersion.Caption := Form3.version;
   lbNewVersion.Caption := Form3.HTMLtext;
+  mmoChangelog.Lines.Add('Изменения: ');
+  mmoChangelog.Lines.Add(Changelog);
 end;
 
 end.

@@ -2,8 +2,8 @@ object FormVers: TFormVers
   Left = 0
   Top = 0
   BorderIcons = [biSystemMenu]
-  Caption = #1042#1099#1096#1083#1086' '#1085#1086#1074#1086#1077' '#1086#1073#1085#1086#1074#1083#1077#1080#1077'!!!'
-  ClientHeight = 186
+  Caption = #1042#1099#1096#1083#1086' '#1085#1086#1074#1086#1077' '#1086#1073#1085#1086#1074#1083#1077#1085#1080#1077'!!!'
+  ClientHeight = 334
   ClientWidth = 418
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -19,7 +19,7 @@ object FormVers: TFormVers
     Left = 0
     Top = 0
     Width = 418
-    Height = 186
+    Height = 334
     Align = alClient
     BevelOuter = bvNone
     Caption = 'pnl1'
@@ -34,7 +34,7 @@ object FormVers: TFormVers
     object Label1: TLabel
       Left = 32
       Top = 16
-      Width = 356
+      Width = 353
       Height = 16
       Caption = #1056#1072#1076#1099' '#1089#1086#1086#1073#1097#1080#1090#1100', '#1095#1090#1086' '#1074#1099#1096#1083#1086' '#1053#1054#1042#1054#1045' '#1086#1073#1085#1086#1074#1083#1077#1085#1080#1077' '#1085#1072#1096#1077#1081' '#1080#1075#1088#1099
       Font.Charset = DEFAULT_CHARSET
@@ -45,10 +45,11 @@ object FormVers: TFormVers
       ParentFont = False
     end
     object Label2: TLabel
-      Left = 64
+      Left = 32
       Top = 38
-      Width = 341
+      Width = 353
       Height = 35
+      Alignment = taCenter
       Caption = 
         #1042' '#1085#1086#1074#1086#1081' '#1074#1077#1088#1089#1080#1080' '#1076#1086#1073#1072#1074#1083#1077#1085#1086' '#1084#1085#1086#1075#1086' '#1087#1083#1102#1096#1077#1082' '#1080' '#1080#1089#1087#1088#1072#1074#1083#1077#1085#1086' '#1084#1085#1086#1075#1086' '#1073#1072#1075#1086#1074', ' +
         #1087#1086#1101#1090#1086#1084#1091' '#1085#1072#1089#1090#1086#1103#1090#1077#1083#1100#1085#1086' '#1088#1077#1082#1086#1084#1077#1085#1076#1091#1077#1084' '#1074#1072#1084' '#1086#1073#1085#1086#1074#1080#1090#1100#1089#1103
@@ -94,6 +95,14 @@ object FormVers: TFormVers
       ParentFont = False
       TabOrder = 0
       OnClick = btnDLClick
+    end
+    object mmoChangelog: TMemo
+      Left = 32
+      Top = 192
+      Width = 353
+      Height = 137
+      ScrollBars = ssVertical
+      TabOrder = 1
     end
   end
 end
