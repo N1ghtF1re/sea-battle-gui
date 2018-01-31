@@ -54,13 +54,17 @@
         <UWP_DelphiLogo150>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_150.png</UWP_DelphiLogo150>
         <SanitizedProjectName>SeaBattle</SanitizedProjectName>
     </PropertyGroup>
+    <Import Project="set.optset" Condition="'$(Base_Win32)'!='' And Exists('set.optset')"/>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <DCC_UsePackage>rtl;vcl;vclactnband;vcldsnap;IndyCore;IndySystem;vclx;bindcomp;tethering;svnui;appanalytics;dsnap;bindcompvcl;vclimg;vcltouch;VclSmp;vcldb;bindcompfmx;svn;bindengine;dbrtl;IndyProtocols;fmx;fmxdae;xmlrtl;fmxobj;vclwinx;fmxase;$(DCC_UsePackage)</DCC_UsePackage>
         <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
-        <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
-        <VerInfo_Locale>1033</VerInfo_Locale>
+        <VerInfo_Keys>CompanyName=BrakhMen Corp;FileDescription=$(MSBuildProjectName);FileVersion=1.1.0.0;InternalName=SeaBattle;LegalCopyright=BrakhMen Corp;LegalTrademarks=;OriginalFilename=SeaBattle;ProgramID=info.brakhmen.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.1.0.0;Comments=</VerInfo_Keys>
+        <VerInfo_Locale>1049</VerInfo_Locale>
         <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
+        <VerInfo_MinorVer>1</VerInfo_MinorVer>
+        <Icon_MainIcon>SeaBattle_Icon.ico</Icon_MainIcon>
+        <CfgDependentOn>set.optset</CfgDependentOn>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1)'!=''">
         <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
@@ -75,9 +79,11 @@
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <AppEnableHighDPI>true</AppEnableHighDPI>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
-        <VerInfo_Locale>1033</VerInfo_Locale>
+        <VerInfo_Locale>1049</VerInfo_Locale>
         <Icon_MainIcon>SeaBattle_Icon10.ico</Icon_MainIcon>
         <BT_BuildType>Debug</BT_BuildType>
+        <VerInfo_MinorVer>1</VerInfo_MinorVer>
+        <VerInfo_Keys>CompanyName=BrakhMen;FileDescription=$(MSBuildProjectName);FileVersion=1.1.0.0;InternalName=SeaBattle;LegalCopyright=;LegalTrademarks=;OriginalFilename=SeaBattle;ProgramID=info.brakhmen.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.1.0.0;Comments=</VerInfo_Keys>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
@@ -96,9 +102,8 @@
         <DCCReference Include="MainPage.pas">
             <Form>Form1</Form>
         </DCCReference>
-        <DCCReference Include="CreateField.pas">
+        <DCCReference Include="Game.pas">
             <Form>Form1</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="AboutUs.pas">
             <Form>FieldForm</Form>
@@ -106,6 +111,19 @@
         <DCCReference Include="ErrorPage.pas">
             <Form>Form2</Form>
             <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="NewVersion.pas">
+            <Form>Form2</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="lib\blcksock.pas"/>
+        <DCCReference Include="lib\synafpc.pas"/>
+        <DCCReference Include="lib\synsock.pas"/>
+        <DCCReference Include="lib\synautil.pas"/>
+        <DCCReference Include="lib\synacode.pas"/>
+        <DCCReference Include="lib\synaip.pas"/>
+        <DCCReference Include="lib\httpsend.pas">
+            <Form>$R *.res</Form>
         </DCCReference>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
