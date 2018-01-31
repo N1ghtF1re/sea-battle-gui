@@ -89,22 +89,20 @@ var
 HTTP: THTTPsend;
 HTML: TStringlist;
 begin
-  version:='1.0';                   //  Текущая версия
+  version:='1.10';                   //  Текущая версия
   HTML:= TStringlist.Create;
   HTTP:= THTTPSend.Create;
   HTTP.HTTPMethod('GET', 'http://brakhmen.info/SB_vers.txt'); // файл на сервере с номером версии
   HTML.LoadFromStream(HTTP.Document);
   HTMLtext:=HTML.Text;
-  //ShowMessage( IntToStr(Pos(version,HTMLtext)));
   if ( (Pos(version,HTMLtext)<>0) or (HTMLtext = ''))  then
   begin
     // Обнов нет
   end
   else
   begin
-    Application.CreateForm(TFormVers, FormVers);
-    FormVers.ShowModal;
-    //Button1.Enabled:=True;
+    Application.CreateForm(TFormVers, FormVers); // Инициализиуем форму с сообщением об обнове
+    FormVers.ShowModal; // Выводим месседж о новой обнове
   end;
 end;
 

@@ -27,10 +27,7 @@ object FormVers: TFormVers
     ParentBackground = False
     ShowCaption = False
     TabOrder = 0
-    ExplicitLeft = 216
-    ExplicitTop = 64
-    ExplicitWidth = 185
-    ExplicitHeight = 41
+    ExplicitLeft = 8
     object Label1: TLabel
       Left = 32
       Top = 16
