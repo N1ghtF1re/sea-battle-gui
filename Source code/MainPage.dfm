@@ -86,8 +86,6 @@ object Form3: TForm3
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 2
-      ExplicitTop = 0
-      ExplicitHeight = 92
       object lbYourName: TLabel
         Left = 0
         Top = 0
@@ -105,7 +103,7 @@ object Form3: TForm3
         Font.Style = []
         ParentFont = False
         WordWrap = True
-        ExplicitLeft = 24
+        ExplicitWidth = 479
       end
       object edt1: TEdit
         Left = 48

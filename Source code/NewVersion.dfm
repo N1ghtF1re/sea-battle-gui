@@ -27,7 +27,6 @@ object FormVers: TFormVers
     ParentBackground = False
     ShowCaption = False
     TabOrder = 0
-    ExplicitLeft = 8
     object Label1: TLabel
       Left = 48
       Top = 16
@@ -45,7 +44,7 @@ object FormVers: TFormVers
       Left = 32
       Top = 38
       Width = 353
-      Height = 35
+      Height = 26
       Alignment = taCenter
       Caption = 
         #1042' '#1085#1086#1074#1086#1081' '#1074#1077#1088#1089#1080#1080' '#1076#1086#1073#1072#1074#1083#1077#1085#1086' '#1084#1085#1086#1075#1086' '#1087#1083#1102#1096#1077#1082' '#1080' '#1080#1089#1087#1088#1072#1074#1083#1077#1085#1086' '#1084#1085#1086#1075#1086' '#1073#1072#1075#1086#1074', ' +

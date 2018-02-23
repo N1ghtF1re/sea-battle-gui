@@ -16,7 +16,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.Grids, Vcl.StdCtrls,
-  Vcl.Imaging.pngimage, Vcl.Buttons, Vcl.Menus;
+  Vcl.Imaging.pngimage, Vcl.Buttons, Vcl.Menus, Vcl.ActnMan, Vcl.ActnColorMaps;
 
 type
   hard = (easy,medium,paramon);
@@ -661,7 +661,8 @@ begin
     begin
       Canvas.Brush.Color:=clWhite;
       Canvas.FillRect(Rect);
-      Canvas.TextOut(Rect.Left+15, Rect.Top+7, '•');
+      Canvas.Font.Size := Trunc(player1matrix.DefaultColWidth*0.22);
+      Canvas.TextOut(Rect.Left+Trunc(player1matrix.DefaultColWidth*0.50- Canvas.Font.Size*0.3), Rect.Top+Trunc(player1matrix.DefaultColWidth*0.50-Canvas.Font.Size*1.2), '•');
       currplayer:=1;
     end;
     if (Cells[ACol,ARow] = 'S')   then
@@ -716,10 +717,12 @@ begin
       Canvas.Font.Color := clWhite;
       canvas.Font.Style := canvas.Font.Style  + [fsBold];
       Canvas.FillRect(Rect); //Текст тоже будет закрашен, его нужно перерисовать:
+
+        Canvas.Font.Size := Trunc(player1matrix.DefaultColWidth*0.22);
       if (ACol <> 10) then
-        Canvas.TextOut(Rect.Left+12, Rect.Top+8, Cells[ACol, ARow])
+        Canvas.TextOut(Rect.Left+Trunc(player1matrix.DefaultColWidth*0.50- Canvas.Font.Size*0.6), Rect.Top+Trunc(player1matrix.DefaultColWidth*0.50-Canvas.Font.Size*1.2), Cells[ACol,ARow])
       else
-         Canvas.TextOut(Rect.Left+8, Rect.Top+8, Cells[ACol, ARow]);
+         Canvas.TextOut(Rect.Left+Trunc(player1matrix.DefaultColWidth*0.50- Canvas.Font.Size*1.1), Rect.Top+Trunc(player1matrix.DefaultColWidth*0.50-Canvas.Font.Size*1.2), Cells[ACol,ARow]);
       Canvas.Font.Color:=clBlack;
       canvas.Font.Style := canvas.Font.Style  - [fsBold];
     end;
@@ -861,7 +864,7 @@ begin
 end;
 
 begin
-  if((mode = FCreate) and (x < 440)) then // При смене мода клики
+  if(mode = FCreate) then // При смене мода клики
   // по полю первого игрока не будут обрабатываться
 
   begin
@@ -972,7 +975,9 @@ begin
       if currplayer = 2 then
         flag:=true;
       Canvas.FillRect(Rect);
-      Canvas.TextOut(Rect.Left+15, Rect.Top+7, '•');
+      //Canvas.TextOut(Rect.Left+15, Rect.Top+7, '•');
+      Canvas.Font.Size := Trunc(player1matrix.DefaultColWidth*0.22);
+      Canvas.TextOut(Rect.Left+Trunc(player1matrix.DefaultColWidth*0.50- Canvas.Font.Size*0.3), Rect.Top+Trunc(player1matrix.DefaultColWidth*0.50-Canvas.Font.Size*1.2), '•');
     end;
     if (Acol = 0) xor (ARow = 0) then
     begin
@@ -990,10 +995,12 @@ begin
       Canvas.Font.Color := clWhite;
       canvas.Font.Style := canvas.Font.Style  + [fsBold];
       Canvas.FillRect(Rect); //Текст тоже будет закрашен, его нужно перерисовать:
+      Canvas.Font.Size := Trunc(player1matrix.DefaultColWidth*0.22);
       if (ACol <> 10) then
-        Canvas.TextOut(Rect.Left+12, Rect.Top+8, Cells[ACol, ARow])
+        Canvas.TextOut(Rect.Left+Trunc(player1matrix.DefaultColWidth*0.50- Canvas.Font.Size*0.6), Rect.Top+Trunc(player1matrix.DefaultColWidth*0.50-Canvas.Font.Size*1.2), Cells[ACol,ARow])
       else
-         Canvas.TextOut(Rect.Left+8, Rect.Top+8, Cells[ACol, ARow]);
+         Canvas.TextOut(Rect.Left+Trunc(player1matrix.DefaultColWidth*0.50- Canvas.Font.Size*1.1), Rect.Top+Trunc(player1matrix.DefaultColWidth*0.50-Canvas.Font.Size*1.2), Cells[ACol,ARow]);
+
       Canvas.Font.Color := clBlack;
       canvas.Font.Style := canvas.Font.Style  - [fsBold];
     end;
@@ -1190,6 +1197,8 @@ begin
   pnIsFin.Color := BGColor;
   pnlName.Color := BGColor;
   // Адаптивка тип, просчитываем все отступы, размеры и тд
+  player1matrix.DefaultColWidth:=Round(Form1.Width*0.033);
+  player1matrix.DefaultRowHeight:=player1matrix.DefaultColWidth;
   player1matrix.Width := player1matrix.ColCount*player1matrix.DefaultColWidth + player1matrix.ColCount;
   player1matrix.Height := player1matrix.RowCount*player1matrix.DefaultRowHeight + player1matrix.RowCount;
   player2matrix.Width := player2matrix.ColCount*player2matrix.DefaultColWidth + player2matrix.ColCount;
@@ -1218,14 +1227,29 @@ end;
 
 procedure TForm1.FormResize(Sender: TObject);
 begin
+  player1matrix.DefaultColWidth:=Round(Form1.Width*0.033);
+  player1matrix.DefaultRowHeight:=player1matrix.DefaultColWidth;
+  player2matrix.DefaultColWidth:=player1matrix.DefaultColWidth;
+  player2matrix.DefaultRowHeight:=player1matrix.DefaultColWidth;
+  player1matrix.Left := Round(form1.Width/2) - player1matrix.Width-20 - 70;
+  player2matrix.Left := Round(form1.Width/2) + 70;
+  btnAutoCreate.Left := (player1matrix.Left + player1matrix.Width + (Form1.Width - pnl1.Width) - btnAutoCreate.Width)div 2 -10;
+  pnIsFin.Left := (player1matrix.Left + player1matrix.Width + (Form1.Width - pnl1.Width) - pnIsFin.Width)div 2 -10;
+  player1matrix.Width := player1matrix.ColCount*player1matrix.DefaultColWidth + player1matrix.ColCount;
+  player1matrix.Height := player1matrix.RowCount*player1matrix.DefaultRowHeight + player1matrix.RowCount;
+  player2matrix.Width := player2matrix.ColCount*player2matrix.DefaultColWidth + player2matrix.ColCount;
+  player2matrix.Height := player2matrix.RowCount*player2matrix.DefaultRowHeight + player2matrix.RowCount;
   player1matrix.Left := Round(form1.Width/2) - player1matrix.Width-20 - 70;
   player2matrix.Left := Round(form1.Width/2) + 70;
   lbP1N.Left := player1matrix.Left + Round((player1matrix.Width + lbP1N.Width)/2);
   lbP2N.Left := player2matrix.Left + Round((player2matrix.Width + lbP2N.Width)/2);
+  pnlName.Width := player1matrix.Width;
   pnlName.Left := player1matrix.Left;
   img2.Left := player2matrix.Left + ((player2matrix.Width - img2.Width) div 2);
-  btnAutoCreate.Left := (player1matrix.Left + player1matrix.Width + (Form1.Width - pnl1.Width) - btnAutoCreate.Width)div 2 -10;
-  pnIsFin.Left := (player1matrix.Left + player1matrix.Width + (Form1.Width - pnl1.Width) - pnIsFin.Width)div 2 -10;
+  lbP1N.top := player1matrix.Top + player1matrix.Height + 20;
+  lbP2N.top := player2matrix.Top + player2matrix.Height + 20;
+  if player1matrix.Height + 300 > form1.Height then
+    form1.Height:= player1matrix.Height + 300;
 end;
 
 procedure TForm1.mneasyClick(Sender: TObject);

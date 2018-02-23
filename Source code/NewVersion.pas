@@ -36,7 +36,7 @@ uses MainPage;
 
 procedure TFormVers.btnDLClick(Sender: TObject);
 begin
-  ShellExecute(Application.Handle, nil, 'http://brakhmen.info/download.php?file=sea-battle', nil, nil,SW_SHOWNOACTIVATE);
+  ShellExecute(Application.Handle, nil, 'https://brakhmen.info/download.php?file=sea-battle', nil, nil,SW_SHOWNOACTIVATE);
 end;
 
 procedure TFormVers.FormCreate(Sender: TObject);
@@ -46,7 +46,7 @@ var
 begin
   HTML:= TStringlist.Create;
   HTTP:= THTTPSend.Create;
-  HTTP.HTTPMethod('GET', 'http://brakhmen.info/SB_changelog.txt'); // файл на сервере с номером версии
+  HTTP.HTTPMethod('GET', 'https://brakhmen.info/SB_changelog.txt'); // файл на сервере с номером версии
   HTML.LoadFromStream(HTTP.Document);
   Changelog:=HTML.Text;
   lbCurrVersion.Caption := Form3.version;

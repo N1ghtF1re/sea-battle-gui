@@ -92,7 +92,7 @@ begin
   version:='1.10';                   //  Текущая версия
   HTML:= TStringlist.Create;
   HTTP:= THTTPSend.Create;
-  HTTP.HTTPMethod('GET', 'http://brakhmen.info/SB_vers.txt'); // файл на сервере с номером версии
+  HTTP.HTTPMethod('GET', 'https://brakhmen.info/SB_vers.txt'); // файл на сервере с номером версии
   HTML.LoadFromStream(HTTP.Document);
   HTMLtext:=HTML.Text;
   if ( (Pos(version,HTMLtext)<>0) or (HTMLtext = ''))  then
