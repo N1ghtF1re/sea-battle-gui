@@ -1,11 +1,11 @@
 Sea Battle
 --------------------
-A puzzle game: the coloring of regular graphs.
+Sea Battle - it's a GUI implementation of a popular game created by three students in Delphi
 
-The task
+Getting started
 --------------------
-To paint each vertex of the graph in one of two colors according to the given condition.
-Current condition: each red vertex is adjacent to exactly two reds and each black vertex is adjacent to exactly two red vertices.
+To start playing, you need to post SeaBattle.exe, enter your name and start game :)
+
 
 Developers
 --------------------
@@ -15,4 +15,4 @@ In the development of this chic game involved:
 + [**Pilinko Nikita**](https://vk.com/mineralsfree)
 
 
-
+#### [Download last version](https://github.com/N1ghtF1re/sea-battle-gui/releases/tag/1.101)
