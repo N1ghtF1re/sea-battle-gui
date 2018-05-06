@@ -16,7 +16,8 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.Grids, Vcl.StdCtrls,
-  Vcl.Imaging.pngimage, Vcl.Buttons, Vcl.Menus, Vcl.ActnMan, Vcl.ActnColorMaps;
+  Vcl.Imaging.pngimage, Vcl.Buttons, Vcl.Menus, Vcl.ActnMan, Vcl.ActnColorMaps,
+  Vcl.Imaging.jpeg;
 
 type
   hard = (easy,medium,paramon);
@@ -36,7 +37,6 @@ type
     lbNum1: TLabel;
     btNext: TBitBtn;
     pnIsFin: TPanel;
-    img1: TImage;
     lbFrom1: TLabel;
     lbFrom2: TLabel;
     lbFrom3: TLabel;
@@ -134,7 +134,7 @@ begin
   mode := GameOver;
 
   if (P1N = 0) then
-    ShowMessage('Парамошка победил, поэтому может и продолжать не выставлять модули');
+    ShowMessage('Робот победил!');
   for i:=1 to 10 do
     for j:=1 to 10 do
       if(player2matrix.Cells[i,j] = 'S') then
@@ -473,12 +473,12 @@ procedure AIShotShotShot(player1matrix:TStringGrid);
       ### Затем в процедуре player1matrixDrawCell идет повторный вызов
       AIShotShotShot (где отрисовываются раненые корабли)
       Это было сделано для того, что бы была хоть какая задержка
-      И наш Парамошка не стрелял из дробовика, раня сразу весь корабль
+      И наш бот не стрелял из дробовика, раня сразу весь корабль
       Одним выстрелом
       }
     //if (second) and (P1N>0) then isHitted_wow(player1matrix,AIX,AIY);
       if (currplayer = 2) then // Проверяем, попал ли наш
-      // Парамошка по кораблю, иль промазал
+      // бот по кораблю, иль промазал
       begin
         if player1matrix.Cells[AIX,AIY] = '' then
         begin
@@ -496,7 +496,7 @@ procedure AIShotShotShot(player1matrix:TStringGrid);
             player1matrix.Cells[AIX,AIY] := 'R';
             LSX:=AIX;
             LSY:=AIY;
-            // Парамошка попал
+            // бот попал
           end;
         end;
       end;
@@ -638,7 +638,7 @@ begin
   lbNum2.Caption := '3';
   lbNum3.Caption := '2';
   lbNum4.Caption := '1';
-  pnIsFin.Visible := true; // Даем лицезреть полузигующего Парамошку
+  pnIsFin.Visible := true; // Даем лицезреть полузигующего бота
 
 end;
 
@@ -766,7 +766,7 @@ var
   num1,num2,num3,num4: Byte;
 procedure showError;
 begin
-  Form2.ShowModal; // if юзверь налажал then показываем ему Парамошку с ошибкой
+  Form2.ShowModal; // if юзверь налажал then показываем ему бота с ошибкой
   player1matrix.Cells[ACol,ARow] := '';
 end;
 
@@ -904,7 +904,7 @@ begin
           ((player1matrix.Cells[ACol,ARow-1] = 'S') and (player1matrix.Cells[ACol+1,ARow] = 'S')))
       then
       begin
-        showError; // Показываем Парамошку
+        showError; // Показываем бота
       end;
       num1:=0;
       num2:=0;
@@ -1117,7 +1117,7 @@ begin
 end;
 
 procedure TForm1.btNextClick(Sender: TObject);
-// если пользователю надоел Парамошка, он нажимает далее
+// если пользователю надоел бот, он нажимает далее
 // И карочи скрываются ненужные блоки, показываеются нужные
 // Вообщем, в этой процедуре довольно таки скучно.
 // Чуть веселее, чем на лекциях Дубовца (хотя от куда мне знать)

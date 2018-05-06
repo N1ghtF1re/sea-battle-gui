@@ -11,7 +11,6 @@ type
   TForm2 = class(TForm)
     lbl1: TLabel;
     btn1: TButton;
-    img1: TImage;
     procedure btn1Click(Sender: TObject);
   private
     { Private declarations }
